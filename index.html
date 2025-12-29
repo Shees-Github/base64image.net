@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Image Decoder - Free Online Tool to Decode Base64 to Image</title>
+    <meta name="description" content="Free online Base64 image decoder. Paste your Base64 string and instantly decode it to view, preview, and download images. No uploads required, works entirely in your browser.">
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What is Base64 encoding?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 is an encoding scheme that converts binary data into ASCII text format. It's commonly used to embed image data directly into HTML, CSS, or JSON files. The encoded string uses 64 characters (A-Z, a-z, 0-9, +, /) to represent binary data."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I decode a Base64 image?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Simply paste your Base64 string into the text area above. The decoder automatically strips the data:image prefix if present, validates the string, and displays the decoded image. You can then download it using the download button."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is my data safe when using this decoder?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, absolutely. This tool runs entirely in your browser using JavaScript. No data is uploaded to any server. Your Base64 strings and decoded images never leave your device, ensuring complete privacy."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What image formats are supported?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This decoder supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, and BMP. The format is automatically detected from the Base64 data URI prefix or file signature."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <main class="container" x-data="base64Decoder()">
+        <header>
+            <h1>Base64 Image Decoder</h1>
+            <p class="subtitle">Decode Base64 strings to images instantly in your browser</p>
+        </header>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="decodeImage"
+                    placeholder="Paste your Base64 string here (with or without data:image/png;base64, prefix)..."
+                    rows="6"
+                ></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="actions">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+
+            <div class="preview-container" x-show="imageUrl">
+                <h2>Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imageUrl" alt="Decoded image preview" x-show="imageUrl">
+                </div>
+                <div class="image-info" x-show="imageInfo">
+                    <p><strong>Format:</strong> <span x-text="imageInfo.format"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                </div>
+                <button @click="downloadImage" class="btn-primary">Download Image</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2>What is a Base64 Image Decoder?</h2>
+            <p>
+                A Base64 image decoder is a tool that converts Base64-encoded strings back into their original image format.
+                Base64 encoding is widely used in web development to embed images directly into HTML, CSS, or JSON files without
+                requiring separate image files. This technique is particularly useful for small icons, logos, or when you need
+                to include images in data URIs.
+            </p>
+
+            <h2>How Does Base64 Encoding Work?</h2>
+            <p>
+                Base64 encoding transforms binary image data into a text string using 64 ASCII characters (A-Z, a-z, 0-9, +, and /).
+                This encoding increases the file size by approximately 33% but allows binary data to be safely transmitted through
+                text-based protocols like JSON or XML. When you see a string starting with "data:image/png;base64," or similar,
+                that's a Base64-encoded image.
+            </p>
+
+            <h2>Why Use This Base64 Decoder?</h2>
+            <p>
+                Our Base64 image decoder offers several advantages for developers and designers. First, it operates entirely in
+                your browser, meaning your data never leaves your device—ensuring complete privacy and security. There's no need
+                to upload sensitive images to external servers. Second, it's instant: paste your Base64 string and immediately
+                see the decoded image. Third, it handles the complexity of stripping data URI prefixes automatically, so you can
+                paste the entire data URI or just the Base64 portion.
+            </p>
+
+            <h2>Common Use Cases</h2>
+            <p>
+                Base64 image decoding is essential in various scenarios. Web developers often encounter Base64 images in API
+                responses, configuration files, or database records. Email developers use Base64 encoding to embed images in
+                HTML emails. Mobile app developers may receive Base64-encoded images from backend services. Quality assurance
+                teams use decoders to verify image data in JSON payloads. Anyone working with data URIs, Canvas exports, or
+                embedded resources will find this tool invaluable.
+            </p>
+
+            <h2>Features of This Tool</h2>
+            <p>
+                This decoder automatically validates your Base64 input, stripping unnecessary prefixes like "data:image/png;base64,"
+                if present. It provides instant visual feedback with image previews and displays helpful information about the
+                decoded image, including format and file size. The download feature creates a proper blob URL, allowing you to
+                save the decoded image to your device. All processing happens client-side using modern browser APIs, ensuring
+                fast performance and complete data privacy.
+            </p>
+
+            <h2>Supported Image Formats</h2>
+            <p>
+                This tool supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, BMP, and ICO. The image
+                format is automatically detected from either the data URI prefix (e.g., "data:image/png;base64,") or from the
+                binary signature of the decoded data. You can decode any Base64 string that represents a valid image file
+                supported by modern web browsers.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>What is Base64 encoding?</h3>
+                <p>
+                    Base64 is an encoding scheme that converts binary data into ASCII text format. It's commonly used to embed
+                    image data directly into HTML, CSS, or JSON files. The encoded string uses 64 characters (A-Z, a-z, 0-9, +, /)
+                    to represent binary data.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>How do I decode a Base64 image?</h3>
+                <p>
+                    Simply paste your Base64 string into the text area above. The decoder automatically strips the "data:image"
+                    prefix if present, validates the string, and displays the decoded image. You can then download it using the
+                    download button.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is my data safe when using this decoder?</h3>
+                <p>
+                    Yes, absolutely. This tool runs entirely in your browser using JavaScript. No data is uploaded to any server.
+                    Your Base64 strings and decoded images never leave your device, ensuring complete privacy and security.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>What image formats are supported?</h3>
+                <p>
+                    This decoder supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, and BMP. The format
+                    is automatically detected from the Base64 data URI prefix or file signature.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can I decode Base64 without the data URI prefix?</h3>
+                <p>
+                    Yes! You can paste either the complete data URI (e.g., "data:image/png;base64,iVBORw0KG...") or just the
+                    Base64 string itself. The tool automatically handles both formats.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Why is my Base64 string showing an error?</h3>
+                <p>
+                    Errors typically occur if the Base64 string is malformed, incomplete, or contains invalid characters. Ensure
+                    you've copied the entire string without truncation. Base64 strings should only contain A-Z, a-z, 0-9, +, /,
+                    and = (for padding).
+                </p>
+            </div>
+        </article>
+
+        <footer>
+            <p>&copy; 2025 Base64 Image Decoder. All processing happens in your browser.</p>
+        </footer>
+    </main>
+
+    <script>
+        function base64Decoder() {
+            return {
+                base64Input: '',
+                imageUrl: '',
+                error: '',
+                imageInfo: null,
+                imageBlob: null,
+
+                decodeImage() {
+                    this.error = '';
+                    this.imageUrl = '';
+                    this.imageInfo = null;
+
+                    if (!this.base64Input.trim()) {
+                        return;
+                    }
+
+                    try {
+                        // Strip data URI prefix if present
+                        let base64String = this.base64Input.trim();
+                        const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+
+                        let format = 'unknown';
+                        if (dataUriMatch) {
+                            format = dataUriMatch[1];
+                            base64String = dataUriMatch[2];
+                        }
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64
+                        const binaryString = atob(base64String);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+
+                        // Detect format from file signature if not from data URI
+                        if (format === 'unknown') {
+                            format = this.detectImageFormat(bytes);
+                        }
+
+                        // Create blob and URL
+                        const mimeType = this.getMimeType(format);
+                        this.imageBlob = new Blob([bytes], { type: mimeType });
+                        this.imageUrl = URL.createObjectURL(this.imageBlob);
+
+                        // Set image info
+                        this.imageInfo = {
+                            format: format.toUpperCase(),
+                            size: this.formatBytes(this.imageBlob.size)
+                        };
+
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.imageUrl = '';
+                        this.imageInfo = null;
+                    }
+                },
+
+                detectImageFormat(bytes) {
+                    // Check file signatures
+                    if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xD8) return 'jpeg';
+                    if (bytes.length >= 4 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) return 'png';
+                    if (bytes.length >= 3 && bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) return 'gif';
+                    if (bytes.length >= 4 && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) return 'webp';
+                    if (bytes.length >= 2 && bytes[0] === 0x42 && bytes[1] === 0x4D) return 'bmp';
+                    if (bytes.length >= 5 && bytes[0] === 0x3C && bytes[1] === 0x73 && bytes[2] === 0x76 && bytes[3] === 0x67) return 'svg+xml';
+                    return 'png'; // Default fallback
+                },
+
+                getMimeType(format) {
+                    const mimeTypes = {
+                        'png': 'image/png',
+                        'jpeg': 'image/jpeg',
+                        'jpg': 'image/jpeg',
+                        'gif': 'image/gif',
+                        'webp': 'image/webp',
+                        'bmp': 'image/bmp',
+                        'svg+xml': 'image/svg+xml',
+                        'svg': 'image/svg+xml'
+                    };
+                    return mimeTypes[format.toLowerCase()] || 'image/png';
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                downloadImage() {
+                    if (!this.imageBlob) return;
+
+                    const format = this.imageInfo.format.toLowerCase();
+                    const timestamp = Date.now();
+
+                    // Map format to proper file extension
+                    let extension = format;
+                    if (format === 'jpeg') extension = 'jpg';
+                    else if (format === 'svg+xml') extension = 'svg';
+
+                    const filename = `decoded-image-${timestamp}.${extension}`;
+
+                    const link = document.createElement('a');
+                    link.href = this.imageUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.imageUrl = '';
+                    this.error = '';
+                    this.imageInfo = null;
+                    if (this.imageBlob) {
+                        URL.revokeObjectURL(this.imageUrl);
+                        this.imageBlob = null;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
