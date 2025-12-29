@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Validator - Validate Base64 Strings Online</title>
+    <meta name="description" content="Free online Base64 validator. Check if your Base64 strings are valid, detect image format, and verify encoding. Instant validation with detailed feedback.">
+    <link rel="stylesheet" href="/assets/style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I validate a Base64 string?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Paste your Base64 string into the text area above. The validator will instantly check if it's properly formatted, detect the image format, and provide detailed feedback about any issues."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What makes a Base64 string invalid?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A Base64 string is invalid if it contains characters outside of A-Z, a-z, 0-9, +, /, and =. It's also invalid if the length isn't a multiple of 4 (when padding is included) or if padding characters appear in incorrect positions."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo">BASE64IMAGE</a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/#tools">Tools</a></li>
+                    <li><a href="/about/">About</a></li>
+                    <li><a href="/privacy-policy/">Privacy</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main x-data="base64Validator()">
+        <h1>Base64 Validator</h1>
+        <p class="intro">Validate Base64 strings and verify image data</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All validation happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="validateBase64"
+                    placeholder="Paste your Base64 string here..."
+                    rows="6"
+                ></textarea>
+            </div>
+
+            <div class="preview-container" x-show="validationResult">
+                <h2>Validation Result</h2>
+
+                <div x-show="validationResult && validationResult.isValid" class="success" style="margin-bottom: 20px;">
+                    ✓ Valid Base64 string
+                </div>
+
+                <div x-show="validationResult && !validationResult.isValid" class="error" style="margin-bottom: 20px;">
+                    ✗ Invalid Base64 string
+                </div>
+
+                <div class="image-info" x-show="validationResult">
+                    <p><strong>Status:</strong> <span x-text="validationResult.isValid ? 'Valid' : 'Invalid'"></span></p>
+                    <p x-show="validationResult.hasDataUri"><strong>Data URI:</strong> <span x-text="validationResult.hasDataUri ? 'Yes' : 'No'"></span></p>
+                    <p x-show="validationResult.format"><strong>Detected Format:</strong> <span x-text="validationResult.format"></span></p>
+                    <p><strong>Length:</strong> <span x-text="validationResult.length"></span> characters</p>
+                    <p x-show="validationResult.estimatedSize"><strong>Estimated Size:</strong> <span x-text="validationResult.estimatedSize"></span></p>
+                    <p x-show="validationResult.error" style="color: #dc3545;"><strong>Error:</strong> <span x-text="validationResult.error"></span></p>
+                </div>
+
+                <div class="image-wrapper" x-show="validationResult && validationResult.isValid && validationResult.isImage">
+                    <img :src="imagePreview" alt="Preview" x-show="imagePreview">
+                </div>
+            </div>
+
+            <div class="actions">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2>What is Base64 Validation?</h2>
+            <p>
+                Base64 validation checks whether a string is properly encoded according to the Base64 specification. Valid Base64 strings use only the
+                characters A-Z, a-z, 0-9, +, and /, with = used for padding. The validator verifies the character set, checks padding correctness,
+                and can detect the image format if the string represents image data.
+            </p>
+
+            <h2>Why Validate Base64 Strings?</h2>
+            <p>
+                Validating Base64 strings is crucial for debugging and quality assurance. Invalid Base64 can cause applications to crash or display
+                errors when decoding. Validation helps identify truncated or corrupted data, detect encoding errors before they reach production,
+                and verify that API responses contain properly formatted image data. For developers working with Base64 data, validation is an
+                essential step in ensuring data integrity.
+            </p>
+
+            <h2>How This Validator Works</h2>
+            <p>
+                This tool performs comprehensive validation on your Base64 string. It checks character validity, ensuring only permitted Base64
+                characters are used. It verifies padding correctness, checking that = characters appear only at the end. It detects data URI
+                prefixes and extracts format information. It estimates the decoded size and attempts to decode the string to verify it represents
+                valid data. For image data, it tries to load and preview the image to confirm validity.
+            </p>
+
+            <h2>Common Validation Errors</h2>
+            <p>
+                Several issues can make a Base64 string invalid. Invalid characters outside the Base64 alphabet will cause validation to fail.
+                Incorrect padding with = characters in wrong positions indicates corruption. Truncated strings that end abruptly suggest incomplete
+                data. Whitespace or line breaks within the encoded string can cause parsing errors. This validator identifies these issues and
+                provides clear feedback to help you fix the problem.
+            </p>
+
+            <h2>Base64 String Structure</h2>
+            <p>
+                A valid Base64 string follows specific rules. It uses only 64 specific characters plus padding. The length must be a multiple of 4
+                when fully padded. Padding characters (=) can only appear at the end. Data URIs include a prefix like "data:image/png;base64,"
+                before the encoded data. Understanding this structure helps identify why validation might fail and how to fix invalid strings.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>How do I validate a Base64 string?</h3>
+                <p>
+                    Paste your Base64 string into the text area above. The validator will instantly check if it's properly formatted, detect the
+                    image format, and provide detailed feedback about any issues.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>What makes a Base64 string invalid?</h3>
+                <p>
+                    A Base64 string is invalid if it contains characters outside of A-Z, a-z, 0-9, +, /, and =. It's also invalid if the length
+                    isn't a multiple of 4 (when padding is included) or if padding characters appear in incorrect positions.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can this validator detect the image format?</h3>
+                <p>
+                    Yes. If your Base64 string includes a data URI prefix (like "data:image/png;base64,"), the validator will extract the format.
+                    It can also detect the format by examining the decoded binary data's file signature.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Why does my valid-looking Base64 fail validation?</h3>
+                <p>
+                    Common causes include whitespace or line breaks in the string, incomplete or truncated data, or incorrect padding. The validator
+                    will provide specific error messages to help identify the issue.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is this validator safe for sensitive data?</h3>
+                <p>
+                    Yes. All validation happens locally in your browser. Your Base64 data never leaves your device, ensuring complete privacy
+                    and security.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="/privacy-policy/">Privacy Policy</a>
+                <a href="/terms-of-service/">Terms of Service</a>
+                <a href="/about/">About</a>
+            </div>
+            <p class="footer-copyright">&copy; 2025 BASE64IMAGE. All tools run locally in your browser.</p>
+        </div>
+    </footer>
+
+    <script>
+        function base64Validator() {
+            return {
+                base64Input: '',
+                validationResult: null,
+                imagePreview: '',
+
+                validateBase64() {
+                    this.validationResult = null;
+                    this.imagePreview = '';
+
+                    if (!this.base64Input.trim()) {
+                        return;
+                    }
+
+                    const result = {
+                        isValid: false,
+                        hasDataUri: false,
+                        format: '',
+                        length: 0,
+                        estimatedSize: '',
+                        error: '',
+                        isImage: false
+                    };
+
+                    try {
+                        let base64String = this.base64Input.trim();
+                        const originalLength = base64String.length;
+
+                        // Check for data URI
+                        const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+                        if (dataUriMatch) {
+                            result.hasDataUri = true;
+                            result.format = dataUriMatch[1].toUpperCase();
+                            base64String = dataUriMatch[2];
+                        }
+
+                        result.length = originalLength;
+
+                        // Validate Base64 characters
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            result.error = 'Contains invalid characters. Base64 only allows A-Z, a-z, 0-9, +, /, and =';
+                            this.validationResult = result;
+                            return;
+                        }
+
+                        // Check padding
+                        const paddingMatch = base64String.match(/=+$/);
+                        if (paddingMatch && paddingMatch[0].length > 2) {
+                            result.error = 'Invalid padding. Maximum 2 padding characters allowed.';
+                            this.validationResult = result;
+                            return;
+                        }
+
+                        // Try to decode
+                        try {
+                            const decoded = atob(base64String);
+                            result.isValid = true;
+                            result.estimatedSize = this.formatBytes(decoded.length);
+
+                            // Try to detect if it's an image
+                            const bytes = new Uint8Array(decoded.length);
+                            for (let i = 0; i < decoded.length; i++) {
+                                bytes[i] = decoded.charCodeAt(i);
+                            }
+
+                            // Detect format from file signature if not already detected
+                            if (!result.format) {
+                                result.format = this.detectImageFormat(bytes);
+                            }
+
+                            // Try to preview image
+                            if (result.format) {
+                                result.isImage = true;
+                                this.imagePreview = `data:image/${result.format.toLowerCase()};base64,${base64String}`;
+                            }
+
+                        } catch (decodeError) {
+                            result.error = 'Failed to decode Base64 string. Data may be corrupted.';
+                        }
+
+                    } catch (err) {
+                        result.error = err.message || 'Validation error';
+                    }
+
+                    this.validationResult = result;
+                },
+
+                detectImageFormat(bytes) {
+                    if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xD8) return 'JPEG';
+                    if (bytes.length >= 4 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) return 'PNG';
+                    if (bytes.length >= 3 && bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) return 'GIF';
+                    if (bytes.length >= 4 && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) return 'WEBP';
+                    if (bytes.length >= 2 && bytes[0] === 0x42 && bytes[1] === 0x4D) return 'BMP';
+                    if (bytes.length >= 5 && bytes[0] === 0x3C && bytes[1] === 0x73 && bytes[2] === 0x76 && bytes[3] === 0x67) return 'SVG';
+                    return '';
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.validationResult = null;
+                    this.imagePreview = '';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
