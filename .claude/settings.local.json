@@ -4,7 +4,14 @@
       "Bash(tree:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(git ls-tree:*)",
+      "Bash(if [ -f .gitignore ])",
+      "Bash(then cat .gitignore)",
+      "Bash(else echo \"No .gitignore file\")",
+      "Bash(fi)",
+      "Bash(docker build:*)",
+      "Bash(find:*)"
     ]
   }
 }
