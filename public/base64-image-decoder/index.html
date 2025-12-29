@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base64 Image Decoder - Free Online Tool to Decode Base64 to Image</title>
     <meta name="description" content="Free online Base64 image decoder. Paste your Base64 string and instantly decode it to view, preview, and download images. No uploads required, works entirely in your browser.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -49,12 +50,12 @@
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
-            <a href="/" class="logo">BASE64IMAGE</a>
+            <a href="/" class="logo"><i class="fas fa-image"></i> BASE64IMAGE</a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="/#tools">Tools</a></li>
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="/privacy-policy/">Privacy</a></li>
+                    <li><a href="/#tools"><i class="fas fa-tools"></i> Tools</a></li>
+                    <li><a href="/about/"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/privacy-policy/"><i class="fas fa-shield-alt"></i> Privacy</a></li>
                 </ul>
             </nav>
         </div>
@@ -62,7 +63,7 @@
 
     <!-- Main Content -->
     <main x-data="base64Decoder()">
-        <h1>Base64 Image Decoder</h1>
+        <h1><i class="fas fa-unlock-alt"></i> Base64 Image Decoder</h1>
         <p class="intro">Decode Base64 strings to images instantly in your browser</p>
 
         <div class="trust-note">
@@ -87,7 +88,7 @@
             </div>
 
             <div class="preview-container" x-show="imageUrl">
-                <h2>Preview</h2>
+                <h2><i class="fas fa-image"></i> Preview</h2>
                 <div class="image-wrapper">
                     <img :src="imageUrl" alt="Decoded image preview" x-show="imageUrl">
                 </div>
@@ -100,7 +101,7 @@
         </section>
 
         <article class="content-section">
-            <h2>What is a Base64 Image Decoder?</h2>
+            <h2><i class="fas fa-question-circle"></i> What is a Base64 Image Decoder?</h2>
             <p>
                 A Base64 image decoder is a tool that converts Base64-encoded strings back into their original image format.
                 Base64 encoding is widely used in web development to embed images directly into HTML, CSS, or JSON files without
@@ -108,7 +109,7 @@
                 to include images in data URIs.
             </p>
 
-            <h2>How Does Base64 Encoding Work?</h2>
+            <h2><i class="fas fa-cog"></i> How Does Base64 Encoding Work?</h2>
             <p>
                 Base64 encoding transforms binary image data into a text string using 64 ASCII characters (A-Z, a-z, 0-9, +, and /).
                 This encoding increases the file size by approximately 33% but allows binary data to be safely transmitted through
@@ -116,7 +117,7 @@
                 that's a Base64-encoded image.
             </p>
 
-            <h2>Why Use This Base64 Decoder?</h2>
+            <h2><i class="fas fa-lightbulb"></i> Why Use This Base64 Decoder?</h2>
             <p>
                 Our Base64 image decoder offers several advantages for developers and designers. First, it operates entirely in
                 your browser, meaning your data never leaves your device—ensuring complete privacy and security. There's no need
@@ -125,7 +126,7 @@
                 paste the entire data URI or just the Base64 portion.
             </p>
 
-            <h2>Common Use Cases</h2>
+            <h2><i class="fas fa-list-ul"></i> Common Use Cases</h2>
             <p>
                 Base64 image decoding is essential in various scenarios. Web developers often encounter Base64 images in API
                 responses, configuration files, or database records. Email developers use Base64 encoding to embed images in
@@ -134,7 +135,7 @@
                 embedded resources will find this tool invaluable.
             </p>
 
-            <h2>Features of This Tool</h2>
+            <h2><i class="fas fa-star"></i> Features of This Tool</h2>
             <p>
                 This decoder automatically validates your Base64 input, stripping unnecessary prefixes like "data:image/png;base64,"
                 if present. It provides instant visual feedback with image previews and displays helpful information about the
@@ -143,7 +144,7 @@
                 fast performance and complete data privacy.
             </p>
 
-            <h2>Supported Image Formats</h2>
+            <h2><i class="fas fa-image"></i> Supported Image Formats</h2>
             <p>
                 This tool supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, BMP, and ICO. The image
                 format is automatically detected from either the data URI prefix (e.g., "data:image/png;base64,") or from the
@@ -210,9 +211,9 @@
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-links">
-                <a href="/privacy-policy/">Privacy Policy</a>
-                <a href="/terms-of-service/">Terms of Service</a>
-                <a href="/about/">About</a>
+                <a href="/privacy-policy/"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                <a href="/terms-of-service/"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                <a href="/about/"><i class="fas fa-info-circle"></i> About</a>
             </div>
             <p class="footer-copyright">&copy; 2025 BASE64IMAGE. All tools run locally in your browser.</p>
         </div>

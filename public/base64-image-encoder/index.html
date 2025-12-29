@@ -5,8 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base64 Image Encoder - Convert Images to Base64 Online</title>
     <meta name="description" content="Free online Base64 image encoder. Upload any image and convert it to a Base64 string. Perfect for embedding images in HTML, CSS, or JSON. Works locally in your browser.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        .processing-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .processing-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .processing-spinner p {
+            color: white;
+            font-size: 18px;
+            margin: 0;
+        }
+    </style>
 
     <script type="application/ld+json">
     {
@@ -41,12 +83,12 @@
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
-            <a href="/" class="logo">BASE64IMAGE</a>
+            <a href="/" class="logo"><i class="fas fa-image"></i> BASE64IMAGE</a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="/#tools">Tools</a></li>
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="/privacy-policy/">Privacy</a></li>
+                    <li><a href="/#tools"><i class="fas fa-tools"></i> Tools</a></li>
+                    <li><a href="/about/"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/privacy-policy/"><i class="fas fa-shield-alt"></i> Privacy</a></li>
                 </ul>
             </nav>
         </div>
@@ -54,7 +96,14 @@
 
     <!-- Main Content -->
     <main x-data="base64Encoder()">
-        <h1>Base64 Image Encoder</h1>
+        <div x-show="isProcessing" x-cloak class="processing-overlay">
+            <div class="processing-spinner">
+                <div class="spinner"></div>
+                <p>Processing image...</p>
+            </div>
+        </div>
+
+        <h1><i class="fas fa-file-upload"></i> Base64 Image Encoder</h1>
         <p class="intro">Convert images to Base64 strings instantly in your browser</p>
 
         <div class="trust-note">
@@ -75,7 +124,7 @@
             </div>
 
             <div class="preview-container" x-show="imagePreview">
-                <h2>Preview</h2>
+                <h2><i class="fas fa-image"></i> Preview</h2>
                 <div class="image-wrapper">
                     <img :src="imagePreview" alt="Image preview" x-show="imagePreview">
                 </div>
@@ -104,14 +153,14 @@
         </section>
 
         <article class="content-section">
-            <h2>What is Base64 Image Encoding?</h2>
+            <h2><i class="fas fa-question-circle"></i> What is Base64 Image Encoding?</h2>
             <p>
                 Base64 image encoding converts binary image data into a text string that can be safely embedded in HTML, CSS, JSON, or other text-based formats.
                 This encoding scheme uses 64 ASCII characters to represent binary data, making it possible to include images directly in your code without
                 requiring separate image files or external URLs.
             </p>
 
-            <h2>Why Encode Images to Base64?</h2>
+            <h2><i class="fas fa-lightbulb"></i> Why Encode Images to Base64?</h2>
             <p>
                 Base64-encoded images are useful in many web development scenarios. They eliminate additional HTTP requests by embedding small assets directly
                 in CSS or HTML. They're essential for data URIs in stylesheets, allowing you to include icons and logos without external files. Email developers
@@ -119,14 +168,14 @@
                 small images like icons, buttons, and logos where the convenience outweighs the 33% size increase from encoding.
             </p>
 
-            <h2>How This Encoder Works</h2>
+            <h2><i class="fas fa-cog"></i> How This Encoder Works</h2>
             <p>
                 Our Base64 image encoder uses the FileReader API to read your uploaded image file directly in the browser. The image data is then converted
                 to a Base64 string using the btoa() function. The result includes the complete data URI with MIME type, making it ready to use in HTML img
                 tags, CSS backgrounds, or anywhere data URIs are supported. All processing happens instantly in your browser's memory—no server uploads required.
             </p>
 
-            <h2>Common Use Cases</h2>
+            <h2><i class="fas fa-list-ul"></i> Common Use Cases</h2>
             <p>
                 Developers encode images to Base64 for various purposes. Frontend developers embed small UI elements to reduce HTTP requests and improve
                 page load performance. CSS developers include background images and icons directly in stylesheets. Email template designers embed images
@@ -134,7 +183,7 @@
                 as Base64 strings. Anyone working with data URIs, inline images, or API payloads will find this tool invaluable.
             </p>
 
-            <h2>Best Practices</h2>
+            <h2><i class="fas fa-star"></i> Best Practices</h2>
             <p>
                 While Base64 encoding is convenient, use it wisely. Encode only small images (typically under 10KB) to avoid bloating your HTML or CSS files.
                 Larger images should be served as separate files to benefit from browser caching and CDN distribution. Base64 is ideal for frequently-used
@@ -191,9 +240,9 @@
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-links">
-                <a href="/privacy-policy/">Privacy Policy</a>
-                <a href="/terms-of-service/">Terms of Service</a>
-                <a href="/about/">About</a>
+                <a href="/privacy-policy/"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                <a href="/terms-of-service/"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                <a href="/about/"><i class="fas fa-info-circle"></i> About</a>
             </div>
             <p class="footer-copyright">&copy; 2025 BASE64IMAGE. All tools run locally in your browser.</p>
         </div>
@@ -207,8 +256,10 @@
                 error: '',
                 success: '',
                 fileInfo: null,
+                isProcessing: false,
 
                 handleFileUpload(event) {
+                    this.isProcessing = true;
                     this.error = '';
                     this.success = '';
                     this.base64Output = '';
@@ -216,11 +267,15 @@
                     this.fileInfo = null;
 
                     const file = event.target.files[0];
-                    if (!file) return;
+                    if (!file) {
+                        this.isProcessing = false;
+                        return;
+                    }
 
                     // Validate file type
                     if (!file.type.startsWith('image/')) {
                         this.error = 'Please select a valid image file.';
+                        this.isProcessing = false;
                         return;
                     }
 
@@ -237,9 +292,11 @@
                         this.imagePreview = e.target.result;
                         this.base64Output = e.target.result;
                         this.success = 'Image successfully encoded to Base64!';
+                        this.isProcessing = false;
                     };
                     reader.onerror = () => {
                         this.error = 'Failed to read the image file. Please try again.';
+                        this.isProcessing = false;
                     };
                     reader.readAsDataURL(file);
                 },

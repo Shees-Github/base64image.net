@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base64 Validator - Validate Base64 Strings Online</title>
     <meta name="description" content="Free online Base64 validator. Check if your Base64 strings are valid, detect image format, and verify encoding. Instant validation with detailed feedback.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
@@ -34,12 +35,12 @@
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
-            <a href="/" class="logo">BASE64IMAGE</a>
+            <a href="/" class="logo"><i class="fas fa-image"></i> BASE64IMAGE</a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="/#tools">Tools</a></li>
-                    <li><a href="/about/">About</a></li>
-                    <li><a href="/privacy-policy/">Privacy</a></li>
+                    <li><a href="/#tools"><i class="fas fa-tools"></i> Tools</a></li>
+                    <li><a href="/about/"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li><a href="/privacy-policy/"><i class="fas fa-shield-alt"></i> Privacy</a></li>
                 </ul>
             </nav>
         </div>
@@ -47,7 +48,7 @@
 
     <!-- Main Content -->
     <main x-data="base64Validator()">
-        <h1>Base64 Validator</h1>
+        <h1><i class="fas fa-check-circle"></i> Base64 Validator</h1>
         <p class="intro">Validate Base64 strings and verify image data</p>
 
         <div class="trust-note">
@@ -67,7 +68,7 @@
             </div>
 
             <div class="preview-container" x-show="validationResult">
-                <h2>Validation Result</h2>
+                <h2><i class="fas fa-clipboard-check"></i> Validation Result</h2>
 
                 <div x-show="validationResult && validationResult.isValid" class="success" style="margin-bottom: 20px;">
                     ✓ Valid Base64 string
@@ -97,14 +98,14 @@
         </section>
 
         <article class="content-section">
-            <h2>What is Base64 Validation?</h2>
+            <h2><i class="fas fa-question-circle"></i> What is Base64 Validation?</h2>
             <p>
                 Base64 validation checks whether a string is properly encoded according to the Base64 specification. Valid Base64 strings use only the
                 characters A-Z, a-z, 0-9, +, and /, with = used for padding. The validator verifies the character set, checks padding correctness,
                 and can detect the image format if the string represents image data.
             </p>
 
-            <h2>Why Validate Base64 Strings?</h2>
+            <h2><i class="fas fa-lightbulb"></i> Why Validate Base64 Strings?</h2>
             <p>
                 Validating Base64 strings is crucial for debugging and quality assurance. Invalid Base64 can cause applications to crash or display
                 errors when decoding. Validation helps identify truncated or corrupted data, detect encoding errors before they reach production,
@@ -112,7 +113,7 @@
                 essential step in ensuring data integrity.
             </p>
 
-            <h2>How This Validator Works</h2>
+            <h2><i class="fas fa-cog"></i> How This Validator Works</h2>
             <p>
                 This tool performs comprehensive validation on your Base64 string. It checks character validity, ensuring only permitted Base64
                 characters are used. It verifies padding correctness, checking that = characters appear only at the end. It detects data URI
@@ -120,7 +121,7 @@
                 valid data. For image data, it tries to load and preview the image to confirm validity.
             </p>
 
-            <h2>Common Validation Errors</h2>
+            <h2><i class="fas fa-exclamation-circle"></i> Common Validation Errors</h2>
             <p>
                 Several issues can make a Base64 string invalid. Invalid characters outside the Base64 alphabet will cause validation to fail.
                 Incorrect padding with = characters in wrong positions indicates corruption. Truncated strings that end abruptly suggest incomplete
@@ -128,7 +129,7 @@
                 provides clear feedback to help you fix the problem.
             </p>
 
-            <h2>Base64 String Structure</h2>
+            <h2><i class="fas fa-code"></i> Base64 String Structure</h2>
             <p>
                 A valid Base64 string follows specific rules. It uses only 64 specific characters plus padding. The length must be a multiple of 4
                 when fully padded. Padding characters (=) can only appear at the end. Data URIs include a prefix like "data:image/png;base64,"
@@ -183,9 +184,9 @@
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-links">
-                <a href="/privacy-policy/">Privacy Policy</a>
-                <a href="/terms-of-service/">Terms of Service</a>
-                <a href="/about/">About</a>
+                <a href="/privacy-policy/"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                <a href="/terms-of-service/"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                <a href="/about/"><i class="fas fa-info-circle"></i> About</a>
             </div>
             <p class="footer-copyright">&copy; 2025 BASE64IMAGE. All tools run locally in your browser.</p>
         </div>
