@@ -606,31 +606,54 @@ button:active {
     }
 
     .main-nav ul {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .main-nav a {
+        font-size: 0.85rem;
+        padding: 6px 0;
+        white-space: nowrap;
     }
 
     .main-nav > ul > li {
-        position: static;
+        position: relative;
     }
 
-    /* Mobile dropdown - convert to full width */
+    /* Mobile dropdown - convert to full width, hide by default */
     .dropdown-menu {
         position: fixed;
         left: 50%;
-        right: auto;
-        top: auto;
-        margin-top: 5px;
-        transform: translateX(-50%) translateY(0);
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        margin-top: 0;
         width: 90%;
         max-width: 320px;
         min-width: auto;
         border-radius: 10px;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 2000;
     }
 
+    /* Show dropdown only when tapped/clicked */
+    .dropdown.active .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Disable hover on mobile - require tap */
     .dropdown:hover .dropdown-menu {
-        transform: translateX(-50%) translateY(0);
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    .dropdown.active:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
     }
 
     .footer-grid {
