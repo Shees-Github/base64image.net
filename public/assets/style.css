@@ -95,10 +95,15 @@ header.site-header {
     cursor: pointer;
     padding: 8px;
     transition: color 0.2s;
+    margin-left: auto;
 }
 
 .mobile-menu-toggle:hover {
     color: #667eea;
+}
+
+.mobile-menu-toggle:focus {
+    outline: none;
 }
 
 /* Dropdown Menu */
@@ -622,8 +627,13 @@ button:active {
 
     /* Show hamburger button on mobile */
     .mobile-menu-toggle {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
         z-index: 1001;
+        width: 44px;
+        height: 44px;
     }
 
     /* Hide navigation by default on mobile */
@@ -638,6 +648,7 @@ button:active {
         transition: right 0.3s ease;
         z-index: 1000;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     /* Show navigation when active */
@@ -686,16 +697,19 @@ button:active {
         box-shadow: none;
         border-radius: 0;
         padding: 0;
-        opacity: 1;
-        visibility: visible;
+        opacity: 0;
+        visibility: hidden;
         background: #f8f9ff;
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0s 0.3s;
     }
 
     .dropdown.active .dropdown-menu {
         max-height: 400px;
+        opacity: 1;
+        visibility: visible;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0s;
     }
 
     .dropdown-menu li {
@@ -713,13 +727,15 @@ button:active {
 
     /* Disable hover effects on mobile */
     .dropdown:hover .dropdown-menu {
-        opacity: 1;
-        visibility: visible;
+        opacity: 0;
+        visibility: hidden;
         transform: none;
         max-height: 0;
     }
 
     .dropdown.active:hover .dropdown-menu {
+        opacity: 1;
+        visibility: visible;
         max-height: 400px;
     }
 
