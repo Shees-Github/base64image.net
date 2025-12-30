@@ -263,31 +263,25 @@
             }
 
             // Initialize counter on page load
-            async function initCounter() {
+            function initCounter() {
                 const counter = document.getElementById('conversion-counter');
                 if (!counter) return;
 
-                // Fetch current count from API
-                const currentCount = await window.getSiteConversions();
+                const currentCount = window.getSiteConversions();
 
                 // Start animation from a slightly lower number for effect
                 const startCount = Math.max(12847, currentCount - 50);
                 animateCounter(counter, startCount, currentCount);
             }
 
-            // Listen for real-time conversion updates
-            window.addEventListener('conversionUpdated', function(e) {
-                const counter = document.getElementById('conversion-counter');
-                if (counter) {
-                    createFlipCounter(counter, e.detail.count);
-                }
-            });
-
-            // Listen for conversion increments
-            window.addEventListener('conversionIncremented', function(e) {
-                const counter = document.getElementById('conversion-counter');
-                if (counter) {
-                    createFlipCounter(counter, e.detail.count);
+            // Listen for conversions from other pages
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'base64image_conversions' && e.newValue) {
+                    const counter = document.getElementById('conversion-counter');
+                    if (counter) {
+                        const newCount = parseInt(e.newValue, 10);
+                        createFlipCounter(counter, newCount);
+                    }
                 }
             });
 
