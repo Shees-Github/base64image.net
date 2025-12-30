@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
     <script src="../assets/components.js"></script>
-    <script src="../assets/counter.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
@@ -295,16 +294,6 @@
                             format: format.toUpperCase(),
                             size: this.formatBytes(this.imageBlob.size)
                         };
-
-                        // Increment site-wide conversion counter
-                        if (typeof window.incrementSiteConversions === 'function') {
-                            window.incrementSiteConversions();
-                        } else {
-                            // Counter script not loaded yet, increment localStorage directly
-                            const key = 'base64image_conversions';
-                            const current = parseInt(localStorage.getItem(key) || '12847', 10);
-                            localStorage.setItem(key, (current + 1).toString());
-                        }
 
                     } catch (err) {
                         this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
