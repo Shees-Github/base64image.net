@@ -6,14 +6,13 @@ RUN apk add --no-cache nginx
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/http.d/default.conf
 
-# Copy static files and API
+# Copy static files (includes API in public/api/)
 COPY public/ /usr/share/nginx/html/
-COPY api/ /usr/share/nginx/html/api/
 
 # Create directory for counter data with proper permissions
 RUN mkdir -p /usr/share/nginx/html/api && \
     chown -R nginx:nginx /usr/share/nginx/html/api && \
-    chmod -R 755 /usr/share/nginx/html/api
+    chmod -R 777 /usr/share/nginx/html/api
 
 # Create PHP-FPM run directory
 RUN mkdir -p /var/run/php

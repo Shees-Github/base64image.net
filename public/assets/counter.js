@@ -13,6 +13,7 @@
     // Get count from API
     async function fetchCount() {
         try {
+            console.log('[Counter] Fetching count from:', API_ENDPOINT);
             const response = await fetch(API_ENDPOINT, {
                 method: 'GET',
                 headers: {
@@ -20,11 +21,13 @@
                 }
             });
 
+            console.log('[Counter] Response status:', response.status);
             if (!response.ok) {
-                throw new Error('API request failed');
+                throw new Error(`API request failed with status ${response.status}`);
             }
 
             const data = await response.json();
+            console.log('[Counter] Received data:', data);
             cachedCount = data.count;
             cacheTime = Date.now();
 
@@ -94,11 +97,21 @@
 
     // Public API: Increment conversion count
     window.incrementSiteConversions = function(callback) {
+        console.log('[Counter] Incrementing conversion count...');
         incrementCount().then(count => {
+            console.log('[Counter] Count incremented to:', count);
             if (callback && typeof callback === 'function') {
                 callback(count);
             }
+        }).catch(error => {
+            console.error('[Counter] Error incrementing:', error);
         });
+    };
+
+    // Also provide async version
+    window.incrementSiteConversionsAsync = async function() {
+        console.log('[Counter] Incrementing conversion count (async)...');
+        return await incrementCount();
     };
 
     // Public API: Get current count
