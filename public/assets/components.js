@@ -5,6 +5,9 @@ const HeaderComponent = `
     <header class="site-header">
         <div class="header-container">
             <a href="/" class="logo"><i class="fas fa-image"></i> BASE64IMAGE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
             <nav class="main-nav">
                 <ul>
                     <li class="dropdown">
@@ -23,6 +26,7 @@ const HeaderComponent = `
                 </ul>
             </nav>
         </div>
+        <div class="mobile-menu-overlay"></div>
     </header>
 `;
 
@@ -80,32 +84,85 @@ function initComponents() {
 
 // Mobile menu toggle functionality
 function initMobileMenu() {
-    // Only apply on mobile devices
-    if (window.innerWidth <= 768) {
-        const dropdown = document.querySelector('.dropdown');
-        const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    const menuOverlay = document.querySelector('.mobile-menu-overlay');
+    const dropdown = document.querySelector('.dropdown');
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
 
-        if (dropdown && dropdownToggle) {
-            dropdownToggle.addEventListener('click', function(e) {
+    // Toggle mobile menu
+    if (menuToggle && mainNav && menuOverlay) {
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mainNav.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+
+            // Change icon
+            const icon = menuToggle.querySelector('i');
+            if (mainNav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when clicking overlay
+        menuOverlay.addEventListener('click', function() {
+            mainNav.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        });
+    }
+
+    // Handle dropdown toggle on mobile
+    if (dropdown && dropdownToggle) {
+        dropdownToggle.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768) {
                 e.preventDefault();
                 dropdown.classList.toggle('active');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!dropdown.contains(e.target)) {
-                    dropdown.classList.remove('active');
-                }
-            });
-        }
+            }
+        });
     }
+
+    // Close mobile menu and dropdown when clicking nav links
+    const navLinks = document.querySelectorAll('.main-nav a:not(.dropdown-toggle)');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                mainNav.classList.remove('active');
+                menuOverlay.classList.remove('active');
+                dropdown.classList.remove('active');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    });
 }
 
-// Re-init on resize
+// Clean up on resize to desktop
 window.addEventListener('resize', function() {
-    const dropdown = document.querySelector('.dropdown');
-    if (dropdown && window.innerWidth > 768) {
-        dropdown.classList.remove('active');
+    if (window.innerWidth > 768) {
+        const mainNav = document.querySelector('.main-nav');
+        const menuOverlay = document.querySelector('.mobile-menu-overlay');
+        const dropdown = document.querySelector('.dropdown');
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+
+        if (mainNav) mainNav.classList.remove('active');
+        if (menuOverlay) menuOverlay.classList.remove('active');
+        if (dropdown) dropdown.classList.remove('active');
+
+        if (menuToggle) {
+            const icon = menuToggle.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
     }
 });
 
