@@ -12,51 +12,25 @@ const HeaderComponent = `
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li class="dropdown">
-                        <a href="/encoder/" class="dropdown-toggle">Encoder</a>
+                        <a href="#" class="dropdown-toggle">Encoder</a>
                         <ul class="dropdown-menu">
-                            <li><a href="/encoder/text/">Text to Base64</a></li>
-                            <li><a href="/encoder/file/">File to Base64</a></li>
-                            <li><a href="/encoder/image/">Image to Base64</a></li>
+                            <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+                            <li><a href="/base64-image-encoder/">File to Base64</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="/decoder/" class="dropdown-toggle">Decoder</a>
+                        <a href="#" class="dropdown-toggle">Decoder</a>
                         <ul class="dropdown-menu">
-                            <li><a href="/decoder/text/">Base64 to Text</a></li>
-                            <li><a href="/decoder/file/">Base64 to File</a></li>
-                            <li><a href="/decoder/image/">Base64 to Image</a></li>
+                            <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
+                            <li><a href="/base64-image-decoder/">Base64 to File</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="/file-tools/" class="dropdown-toggle">File Tools</a>
+                        <a href="#" class="dropdown-toggle">Tools</a>
                         <ul class="dropdown-menu">
-                            <li><a href="/file-tools/pdf/">PDF Encoder/Decoder</a></li>
-                            <li><a href="/file-tools/document/">Word/Excel/PowerPoint</a></li>
-                            <li><a href="/file-tools/bulk/">Bulk File Conversion</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="/image-tools/" class="dropdown-toggle">Image Tools</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/image-tools/convert/">Convert Image to Base64</a></li>
-                            <li><a href="/image-tools/download/">Base64 to Image Download</a></li>
-                            <li><a href="/image-tools/resize/">Resize/Compress Images</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="/pdf-doc-tools/" class="dropdown-toggle">PDF/Doc Tools</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/pdf-doc-tools/encoder-decoder/">PDF Encoder/Decoder</a></li>
-                            <li><a href="/pdf-doc-tools/preview/">Preview PDF from Base64</a></li>
-                            <li><a href="/pdf-doc-tools/download/">Base64 to Document Download</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="/utilities/" class="dropdown-toggle">Utilities</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/utilities/url/">URL Encoder/Decoder</a></li>
-                            <li><a href="/utilities/validator/">Base64 Validator</a></li>
-                            <li><a href="/utilities/encrypt/">Encrypt/Decrypt</a></li>
+                            <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+                            <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+                            <li><a href="/base64-validator/">Base64 Validator</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -71,28 +45,13 @@ const FooterComponent = `
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-section">
-                    <h3>Encoder Tools</h3>
+                    <h3>Base64 Tools</h3>
                     <ul>
-                        <li><a href="/encoder/text/">Text to Base64</a></li>
-                        <li><a href="/encoder/file/">File to Base64</a></li>
-                        <li><a href="/encoder/image/">Image to Base64</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Decoder Tools</h3>
-                    <ul>
-                        <li><a href="/decoder/text/">Base64 to Text</a></li>
-                        <li><a href="/decoder/file/">Base64 to File</a></li>
-                        <li><a href="/decoder/image/">Base64 to Image</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>File & Image Tools</h3>
-                    <ul>
-                        <li><a href="/file-tools/pdf/">PDF Tools</a></li>
-                        <li><a href="/file-tools/document/">Document Tools</a></li>
-                        <li><a href="/image-tools/convert/">Image Converter</a></li>
-                        <li><a href="/utilities/validator/">Base64 Validator</a></li>
+                        <li><a href="/base64-image-encoder/">Base64 Image Encoder</a></li>
+                        <li><a href="/base64-image-decoder/">Base64 Image Decoder</a></li>
+                        <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+                        <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+                        <li><a href="/base64-validator/">Base64 Validator</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
