@@ -682,6 +682,11 @@ button:active {
         width: 100%;
     }
 
+    /* Reduce padding for dropdown toggles */
+    .main-nav .dropdown-toggle {
+        padding: 12px 20px;
+    }
+
     /* Mobile menu overlay */
     .mobile-menu-overlay {
         display: none;
