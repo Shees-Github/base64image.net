@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 File Decoder - Decode Base64 to File Download Online Free</title>
+    <meta name="description" content="Free online Base64 file decoder. Convert Base64 encoded strings back to downloadable files. Supports all file types. No uploads required, works entirely in your browser.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-file-download"></i> Base64 File Decoder</h1>
+
+        <p class="intro">
+            Decode Base64 encoded strings back to downloadable files instantly. Extract files from Base64 data, API responses, or data URIs. Supports all file types.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All decoding happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div class="tool-section" x-data="fileDecoder()">
+            <div class="input-group">
+                <label for="base64Input"><i class="fas fa-code"></i> Paste Base64 String</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    rows="10"
+                    placeholder="Paste your Base64 encoded file data here..."
+                ></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="filenameInput"><i class="fas fa-file-signature"></i> Output Filename (optional)</label>
+                <input
+                    type="text"
+                    id="filenameInput"
+                    x-model="outputFilename"
+                    placeholder="decoded-file.bin"
+                />
+                <p style="margin-top: 5px; font-size: 0.85rem; color: #666;">
+                    Specify the filename with extension (e.g., document.pdf, archive.zip, data.json)
+                </p>
+            </div>
+
+            <div class="actions">
+                <button @click="decodeFile" class="btn-primary" :disabled="!base64Input.trim() || processing">
+                    <span x-show="!processing"><i class="fas fa-unlock"></i> Decode & Download</span>
+                    <span x-show="processing"><i class="fas fa-spinner fa-spin"></i> Decoding...</span>
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+            <div x-show="success" class="success" x-text="success"></div>
+
+            <div x-show="fileInfo" class="preview-container">
+                <h2><i class="fas fa-info-circle"></i> Decoded File Information</h2>
+
+                <div class="image-info">
+                    <p><strong>Filename:</strong> <span x-text="fileInfo.filename"></span></p>
+                    <p><strong>File Size:</strong> <span x-text="fileInfo.sizeFormatted"></span></p>
+                    <p><strong>Base64 Length:</strong> <span x-text="fileInfo.base64Length.toLocaleString()"></span> characters</p>
+                    <p><strong>Status:</strong> <span style="color: #28a745;">✓ Ready to download</span></p>
+                </div>
+
+                <p style="margin-top: 20px;">
+                    <i class="fas fa-arrow-down"></i> Click the "Decode & Download" button above to download your file.
+                </p>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 File Decoding?</h2>
+            <p>
+                Base64 file decoding converts Base64 encoded strings back into their original binary file format. This is essential when receiving files through APIs, extracting attachments from JSON, or converting data URIs back to downloadable files.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <p>
+                <strong>API Responses:</strong> Many APIs return file data as Base64 strings. Decode them to save the actual files to your device.
+            </p>
+            <p>
+                <strong>Email Attachments:</strong> Extract file attachments that were Base64 encoded in email MIME data.
+            </p>
+            <p>
+                <strong>Data URIs:</strong> Convert data URIs (data:application/pdf;base64,...) back to downloadable files.
+            </p>
+            <p>
+                <strong>Database Exports:</strong> Retrieve files that were stored as Base64 strings in database text fields.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How to Use This Tool</h2>
+            <p>
+                <strong>Step 1:</strong> Paste your Base64 encoded string into the text area. You can paste the pure Base64 string or include the data URI prefix (data:application/pdf;base64,...)—the tool will handle both.
+            </p>
+            <p>
+                <strong>Step 2:</strong> Optionally specify an output filename with the correct file extension (e.g., report.pdf, data.json, archive.zip).
+            </p>
+            <p>
+                <strong>Step 3:</strong> Click "Decode & Download" to decode the Base64 and automatically download the file to your device.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> Troubleshooting</h2>
+            <p>
+                <strong>Invalid Base64 Error:</strong> Make sure you copied the complete Base64 string. Remove any extra spaces, line breaks, or invalid characters.
+            </p>
+            <p>
+                <strong>File Won't Open:</strong> Ensure you specified the correct file extension. The decoded binary data needs the right extension to be recognized by your operating system.
+            </p>
+            <p>
+                <strong>Browser Hangs:</strong> Very large Base64 strings (over 50MB) may cause browser performance issues. Try using a smaller file or a desktop application for large files.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                All decoding happens locally in your browser. Your Base64 data is never sent to any server. Files are generated and downloaded directly from your browser's memory, ensuring complete privacy for sensitive or confidential files.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function fileDecoder() {
+            return {
+                base64Input: '',
+                outputFilename: 'decoded-file.bin',
+                error: '',
+                success: '',
+                fileInfo: null,
+                processing: false,
+
+                decodeFile() {
+                    this.error = '';
+                    this.success = '';
+                    this.fileInfo = null;
+
+                    if (!this.base64Input.trim()) {
+                        this.error = 'Please paste a Base64 string to decode.';
+                        return;
+                    }
+
+                    this.processing = true;
+
+                    try {
+                        // Remove data URI prefix if present
+                        let base64String = this.base64Input.trim();
+                        const dataUriMatch = base64String.match(/^data:[^;]+;base64,(.+)$/);
+
+                        if (dataUriMatch) {
+                            base64String = dataUriMatch[1];
+                        }
+
+                        // Remove whitespace
+                        base64String = base64String.replace(/\s/g, '');
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64
+                        const binaryString = atob(base64String);
+                        const bytes = new Uint8Array(binaryString.length);
+
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+
+                        // Create blob and download
+                        const blob = new Blob([bytes]);
+                        const url = URL.createObjectURL(blob);
+
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = this.outputFilename || 'decoded-file.bin';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+
+                        // Show file info
+                        this.fileInfo = {
+                            filename: this.outputFilename || 'decoded-file.bin',
+                            size: bytes.length,
+                            sizeFormatted: this.formatBytes(bytes.length),
+                            base64Length: base64String.length
+                        };
+
+                        this.success = 'File decoded successfully! Check your downloads folder.';
+                        this.processing = false;
+
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.processing = false;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.outputFilename = 'decoded-file.bin';
+                    this.error = '';
+                    this.success = '';
+                    this.fileInfo = null;
+                    this.processing = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

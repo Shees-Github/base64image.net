@@ -53,11 +53,15 @@
         "description": "Free, privacy-focused Base64 image tools for encoding, decoding, converting, and validating Base64 images. All processing happens locally in your browser.",
         "browserRequirements": "Requires JavaScript",
         "featureList": [
+            "Base64 Text Encoder",
+            "Base64 Text Decoder",
+            "Base64 File Encoder",
+            "Base64 File Decoder",
             "Base64 Image Encoder",
             "Base64 Image Decoder",
             "Base64 to PNG Converter",
-            "Base64 Validator",
             "Base64 to PDF Converter",
+            "Base64 Validator",
             "Client-side Processing",
             "No Data Upload",
             "Privacy-First"
@@ -89,7 +93,7 @@
             "name": "What tools does BASE64IMAGE offer?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "BASE64IMAGE offers five free tools: Base64 Image Decoder (decode Base64 to images), Base64 Image Encoder (convert images to Base64), Base64 to PNG Converter (convert Base64 to PNG format), Base64 Validator (validate and verify Base64 strings), and Base64 to PDF Converter (convert PDFs to Base64 and vice versa)."
+                "text": "BASE64IMAGE offers nine free tools: Base64 Text Encoder/Decoder (convert text to/from Base64), Base64 File Encoder/Decoder (convert any file type to/from Base64), Base64 Image Encoder/Decoder (convert images to/from Base64), Base64 to PNG Converter (convert Base64 to PNG format), Base64 to PDF Converter (convert PDFs to Base64 and vice versa), and Base64 Validator (validate and verify Base64 strings)."
             }
         }, {
             "@type": "Question",
@@ -124,13 +128,33 @@
 
             <div class="tool-list">
                 <div class="tool-card">
-                    <h3><i class="fas fa-unlock"></i> <a href="/base64-image-decoder/">Base64 Image Decoder</a></h3>
-                    <p>Decode Base64 strings to images. Supports PNG, JPEG, GIF, SVG, WebP, and BMP formats. Paste your Base64 string and instantly preview the decoded image.</p>
+                    <h3><i class="fas fa-font"></i> <a href="/base64-text-encoder/">Base64 Text Encoder</a></h3>
+                    <p>Convert plain text to Base64 strings. Perfect for encoding text for APIs, data URLs, or configuration files.</p>
                 </div>
 
                 <div class="tool-card">
-                    <h3><i class="fas fa-lock"></i> <a href="/base64-image-encoder/">Base64 Image Encoder</a></h3>
+                    <h3><i class="fas fa-file-alt"></i> <a href="/base64-text-decoder/">Base64 Text Decoder</a></h3>
+                    <p>Decode Base64 strings back to plain text. Extract text from API responses, JWT tokens, or email headers.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-file-upload"></i> <a href="/base64-file-encoder/">Base64 File Encoder</a></h3>
+                    <p>Convert any file type to Base64 strings. Upload documents, archives, media files, or executables and get Base64-encoded output.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-file-download"></i> <a href="/base64-file-decoder/">Base64 File Decoder</a></h3>
+                    <p>Decode Base64 strings back to downloadable files. Extract files from API responses, data URIs, or database exports.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-image"></i> <a href="/base64-image-encoder/">Base64 Image Encoder</a></h3>
                     <p>Convert images to Base64 strings. Upload any image and get a clean Base64-encoded string ready to use in your HTML, CSS, or JSON files.</p>
+                </div>
+
+                <div class="tool-card">
+                    <h3><i class="fas fa-unlock"></i> <a href="/base64-image-decoder/">Base64 Image Decoder</a></h3>
+                    <p>Decode Base64 strings to images. Supports PNG, JPEG, GIF, SVG, WebP, and BMP formats. Paste your Base64 string and instantly preview the decoded image.</p>
                 </div>
 
                 <div class="tool-card">
@@ -139,13 +163,13 @@
                 </div>
 
                 <div class="tool-card">
-                    <h3><i class="fas fa-check-circle"></i> <a href="/base64-validator/">Base64 Validator</a></h3>
-                    <p>Validate Base64 strings and check if they represent valid image data. Detect format, verify encoding, and identify issues.</p>
+                    <h3><i class="fas fa-file-pdf"></i> <a href="/base64-to-pdf/">Base64 to PDF</a></h3>
+                    <p>Convert PDF files to Base64 strings or decode Base64 to PDF documents. Perfect for embedding PDFs in APIs or extracting PDF files from Base64 data.</p>
                 </div>
 
                 <div class="tool-card">
-                    <h3><i class="fas fa-file-pdf"></i> <a href="/base64-to-pdf/">Base64 to PDF</a></h3>
-                    <p>Convert PDF files to Base64 strings or decode Base64 to PDF documents. Perfect for embedding PDFs in APIs or extracting PDF files from Base64 data.</p>
+                    <h3><i class="fas fa-check-circle"></i> <a href="/base64-validator/">Base64 Validator</a></h3>
+                    <p>Validate Base64 strings and check if they represent valid image data. Detect format, verify encoding, and identify issues.</p>
                 </div>
             </div>
         </section>

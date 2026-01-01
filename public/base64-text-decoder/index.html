@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Text Decoder - Decode Base64 to Text Online Free</title>
+    <meta name="description" content="Free online Base64 text decoder. Convert Base64 encoded strings back to plain text instantly. No uploads required, works entirely in your browser. Fast, secure, and privacy-focused.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-unlock"></i> Base64 Text Decoder</h1>
+
+        <p class="intro">
+            Decode Base64 encoded strings back to plain text instantly. Extract text from Base64 data, decode API responses, or reverse Base64 encoding for any text data.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All decoding happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div class="tool-section" x-data="textDecoder()">
+            <div class="input-group">
+                <label for="base64Input"><i class="fas fa-code"></i> Enter Base64 String to Decode</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    rows="8"
+                    placeholder="Paste your Base64 encoded text here..."
+                ></textarea>
+            </div>
+
+            <div class="actions">
+                <button @click="decodeText" class="btn-primary" :disabled="!base64Input.trim()">
+                    <i class="fas fa-unlock"></i> Decode to Text
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+
+            <div x-show="textOutput" class="preview-container">
+                <h2><i class="fas fa-font"></i> Decoded Text</h2>
+
+                <div class="input-group">
+                    <label>Plain Text Output</label>
+                    <textarea
+                        x-model="textOutput"
+                        rows="8"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="actions">
+                    <button @click="copyToClipboard" class="btn-primary">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                    <button @click="downloadAsText" class="btn-secondary">
+                        <i class="fas fa-download"></i> Download as .txt
+                    </button>
+                </div>
+
+                <div x-show="copySuccess" class="success">
+                    ✓ Copied to clipboard!
+                </div>
+
+                <div class="image-info">
+                    <p><strong>Base64 Length:</strong> <span x-text="base64Input.length"></span> characters</p>
+                    <p><strong>Decoded Length:</strong> <span x-text="textOutput.length"></span> characters</p>
+                    <p><strong>Encoding:</strong> UTF-8</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 Text Decoding?</h2>
+            <p>
+                Base64 text decoding converts Base64 encoded strings back to their original plain text format. This is essential when working with APIs, configuration files, or any system that transmits text data in Base64 format.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> When You Need Text Decoding</h2>
+            <p>
+                <strong>API Responses:</strong> Many APIs return text data encoded in Base64 format. You need to decode it to read the actual content.
+            </p>
+            <p>
+                <strong>Email Headers:</strong> Email systems often encode subject lines and headers in Base64 to support international characters.
+            </p>
+            <p>
+                <strong>JWT Tokens:</strong> JSON Web Tokens contain Base64 encoded payloads that need decoding to read claims and user data.
+            </p>
+            <p>
+                <strong>Configuration Data:</strong> Configuration files and environment variables sometimes store text data in Base64 format for portability.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Text Base64 Decoding Works</h2>
+            <p>
+                This tool takes your Base64 string and reverses the encoding process. It converts the Base64 characters back into bytes, then interprets those bytes as UTF-8 text. The tool automatically handles UTF-8 encoding to properly display international characters and special symbols.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> Common Decoding Issues</h2>
+            <p>
+                <strong>Invalid Base64:</strong> If your Base64 string contains invalid characters or incorrect padding, decoding will fail. Make sure you copied the complete Base64 string without extra spaces or line breaks.
+            </p>
+            <p>
+                <strong>Binary Data:</strong> If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show garbled characters. Use the appropriate image or file decoder instead.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                All decoding happens locally in your browser using JavaScript. Your Base64 data is never sent to any server. This ensures complete privacy when decoding sensitive information like API tokens, passwords, or confidential messages.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function textDecoder() {
+            return {
+                base64Input: '',
+                textOutput: '',
+                error: '',
+                copySuccess: false,
+
+                decodeText() {
+                    this.error = '';
+                    this.copySuccess = false;
+
+                    if (!this.base64Input.trim()) {
+                        this.error = 'Please enter a Base64 string to decode.';
+                        return;
+                    }
+
+                    try {
+                        // Remove whitespace and newlines
+                        const cleanBase64 = this.base64Input.replace(/\s/g, '');
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(cleanBase64)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64 to text
+                        this.textOutput = decodeURIComponent(escape(atob(cleanBase64)));
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.textOutput = '';
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.textOutput).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                downloadAsText() {
+                    const blob = new Blob([this.textOutput], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `decoded-text-${Date.now()}.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.textOutput = '';
+                    this.error = '';
+                    this.copySuccess = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

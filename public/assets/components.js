@@ -11,8 +11,22 @@ const HeaderComponent = `
             <nav class="main-nav">
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/base64-image-encoder/">Encoder</a></li>
-                    <li><a href="/base64-image-decoder/">Decoder</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Encoder <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/base64-text-encoder/">Text to Base64</a></li>
+                            <li><a href="/base64-file-encoder/">File to Base64</a></li>
+                            <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Decoder <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
+                            <li><a href="/base64-file-decoder/">Base64 to File</a></li>
+                            <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/base64-to-png/">To PNG</a></li>
                     <li><a href="/base64-to-pdf/">To PDF</a></li>
                     <li><a href="/base64-validator/">Validator</a></li>
@@ -28,10 +42,24 @@ const FooterComponent = `
         <div class="footer-container">
             <div class="footer-grid">
                 <div class="footer-section">
-                    <h3>Base64 Tools</h3>
+                    <h3>Encoders</h3>
                     <ul>
-                        <li><a href="/base64-image-encoder/">Base64 Image Encoder</a></li>
-                        <li><a href="/base64-image-decoder/">Base64 Image Decoder</a></li>
+                        <li><a href="/base64-text-encoder/">Text to Base64</a></li>
+                        <li><a href="/base64-file-encoder/">File to Base64</a></li>
+                        <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Decoders</h3>
+                    <ul>
+                        <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
+                        <li><a href="/base64-file-decoder/">Base64 to File</a></li>
+                        <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Converters</h3>
+                    <ul>
                         <li><a href="/base64-to-png/">Base64 to PNG</a></li>
                         <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
                         <li><a href="/base64-validator/">Base64 Validator</a></li>
@@ -61,6 +89,7 @@ function initComponents() {
     if (headerPlaceholder) {
         headerPlaceholder.outerHTML = HeaderComponent;
         initMobileMenu();
+        initDropdowns();
     }
 
     // Insert footer
@@ -117,6 +146,55 @@ function initMobileMenu() {
             });
         });
     }
+}
+
+// Dropdown menu functionality
+function initDropdowns() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+
+    dropdownToggles.forEach((toggle, index) => {
+        const dropdown = dropdowns[index];
+        const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+
+        // Desktop: hover behavior
+        if (window.innerWidth > 768) {
+            dropdown.addEventListener('mouseenter', function() {
+                dropdown.classList.add('active');
+            });
+
+            dropdown.addEventListener('mouseleave', function() {
+                dropdown.classList.remove('active');
+            });
+        }
+
+        // Mobile: click behavior
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (window.innerWidth <= 768) {
+                // Close other dropdowns
+                dropdowns.forEach((dd, i) => {
+                    if (i !== index) {
+                        dd.classList.remove('active');
+                    }
+                });
+
+                // Toggle current dropdown
+                dropdown.classList.toggle('active');
+            }
+        });
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown')) {
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
 }
 
 // Clean up on resize to desktop

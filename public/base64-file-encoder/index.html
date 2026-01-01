@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 File Encoder - Convert Any File to Base64 Online Free</title>
+    <meta name="description" content="Free online Base64 file encoder. Convert any file type to Base64 format instantly. Supports documents, archives, executables, and more. No uploads required, works entirely in your browser.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-file-upload"></i> Base64 File Encoder</h1>
+
+        <p class="intro">
+            Convert any file to Base64 format instantly. Supports all file types including documents, archives, executables, and binary files. Perfect for embedding files in JSON, APIs, or data URIs.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All encoding happens locally in your browser. Your files never leave your device or get uploaded to any server.
+        </div>
+
+        <div class="tool-section" x-data="fileEncoder()">
+            <div class="input-group">
+                <label for="fileInput"><i class="fas fa-file"></i> Select File to Encode</label>
+                <input
+                    type="file"
+                    id="fileInput"
+                    @change="handleFileSelect($event)"
+                />
+                <p x-show="fileName" style="margin-top: 10px; color: #667eea;">
+                    <i class="fas fa-check-circle"></i> Selected: <strong x-text="fileName"></strong>
+                </p>
+            </div>
+
+            <div class="actions">
+                <button @click="encodeFile" class="btn-primary" :disabled="!file || processing">
+                    <span x-show="!processing"><i class="fas fa-lock"></i> Encode to Base64</span>
+                    <span x-show="processing"><i class="fas fa-spinner fa-spin"></i> Encoding...</span>
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+
+            <div x-show="base64Output" class="preview-container">
+                <h2><i class="fas fa-code"></i> Base64 Output</h2>
+
+                <div class="input-group">
+                    <label>Encoded Base64 String (first 1000 characters)</label>
+                    <textarea
+                        x-model="base64Preview"
+                        rows="8"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="actions">
+                    <button @click="copyToClipboard" class="btn-primary">
+                        <i class="fas fa-copy"></i> Copy Full Base64
+                    </button>
+                    <button @click="downloadAsText" class="btn-secondary">
+                        <i class="fas fa-download"></i> Download as .txt
+                    </button>
+                </div>
+
+                <div x-show="copySuccess" class="success">
+                    ✓ Copied to clipboard!
+                </div>
+
+                <div class="image-info">
+                    <p><strong>File Name:</strong> <span x-text="fileName"></span></p>
+                    <p><strong>File Type:</strong> <span x-text="fileType"></span></p>
+                    <p><strong>Original Size:</strong> <span x-text="formatBytes(fileSize)"></span></p>
+                    <p><strong>Base64 Length:</strong> <span x-text="base64Output.length.toLocaleString()"></span> characters</p>
+                    <p><strong>Size Increase:</strong> <span x-text="Math.round((base64Output.length - fileSize) / fileSize * 100)"></span>%</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 File Encoding?</h2>
+            <p>
+                Base64 file encoding converts any file into a text string using Base64 format. This allows binary files to be transmitted through text-based systems like JSON APIs, email, or embedded in HTML and CSS. The encoding process converts raw file bytes into ASCII characters that are safe for text transmission.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <p>
+                <strong>API Data Transmission:</strong> Send files through JSON APIs by encoding them as Base64 strings in request/response payloads.
+            </p>
+            <p>
+                <strong>Email Attachments:</strong> Embed small files directly in email messages using MIME Base64 encoding.
+            </p>
+            <p>
+                <strong>Data URIs:</strong> Create data URIs for embedding files in HTML, CSS, or JavaScript without external file references.
+            </p>
+            <p>
+                <strong>Database Storage:</strong> Store small files directly in database text fields using Base64 encoding.
+            </p>
+            <p>
+                <strong>Configuration Files:</strong> Embed binary data or files in configuration files that only support text format.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> Supported File Types</h2>
+            <p>
+                This tool supports all file types including:
+            </p>
+            <p>
+                <strong>Documents:</strong> PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, RTF
+            </p>
+            <p>
+                <strong>Archives:</strong> ZIP, RAR, 7Z, TAR, GZ
+            </p>
+            <p>
+                <strong>Executables:</strong> EXE, DLL, SO, APP
+            </p>
+            <p>
+                <strong>Media:</strong> MP3, MP4, AVI, MOV, WAV (Note: Use image-specific tools for images)
+            </p>
+            <p>
+                <strong>Data:</strong> JSON, XML, CSV, SQL, DB
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> File Size Considerations</h2>
+            <p>
+                <strong>Size Increase:</strong> Base64 encoding increases file size by approximately 33%. A 1MB file becomes ~1.33MB when encoded.
+            </p>
+            <p>
+                <strong>Browser Limitations:</strong> Very large files (over 50MB) may cause browser performance issues or memory errors. For large files, consider splitting them or using server-side encoding.
+            </p>
+            <p>
+                <strong>Recommended Use:</strong> This tool works best for files under 10MB. For larger files, consider using command-line tools or server-side encoding.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                Your files are processed entirely in your browser using JavaScript File API. No file data is ever sent to any server. All encoding happens locally on your device, ensuring complete privacy for sensitive or confidential files.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function fileEncoder() {
+            return {
+                file: null,
+                fileName: '',
+                fileType: '',
+                fileSize: 0,
+                base64Output: '',
+                base64Preview: '',
+                error: '',
+                copySuccess: false,
+                processing: false,
+
+                handleFileSelect(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.file = file;
+                        this.fileName = file.name;
+                        this.fileType = file.type || 'unknown';
+                        this.fileSize = file.size;
+                        this.error = '';
+                        this.base64Output = '';
+                        this.base64Preview = '';
+                    }
+                },
+
+                async encodeFile() {
+                    if (!this.file) {
+                        this.error = 'Please select a file first.';
+                        return;
+                    }
+
+                    this.processing = true;
+                    this.error = '';
+                    this.copySuccess = false;
+
+                    try {
+                        const reader = new FileReader();
+
+                        reader.onload = (e) => {
+                            try {
+                                const arrayBuffer = e.target.result;
+                                const bytes = new Uint8Array(arrayBuffer);
+                                let binary = '';
+
+                                for (let i = 0; i < bytes.length; i++) {
+                                    binary += String.fromCharCode(bytes[i]);
+                                }
+
+                                this.base64Output = btoa(binary);
+                                this.base64Preview = this.base64Output.substring(0, 1000) +
+                                    (this.base64Output.length > 1000 ? '...' : '');
+                                this.processing = false;
+                            } catch (err) {
+                                this.error = 'Failed to encode file: ' + err.message;
+                                this.processing = false;
+                            }
+                        };
+
+                        reader.onerror = () => {
+                            this.error = 'Failed to read file. Please try again.';
+                            this.processing = false;
+                        };
+
+                        reader.readAsArrayBuffer(this.file);
+                    } catch (err) {
+                        this.error = 'Failed to process file: ' + err.message;
+                        this.processing = false;
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.base64Output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                downloadAsText() {
+                    const blob = new Blob([this.base64Output], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${this.fileName}.base64.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                clearAll() {
+                    this.file = null;
+                    this.fileName = '';
+                    this.fileType = '';
+                    this.fileSize = 0;
+                    this.base64Output = '';
+                    this.base64Preview = '';
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.processing = false;
+                    document.getElementById('fileInput').value = '';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

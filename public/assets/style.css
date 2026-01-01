@@ -87,6 +87,71 @@ header.site-header {
     display: none;
 }
 
+/* Dropdown Menus */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dropdown-toggle i {
+    display: inline-block !important;
+    font-size: 0.7rem;
+    transition: transform 0.2s;
+}
+
+.dropdown.active .dropdown-toggle i {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    padding: 8px 0;
+    margin-top: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 1000;
+}
+
+.dropdown.active .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-menu li {
+    list-style: none;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 16px;
+    color: #444;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+    background: #f8f9ff;
+    color: #667eea;
+    padding-left: 20px;
+}
+
 /* Mobile Menu Toggle Button */
 .mobile-menu-toggle {
     display: none;
@@ -634,6 +699,44 @@ button:active {
     .mobile-menu-overlay.active {
         display: block;
         opacity: 1;
+    }
+
+    /* Mobile dropdown styles */
+    .dropdown-menu {
+        position: static;
+        box-shadow: none;
+        margin-top: 0;
+        border-radius: 0;
+        border-top: 1px solid #f0f0f0;
+        background: #f8f9ff;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: none;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0s 0.3s;
+    }
+
+    .dropdown.active .dropdown-menu {
+        max-height: 500px;
+        opacity: 1;
+        visibility: visible;
+        transition: max-height 0.3s ease, opacity 0.3s ease, visibility 0s;
+    }
+
+    .dropdown-menu a {
+        padding: 12px 20px 12px 40px;
+        font-size: 0.95rem;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+    }
+
+    .dropdown-menu a:hover {
+        background: #ffffff;
+        padding-left: 44px;
+    }
+
+    .dropdown-menu li:last-child a {
+        border-bottom: none;
     }
 
     .footer-grid {
