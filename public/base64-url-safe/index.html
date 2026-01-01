@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL-Safe Base64 Encoder/Decoder - Convert Base64 for URLs Online Free</title>
+    <meta name="description" content="Free online URL-safe Base64 encoder and decoder. Convert Base64 strings for safe use in URLs, query parameters, and file names. No uploads required.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-link"></i> URL-Safe Base64 Encoder/Decoder</h1>
+
+        <p class="intro">
+            Convert Base64 strings to URL-safe format by replacing problematic characters. Perfect for query parameters, filenames, and web APIs.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div class="tool-section" x-data="urlSafeBase64()">
+            <div class="input-group">
+                <label for="textInput"><i class="fas fa-keyboard"></i> Input Text</label>
+                <textarea
+                    id="textInput"
+                    x-model="textInput"
+                    rows="6"
+                    placeholder="Enter text to encode or paste Base64/URL-safe Base64 to decode..."
+                ></textarea>
+            </div>
+
+            <div class="actions">
+                <button @click="encodeToUrlSafe" class="btn-primary">
+                    <i class="fas fa-arrow-down"></i> Encode to URL-Safe Base64
+                </button>
+                <button @click="decodeFromUrlSafe" class="btn-primary">
+                    <i class="fas fa-arrow-up"></i> Decode from URL-Safe Base64
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+            <div x-show="success" class="success" x-text="success"></div>
+
+            <div x-show="output" class="input-group">
+                <label for="output"><i class="fas fa-file-code"></i> Output</label>
+                <textarea
+                    id="output"
+                    x-model="output"
+                    rows="6"
+                    readonly
+                ></textarea>
+                <div class="actions">
+                    <button @click="copyToClipboard" class="btn-secondary">
+                        <i class="fas fa-copy"></i> <span x-text="copySuccess ? 'Copied!' : 'Copy to Clipboard'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is URL-Safe Base64?</h2>
+            <p>
+                URL-safe Base64 is a variant of standard Base64 encoding that replaces characters that have special meaning in URLs. The standard Base64 alphabet uses <code>+</code> and <code>/</code>, which are reserved characters in URLs. URL-safe Base64 replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code>, and typically removes padding (<code>=</code>).
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <p>
+                <strong>Query Parameters:</strong> Safely pass Base64-encoded data in URL query strings without encoding issues.
+            </p>
+            <p>
+                <strong>JWT Tokens:</strong> JSON Web Tokens use URL-safe Base64 encoding for their header, payload, and signature components.
+            </p>
+            <p>
+                <strong>File Names:</strong> Create file names from Base64 data without filesystem-unsafe characters like <code>/</code>.
+            </p>
+            <p>
+                <strong>API Keys:</strong> Generate URL-safe API keys and tokens that can be transmitted in URLs.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How It Works</h2>
+            <p>
+                <strong>Encoding:</strong> The tool first converts your text to standard Base64, then replaces <code>+</code> with <code>-</code>, <code>/</code> with <code>_</code>, and removes trailing <code>=</code> padding characters.
+            </p>
+            <p>
+                <strong>Decoding:</strong> The tool reverses the process by replacing <code>-</code> with <code>+</code>, <code>_</code> with <code>/</code>, adding padding if needed, then decoding from Base64 to text.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                All encoding and decoding happens locally in your browser. Your text and Base64 data are never sent to any server. This ensures complete privacy for sensitive data like API keys, tokens, or confidential text.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function urlSafeBase64() {
+            return {
+                textInput: '',
+                output: '',
+                error: '',
+                success: '',
+                copySuccess: false,
+
+                encodeToUrlSafe() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.textInput.trim()) {
+                        this.error = 'Please enter text to encode.';
+                        return;
+                    }
+
+                    try {
+                        // Encode to standard Base64
+                        const base64 = btoa(unescape(encodeURIComponent(this.textInput)));
+
+                        // Convert to URL-safe: replace + with -, / with _, remove =
+                        this.output = base64
+                            .replace(/\+/g, '-')
+                            .replace(/\//g, '_')
+                            .replace(/=+$/, '');
+
+                        this.success = 'Text encoded to URL-safe Base64 successfully!';
+                    } catch (err) {
+                        this.error = 'Failed to encode text: ' + err.message;
+                    }
+                },
+
+                decodeFromUrlSafe() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.textInput.trim()) {
+                        this.error = 'Please enter URL-safe Base64 to decode.';
+                        return;
+                    }
+
+                    try {
+                        let urlSafeBase64 = this.textInput.trim();
+
+                        // Convert from URL-safe to standard Base64
+                        let base64 = urlSafeBase64
+                            .replace(/-/g, '+')
+                            .replace(/_/g, '/');
+
+                        // Add padding if needed
+                        const padding = base64.length % 4;
+                        if (padding > 0) {
+                            base64 += '='.repeat(4 - padding);
+                        }
+
+                        // Decode from Base64
+                        this.output = decodeURIComponent(escape(atob(base64)));
+                        this.success = 'URL-safe Base64 decoded successfully!';
+                    } catch (err) {
+                        this.error = 'Failed to decode: ' + err.message;
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                clearAll() {
+                    this.textInput = '';
+                    this.output = '';
+                    this.error = '';
+                    this.success = '';
+                    this.copySuccess = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

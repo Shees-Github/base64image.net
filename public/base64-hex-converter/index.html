@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 to HEX Converter - Convert Base64 to Hexadecimal Online Free</title>
+    <meta name="description" content="Free online Base64 to HEX converter. Convert Base64 strings to hexadecimal format for debugging, cryptography, and low-level programming. Developer-focused tool.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-code"></i> Base64 to HEX Converter</h1>
+
+        <p class="intro">
+            Convert between Base64 and hexadecimal (HEX) formats. Essential for developers working with binary data, cryptography, and low-level programming.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div class="tool-section" x-data="base64HexConverter()">
+            <div class="input-group">
+                <label for="input"><i class="fas fa-keyboard"></i> Input</label>
+                <textarea
+                    id="input"
+                    x-model="input"
+                    rows="8"
+                    placeholder="Enter Base64 or HEX string..."
+                ></textarea>
+            </div>
+
+            <div class="actions">
+                <button @click="base64ToHex" class="btn-primary">
+                    <i class="fas fa-arrow-right"></i> Base64 to HEX
+                </button>
+                <button @click="hexToBase64" class="btn-primary">
+                    <i class="fas fa-arrow-left"></i> HEX to Base64
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+            <div x-show="success" class="success" x-text="success"></div>
+
+            <div x-show="output" class="input-group">
+                <label for="output"><i class="fas fa-file-code"></i> Output</label>
+                <textarea
+                    id="output"
+                    x-model="output"
+                    rows="8"
+                    readonly
+                ></textarea>
+                <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                    <strong>Length:</strong> <span x-text="outputLength"></span> characters
+                </div>
+                <div class="actions">
+                    <button @click="copyToClipboard" class="btn-secondary">
+                        <i class="fas fa-copy"></i> <span x-text="copySuccess ? 'Copied!' : 'Copy to Clipboard'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is HEX (Hexadecimal)?</h2>
+            <p>
+                Hexadecimal is a base-16 numbering system that uses 16 distinct symbols (0-9 and A-F) to represent binary data. Each HEX digit represents 4 bits, making it a compact way to represent binary data. HEX is commonly used in programming, cryptography, color codes, and memory addresses.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <p>
+                <strong>Cryptography:</strong> Convert Base64-encoded hashes or encrypted data to HEX for analysis or comparison.
+            </p>
+            <p>
+                <strong>Binary Data Inspection:</strong> Debug binary protocols, file formats, or network packets by viewing them in HEX.
+            </p>
+            <p>
+                <strong>Hash Verification:</strong> Convert Base64 hashes (SHA-256, MD5) to HEX format for verification against HEX checksums.
+            </p>
+            <p>
+                <strong>Low-Level Programming:</strong> Work with memory dumps, byte arrays, or raw binary data in embedded systems.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How It Works</h2>
+            <p>
+                <strong>Base64 to HEX:</strong> The tool decodes Base64 to binary data, then converts each byte to its two-digit hexadecimal representation (00-FF).
+            </p>
+            <p>
+                <strong>HEX to Base64:</strong> The tool converts pairs of HEX digits to bytes, then encodes the resulting binary data as Base64.
+            </p>
+
+            <h2><i class="fas fa-info-circle"></i> Format Notes</h2>
+            <p>
+                HEX strings can be entered with or without spaces/colons (e.g., <code>48656C6C6F</code> or <code>48:65:6C:6C:6F</code>). The tool automatically handles both formats. Output HEX is displayed as a continuous string of uppercase characters.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                All conversions happen locally in your browser. Your Base64 and HEX data are never sent to any server. This ensures complete privacy for sensitive data like cryptographic keys or hashes.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function base64HexConverter() {
+            return {
+                input: '',
+                output: '',
+                outputLength: 0,
+                error: '',
+                success: '',
+                copySuccess: false,
+
+                base64ToHex() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter a Base64 string.';
+                        return;
+                    }
+
+                    try {
+                        // Remove whitespace
+                        const base64 = this.input.replace(/\s/g, '');
+
+                        // Decode Base64 to binary
+                        const binaryString = atob(base64);
+
+                        // Convert each byte to HEX
+                        let hex = '';
+                        for (let i = 0; i < binaryString.length; i++) {
+                            const byte = binaryString.charCodeAt(i);
+                            hex += byte.toString(16).toUpperCase().padStart(2, '0');
+                        }
+
+                        this.output = hex;
+                        this.outputLength = hex.length;
+                        this.success = 'Base64 converted to HEX successfully!';
+                    } catch (err) {
+                        this.error = 'Invalid Base64 string: ' + err.message;
+                    }
+                },
+
+                hexToBase64() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter a HEX string.';
+                        return;
+                    }
+
+                    try {
+                        // Remove spaces, colons, and other separators
+                        let hex = this.input.replace(/[\s:]/g, '');
+
+                        // Validate HEX string
+                        if (!/^[0-9A-Fa-f]*$/.test(hex)) {
+                            throw new Error('Invalid HEX string. Only 0-9 and A-F are allowed.');
+                        }
+
+                        if (hex.length % 2 !== 0) {
+                            throw new Error('HEX string must have an even number of characters.');
+                        }
+
+                        // Convert HEX pairs to bytes
+                        let binaryString = '';
+                        for (let i = 0; i < hex.length; i += 2) {
+                            const byte = parseInt(hex.substr(i, 2), 16);
+                            binaryString += String.fromCharCode(byte);
+                        }
+
+                        // Encode to Base64
+                        this.output = btoa(binaryString);
+                        this.outputLength = this.output.length;
+                        this.success = 'HEX converted to Base64 successfully!';
+                    } catch (err) {
+                        this.error = err.message || 'Failed to convert HEX to Base64.';
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                clearAll() {
+                    this.input = '';
+                    this.output = '';
+                    this.outputLength = 0;
+                    this.error = '';
+                    this.success = '';
+                    this.copySuccess = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

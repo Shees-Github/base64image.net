@@ -12,7 +12,7 @@ const HeaderComponent = `
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Encoder <i class="fas fa-chevron-down"></i></a>
+                        <a href="#" class="dropdown-toggle">Encoders <i class="fas fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="/base64-text-encoder/">Text to Base64</a></li>
                             <li><a href="/base64-file-encoder/">File to Base64</a></li>
@@ -20,16 +20,30 @@ const HeaderComponent = `
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Decoder <i class="fas fa-chevron-down"></i></a>
+                        <a href="#" class="dropdown-toggle">Decoders <i class="fas fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
                             <li><a href="/base64-file-decoder/">Base64 to File</a></li>
                             <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
                         </ul>
                     </li>
-                    <li><a href="/base64-to-png/">To PNG</a></li>
-                    <li><a href="/base64-to-pdf/">To PDF</a></li>
-                    <li><a href="/base64-validator/">Validator</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Converters <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+                            <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+                            <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Tools <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/base64-validator/">Validator</a></li>
+                            <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
+                            <li><a href="/base64-embed-generator/">Embed Generator</a></li>
+                            <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -62,7 +76,16 @@ const FooterComponent = `
                     <ul>
                         <li><a href="/base64-to-png/">Base64 to PNG</a></li>
                         <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
-                        <li><a href="/base64-validator/">Base64 Validator</a></li>
+                        <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Tools & Utilities</h3>
+                    <ul>
+                        <li><a href="/base64-validator/">Validator</a></li>
+                        <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
+                        <li><a href="/base64-embed-generator/">Embed Generator</a></li>
+                        <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">

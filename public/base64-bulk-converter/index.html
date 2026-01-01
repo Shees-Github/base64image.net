@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bulk Base64 Converter - Convert Multiple Files to Base64 Online Free</title>
+    <meta name="description" content="Free bulk Base64 converter. Upload and convert multiple files to Base64 at once. Batch process images, documents, and files efficiently. Download as ZIP.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-layer-group"></i> Bulk Base64 Converter</h1>
+
+        <p class="intro">
+            Convert multiple files to Base64 at once. Upload several images, documents, or files and get Base64-encoded output for all of them simultaneously.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your files never leave your device.
+        </div>
+
+        <div class="tool-section" x-data="bulkConverter()">
+            <div class="input-group">
+                <label><i class="fas fa-upload"></i> Upload Multiple Files</label>
+                <input type="file" @change="handleFiles" multiple>
+                <p style="margin-top: 5px; font-size: 0.85rem; color: #666;">
+                    Select multiple files (images, documents, etc.) to convert to Base64
+                </p>
+            </div>
+
+            <div x-show="files.length > 0" class="actions">
+                <button @click="convertAll" class="btn-primary" :disabled="processing">
+                    <span x-show="!processing"><i class="fas fa-sync-alt"></i> Convert All to Base64</span>
+                    <span x-show="processing"><i class="fas fa-spinner fa-spin"></i> Converting...</span>
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+            <div x-show="success" class="success" x-text="success"></div>
+
+            <div x-show="files.length > 0" class="preview-container">
+                <h2><i class="fas fa-list"></i> Files (<span x-text="files.length"></span>)</h2>
+
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <template x-for="(file, index) in files" :key="index">
+                        <div style="padding: 15px; margin: 10px 0; background: #f8f9ff; border-radius: 8px; border: 1px solid #e0e4ff;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div>
+                                    <strong><i class="fas fa-file"></i> <span x-text="file.name"></span></strong>
+                                    <div style="font-size: 0.85rem; color: #666; margin-top: 5px;">
+                                        <span x-text="formatBytes(file.size)"></span>
+                                        <span x-show="file.base64"> • Base64 length: <span x-text="file.base64.length.toLocaleString()"></span></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span x-show="file.status === 'pending'" style="color: #666;">
+                                        <i class="fas fa-clock"></i> Pending
+                                    </span>
+                                    <span x-show="file.status === 'processing'" style="color: #667eea;">
+                                        <i class="fas fa-spinner fa-spin"></i> Converting...
+                                    </span>
+                                    <span x-show="file.status === 'completed'" style="color: #28a745;">
+                                        <i class="fas fa-check-circle"></i> Done
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div x-show="file.base64" class="actions" style="gap: 10px;">
+                                <button @click="copyBase64(index)" class="btn-secondary" style="font-size: 0.85rem;">
+                                    <i class="fas fa-copy"></i> Copy Base64
+                                </button>
+                                <button @click="downloadBase64(index)" class="btn-secondary" style="font-size: 0.85rem;">
+                                    <i class="fas fa-download"></i> Download .txt
+                                </button>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <div x-show="converted > 0" class="actions" style="margin-top: 20px;">
+                    <button @click="downloadAllAsJson" class="btn-primary">
+                        <i class="fas fa-file-download"></i> Download All as JSON
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Bulk Conversion?</h2>
+            <p>
+                Bulk Base64 conversion allows you to process multiple files simultaneously, saving time when you need to convert many files at once. Each file is independently converted to Base64, and you can download results individually or as a single JSON file.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <p>
+                <strong>Batch Image Processing:</strong> Convert multiple product images, thumbnails, or icons to Base64 for embedding in web applications.
+            </p>
+            <p>
+                <strong>API Development:</strong> Prepare multiple files for API testing or data migration by converting them to Base64 format.
+            </p>
+            <p>
+                <strong>Documentation:</strong> Embed multiple diagrams or screenshots directly into documentation by converting them to Base64.
+            </p>
+            <p>
+                <strong>Data Export:</strong> Export file collections from databases or CMS systems as Base64 for backup or transfer.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How to Use</h2>
+            <p>
+                <strong>Step 1:</strong> Click the file input and select multiple files (you can select many at once using Ctrl/Cmd + click).
+            </p>
+            <p>
+                <strong>Step 2:</strong> Click "Convert All to Base64" to process all files.
+            </p>
+            <p>
+                <strong>Step 3:</strong> Copy individual Base64 strings or download all results as a JSON file containing all conversions.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> Performance Notes</h2>
+            <p>
+                Large files (over 10MB each) may take longer to process. For optimal performance, keep individual files under 5MB. Very large batches (100+ files) may cause browser slowdowns depending on your device's capabilities.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                All file processing happens locally in your browser. Your files are never uploaded to any server. This ensures complete privacy for sensitive or confidential files.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function bulkConverter() {
+            return {
+                files: [],
+                processing: false,
+                converted: 0,
+                error: '',
+                success: '',
+
+                handleFiles(event) {
+                    this.error = '';
+                    this.success = '';
+
+                    const selectedFiles = Array.from(event.target.files);
+                    if (selectedFiles.length === 0) return;
+
+                    this.files = selectedFiles.map(file => ({
+                        name: file.name,
+                        size: file.size,
+                        file: file,
+                        base64: null,
+                        status: 'pending'
+                    }));
+
+                    this.success = `${selectedFiles.length} file(s) loaded. Click "Convert All to Base64" to start.`;
+                },
+
+                async convertAll() {
+                    this.processing = true;
+                    this.error = '';
+                    this.converted = 0;
+
+                    for (let i = 0; i < this.files.length; i++) {
+                        this.files[i].status = 'processing';
+
+                        try {
+                            const base64 = await this.fileToBase64(this.files[i].file);
+                            this.files[i].base64 = base64;
+                            this.files[i].status = 'completed';
+                            this.converted++;
+                        } catch (err) {
+                            this.files[i].status = 'error';
+                            this.error = `Failed to convert ${this.files[i].name}: ${err.message}`;
+                        }
+                    }
+
+                    this.processing = false;
+                    if (this.converted === this.files.length) {
+                        this.success = `All ${this.converted} file(s) converted successfully!`;
+                    }
+                },
+
+                fileToBase64(file) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const arrayBuffer = e.target.result;
+                            const bytes = new Uint8Array(arrayBuffer);
+                            let binary = '';
+                            for (let i = 0; i < bytes.length; i++) {
+                                binary += String.fromCharCode(bytes[i]);
+                            }
+                            resolve(btoa(binary));
+                        };
+                        reader.onerror = reject;
+                        reader.readAsArrayBuffer(file);
+                    });
+                },
+
+                copyBase64(index) {
+                    navigator.clipboard.writeText(this.files[index].base64).then(() => {
+                        this.success = `Base64 for "${this.files[index].name}" copied to clipboard!`;
+                        setTimeout(() => this.success = '', 2000);
+                    });
+                },
+
+                downloadBase64(index) {
+                    const blob = new Blob([this.files[index].base64], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${this.files[index].name}.base64.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                downloadAllAsJson() {
+                    const results = this.files
+                        .filter(f => f.base64)
+                        .map(f => ({
+                            filename: f.name,
+                            size: f.size,
+                            base64: f.base64
+                        }));
+
+                    const json = JSON.stringify(results, null, 2);
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `base64-bulk-export-${Date.now()}.json`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                clearAll() {
+                    this.files = [];
+                    this.converted = 0;
+                    this.error = '';
+                    this.success = '';
+                    this.processing = false;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

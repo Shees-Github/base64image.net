@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Embed Code Generator - Create HTML Image Embed Snippets Online Free</title>
+    <meta name="description" content="Free Base64 embed code generator. Convert images to Base64 and generate ready-to-use HTML img tags, CSS backgrounds, and data URIs for embedding in web pages.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-code"></i> Base64 Embed Code Generator</h1>
+
+        <p class="intro">
+            Upload an image or paste Base64 to generate ready-to-use HTML, CSS, and Markdown embed code snippets. Perfect for embedding images directly in web pages without external files.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All processing happens locally in your browser. Your images never leave your device.
+        </div>
+
+        <div class="tool-section" x-data="embedGenerator()">
+            <div class="input-group">
+                <label><i class="fas fa-upload"></i> Upload Image</label>
+                <input type="file" @change="handleFile" accept="image/*">
+            </div>
+
+            <p style="text-align: center; margin: 20px 0; color: #666;">— OR —</p>
+
+            <div class="input-group">
+                <label for="base64Input"><i class="fas fa-code"></i> Paste Base64 String</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="handleBase64Input"
+                    rows="6"
+                    placeholder="Paste your Base64 string here (with or without data URI prefix)..."
+                ></textarea>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+            <div x-show="success" class="success" x-text="success"></div>
+
+            <div x-show="preview" class="preview-container">
+                <h2><i class="fas fa-eye"></i> Preview</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img :src="preview" alt="Preview" style="max-width: 100%; max-height: 300px; border: 1px solid #ddd; border-radius: 8px;">
+                </div>
+
+                <h2><i class="fas fa-code"></i> Embed Code Snippets</h2>
+
+                <div class="input-group">
+                    <label><i class="fab fa-html5"></i> HTML img tag</label>
+                    <textarea x-model="htmlCode" rows="3" readonly></textarea>
+                    <button @click="copy(htmlCode)" class="btn-secondary" style="margin-top: 10px;">
+                        <i class="fas fa-copy"></i> Copy HTML
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fab fa-css3-alt"></i> CSS Background</label>
+                    <textarea x-model="cssCode" rows="3" readonly></textarea>
+                    <button @click="copy(cssCode)" class="btn-secondary" style="margin-top: 10px;">
+                        <i class="fas fa-copy"></i> Copy CSS
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fab fa-markdown"></i> Markdown</label>
+                    <textarea x-model="markdownCode" rows="2" readonly></textarea>
+                    <button @click="copy(markdownCode)" class="btn-secondary" style="margin-top: 10px;">
+                        <i class="fas fa-copy"></i> Copy Markdown
+                    </button>
+                </div>
+
+                <div class="input-group">
+                    <label><i class="fas fa-link"></i> Data URI</label>
+                    <textarea x-model="dataUri" rows="4" readonly></textarea>
+                    <button @click="copy(dataUri)" class="btn-secondary" style="margin-top: 10px;">
+                        <i class="fas fa-copy"></i> Copy Data URI
+                    </button>
+                </div>
+
+                <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                    <strong>Image Size:</strong> <span x-text="imageSize"></span> |
+                    <strong>MIME Type:</strong> <span x-text="mimeType"></span>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 Embedding?</h2>
+            <p>
+                Base64 embedding allows you to include images directly in HTML, CSS, or other code without requiring separate image files. The image data is encoded as Base64 and embedded as a data URI, reducing HTTP requests and simplifying deployment.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <p>
+                <strong>Email Templates:</strong> Embed images in HTML emails to ensure they display without external dependencies.
+            </p>
+            <p>
+                <strong>Single-File Applications:</strong> Bundle small icons and logos into a single HTML file for easy distribution.
+            </p>
+            <p>
+                <strong>Offline Web Apps:</strong> Embed images so web applications work without network access.
+            </p>
+            <p>
+                <strong>CSS Sprites Alternative:</strong> Embed small UI icons directly in CSS to reduce HTTP requests.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> Best Practices</h2>
+            <p>
+                <strong>Size Considerations:</strong> Base64 encoding increases file size by ~33%. Only embed small images (under 10KB) for optimal performance.
+            </p>
+            <p>
+                <strong>Caching:</strong> Embedded images can't be cached separately from the HTML/CSS file. Use external files for large or frequently updated images.
+            </p>
+            <p>
+                <strong>Browser Support:</strong> Data URIs are supported in all modern browsers, but very old browsers (IE7 and below) have limitations.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <p>
+                All image processing and code generation happens locally in your browser. Your images are never uploaded to any server. This ensures complete privacy for confidential or sensitive images.
+            </p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function embedGenerator() {
+            return {
+                base64Input: '',
+                preview: '',
+                htmlCode: '',
+                cssCode: '',
+                markdownCode: '',
+                dataUri: '',
+                mimeType: '',
+                imageSize: '',
+                error: '',
+                success: '',
+
+                handleFile(event) {
+                    this.error = '';
+                    this.success = '';
+
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    if (!file.type.startsWith('image/')) {
+                        this.error = 'Please select an image file.';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.mimeType = file.type;
+                        this.imageSize = this.formatBytes(file.size);
+                        this.dataUri = e.target.result;
+                        this.generateCode();
+                        this.success = 'Image loaded successfully! Embed code generated.';
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                handleBase64Input() {
+                    this.error = '';
+                    this.success = '';
+
+                    if (!this.base64Input.trim()) {
+                        this.preview = '';
+                        return;
+                    }
+
+                    try {
+                        let dataUri = this.base64Input.trim();
+
+                        // If it's not a data URI, assume it's base64 for an image/png
+                        if (!dataUri.startsWith('data:')) {
+                            dataUri = 'data:image/png;base64,' + dataUri;
+                        }
+
+                        // Extract MIME type
+                        const match = dataUri.match(/^data:([^;]+);base64,/);
+                        this.mimeType = match ? match[1] : 'image/png';
+
+                        // Estimate size
+                        const base64 = dataUri.split(',')[1];
+                        const sizeInBytes = Math.ceil((base64.length * 3) / 4);
+                        this.imageSize = this.formatBytes(sizeInBytes);
+
+                        this.dataUri = dataUri;
+                        this.generateCode();
+                        this.success = 'Base64 string processed! Embed code generated.';
+                    } catch (err) {
+                        this.error = 'Invalid Base64 or data URI format.';
+                    }
+                },
+
+                generateCode() {
+                    this.preview = this.dataUri;
+
+                    // HTML code
+                    this.htmlCode = `<img src="${this.dataUri}" alt="Embedded image">`;
+
+                    // CSS code
+                    this.cssCode = `.element {
+  background-image: url('${this.dataUri}');
+}`;
+
+                    // Markdown code
+                    this.markdownCode = `![Embedded image](${this.dataUri})`;
+                },
+
+                copy(text) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.success = 'Copied to clipboard!';
+                        setTimeout(() => this.success = '', 2000);
+                    });
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                }
+            }
+        }
+    </script>
+</body>
+</html>
