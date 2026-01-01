@@ -11,28 +11,11 @@ const HeaderComponent = `
             <nav class="main-nav">
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Encoder</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/base64-image-encoder/">Image to Base64</a></li>
-                            <li><a href="/base64-image-encoder/">File to Base64</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Decoder</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
-                            <li><a href="/base64-image-decoder/">Base64 to File</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Tools</a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/base64-to-png/">Base64 to PNG</a></li>
-                            <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
-                            <li><a href="/base64-validator/">Base64 Validator</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="/base64-image-encoder/">Encoder</a></li>
+                    <li><a href="/base64-image-decoder/">Decoder</a></li>
+                    <li><a href="/base64-to-png/">To PNG</a></li>
+                    <li><a href="/base64-to-pdf/">To PDF</a></li>
+                    <li><a href="/base64-validator/">Validator</a></li>
                 </ul>
             </nav>
         </div>
@@ -92,8 +75,6 @@ function initMobileMenu() {
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const mainNav = document.querySelector('.main-nav');
     const menuOverlay = document.querySelector('.mobile-menu-overlay');
-    const dropdowns = document.querySelectorAll('.dropdown');
-    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
 
     // Toggle mobile menu
     if (menuToggle && mainNav && menuOverlay) {
@@ -117,47 +98,25 @@ function initMobileMenu() {
         menuOverlay.addEventListener('click', function() {
             mainNav.classList.remove('active');
             menuOverlay.classList.remove('active');
-            dropdowns.forEach(dd => dd.classList.remove('active'));
             const icon = menuToggle.querySelector('i');
             icon.classList.remove('fa-times');
             icon.classList.add('fa-bars');
         });
+
+        // Close mobile menu when clicking nav links
+        const navLinks = document.querySelectorAll('.main-nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    mainNav.classList.remove('active');
+                    menuOverlay.classList.remove('active');
+                    const icon = menuToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
     }
-
-    // Handle dropdown toggles on mobile
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
-            if (window.innerWidth <= 768) {
-                e.preventDefault();
-                const dropdown = this.closest('.dropdown');
-
-                // Close other dropdowns
-                dropdowns.forEach(dd => {
-                    if (dd !== dropdown) {
-                        dd.classList.remove('active');
-                    }
-                });
-
-                // Toggle current dropdown
-                dropdown.classList.toggle('active');
-            }
-        });
-    });
-
-    // Close mobile menu when clicking nav links (not dropdown toggles)
-    const navLinks = document.querySelectorAll('.main-nav a:not(.dropdown-toggle)');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
-                mainNav.classList.remove('active');
-                menuOverlay.classList.remove('active');
-                dropdowns.forEach(dd => dd.classList.remove('active'));
-                const icon = menuToggle.querySelector('i');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-    });
 }
 
 // Clean up on resize to desktop
@@ -165,12 +124,10 @@ window.addEventListener('resize', function() {
     if (window.innerWidth > 768) {
         const mainNav = document.querySelector('.main-nav');
         const menuOverlay = document.querySelector('.mobile-menu-overlay');
-        const dropdowns = document.querySelectorAll('.dropdown');
         const menuToggle = document.querySelector('.mobile-menu-toggle');
 
         if (mainNav) mainNav.classList.remove('active');
         if (menuOverlay) menuOverlay.classList.remove('active');
-        dropdowns.forEach(dd => dd.classList.remove('active'));
 
         if (menuToggle) {
             const icon = menuToggle.querySelector('i');
