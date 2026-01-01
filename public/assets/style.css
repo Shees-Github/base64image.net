@@ -59,8 +59,9 @@ header.site-header {
 .main-nav ul {
     list-style: none;
     display: flex;
-    gap: 30px;
+    gap: 20px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .main-nav > ul > li {
@@ -71,10 +72,11 @@ header.site-header {
     color: #444;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: all 0.2s;
-    padding: 8px 0;
+    padding: 8px 12px;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .main-nav a:hover {
