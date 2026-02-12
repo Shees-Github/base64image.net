@@ -54,6 +54,66 @@
         }]
     }
     </script>
+
+    <!-- Structured Data - HowTo -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Generate Base64 Embed Code",
+        "description": "Generate ready-to-use HTML, CSS, and Markdown embed code from an image using Base64 encoding.",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Upload Image",
+            "text": "Click the file upload button and select an image from your device, or paste a Base64 string directly into the text field."
+        }, {
+            "@type": "HowToStep",
+            "name": "Select Embed Format",
+            "text": "Review the generated embed code snippets for HTML img tag, CSS background, Markdown, and Data URI formats."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy Generated Code",
+            "text": "Click the copy button next to your preferred embed format to copy the ready-to-use code snippet to your clipboard."
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What is a Base64 data URI?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A Base64 data URI is a string that encodes binary file data as ASCII text and embeds it directly in code using the format data:[MIME type];base64,[encoded data]. It allows images to be included inline in HTML, CSS, or JSON without requiring a separate file request."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does embedding Base64 images affect page load speed?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 encoding increases data size by approximately 33%. For images under 10KB, embedding eliminates an HTTP request, which can improve performance. For images above 10KB, the size overhead typically outweighs the saved request. Base64-embedded images also cannot be cached separately from the HTML or CSS file."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the recommended maximum image size for Base64 embedding?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The widely accepted threshold is 10KB. Images under 10KB benefit from inline embedding because the saved HTTP request offsets the 33% size increase from Base64 encoding. Images above 10KB should be served as external files to take advantage of browser caching and CDN delivery."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I embed SVG images as Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, SVG images can be Base64-encoded and embedded using data:image/svg+xml;base64,[data]. However, since SVG is already a text format, you can also embed SVG content directly in HTML without Base64 encoding, which avoids the 33% size overhead."
+            }
+        }]
+    }
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -143,38 +203,114 @@
         <section class="content-section">
             <h2><i class="fas fa-question-circle"></i> What is Base64 Embedding?</h2>
             <p>
-                Base64 embedding allows you to include images directly in HTML, CSS, or other code without requiring separate image files. The image data is encoded as Base64 and embedded as a data URI, reducing HTTP requests and simplifying deployment.
+                Base64 embedding encodes binary image data as an ASCII text string and places it directly inside HTML, CSS, or Markdown using a data URI. The data URI follows the format <code>data:[MIME type];base64,[encoded data]</code>. This eliminates the need for a separate image file and the HTTP request that goes with it. Browsers decode the Base64 string at render time and display the image inline. The technique is a standard part of the <a href="https://datatracker.ietf.org/doc/html/rfc2397" rel="noopener" target="_blank">RFC 2397</a> specification, supported by all modern browsers. You can <a href="/base64-image-encoder/">encode images to Base64</a> first, then use this generator to produce the embed snippet you need.
             </p>
 
-            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <h2><i class="fas fa-code"></i> What Embed Formats Does This Tool Generate?</h2>
             <p>
-                <strong>Email Templates:</strong> Embed images in HTML emails to ensure they display without external dependencies.
-            </p>
-            <p>
-                <strong>Single-File Applications:</strong> Bundle small icons and logos into a single HTML file for easy distribution.
-            </p>
-            <p>
-                <strong>Offline Web Apps:</strong> Embed images so web applications work without network access.
-            </p>
-            <p>
-                <strong>CSS Sprites Alternative:</strong> Embed small UI icons directly in CSS to reduce HTTP requests.
+                This generator produces four embed formats from a single image upload. Each format targets a different use case in web development, documentation, or API design. The table below compares syntax and typical applications.
             </p>
 
-            <h2><i class="fas fa-exclamation-triangle"></i> Best Practices</h2>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Format</th><th>Syntax</th><th>Use Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>HTML <code>&lt;img&gt;</code></td>
+                        <td><code>&lt;img src="data:image/png;base64,..."&gt;</code></td>
+                        <td>Inline images in web pages</td>
+                    </tr>
+                    <tr>
+                        <td>CSS Background</td>
+                        <td><code>background-image: url('data:image/...')</code></td>
+                        <td>Icons, patterns in stylesheets</td>
+                    </tr>
+                    <tr>
+                        <td>Markdown</td>
+                        <td><code>![alt](data:image/png;base64,...)</code></td>
+                        <td>Documentation, README files</td>
+                    </tr>
+                    <tr>
+                        <td>JSON Data URI</td>
+                        <td><code>"image": "data:image/png;base64,..."</code></td>
+                        <td>API responses, config files</td>
+                    </tr>
+                </tbody>
+            </table>
+
             <p>
-                <strong>Size Considerations:</strong> Base64 encoding increases file size by ~33%. Only embed small images (under 10KB) for optimal performance.
-            </p>
-            <p>
-                <strong>Caching:</strong> Embedded images can't be cached separately from the HTML/CSS file. Use external files for large or frequently updated images.
-            </p>
-            <p>
-                <strong>Browser Support:</strong> Data URIs are supported in all modern browsers, but very old browsers (IE7 and below) have limitations.
+                HTML <code>&lt;img&gt;</code> tags are the most common format for embedding images on web pages. CSS background embedding is preferred for repeating patterns, icons, and decorative elements that belong in a stylesheet. Markdown embedding works in documentation platforms such as GitHub README files. JSON data URIs are used when transmitting image data through REST APIs or storing it in configuration files.
             </p>
 
-            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <h2><i class="fas fa-lightbulb"></i> What Are the Common Use Cases for Base64 Embed Codes?</h2>
             <p>
-                All image processing and code generation happens locally in your browser. Your images are never uploaded to any server. This ensures complete privacy for confidential or sensitive images.
+                Base64 embed codes are used wherever an image must be self-contained within a text document. The primary benefit is eliminating an external file dependency along with the associated HTTP round-trip.
             </p>
+            <p>
+                <strong>Email Templates:</strong> HTML emails embed images as Base64 data URIs so recipients see images without downloading external resources. This avoids blocked-image warnings in email clients like Outlook and Gmail.
+            </p>
+            <p>
+                <strong>Single-File Applications:</strong> Developers bundle small icons and logos directly into one HTML file for portable distribution. No separate asset folder is required.
+            </p>
+            <p>
+                <strong>Offline Web Apps:</strong> Progressive web applications embed critical UI images so the interface renders without a network connection.
+            </p>
+            <p>
+                <strong>CSS Icon Systems:</strong> Small UI icons under <code>10KB</code> are embedded directly in CSS, replacing traditional sprite sheets and removing additional HTTP requests. You can also <a href="/base64-bulk-converter/">batch convert multiple files</a> when building icon libraries.
+            </p>
+
+            <h2><i class="fas fa-check-circle"></i> What Are the Best Practices for Base64 Image Embedding?</h2>
+            <p>
+                Effective Base64 embedding balances convenience against file size. Following these guidelines prevents performance problems while keeping the benefits of inline images.
+            </p>
+            <p>
+                <strong>Size Threshold:</strong> Base64 encoding increases data size by approximately <code>33%</code>. A <code>10KB</code> image becomes roughly <code>13.3KB</code> after encoding. The widely accepted rule is to embed only images under <code>10KB</code>. Above that threshold, the size overhead outweighs the saved HTTP request.
+            </p>
+            <p>
+                <strong>Caching Impact:</strong> Embedded images cannot be cached independently. They are stored as part of the HTML or CSS file. External images benefit from browser caching and CDN delivery. Use external files for images that appear across multiple pages or change infrequently.
+            </p>
+            <p>
+                <strong>Format Selection:</strong> Choose the smallest source format before encoding. A <code>PNG</code> icon may be smaller as an <code>SVG</code>. Use the appropriate MIME type (<code>image/png</code>, <code>image/jpeg</code>, <code>image/svg+xml</code>, <code>image/webp</code>) in the data URI. Need to verify your output? <a href="/base64-to-png/">Convert Base64 to PNG files</a> to inspect the decoded result.
+            </p>
+            <p>
+                <strong>Browser Compatibility:</strong> Data URIs are supported in all modern browsers including Chrome, Firefox, Safari, and Edge. Internet Explorer 8 imposes a <code>32KB</code> limit on data URIs. No length limit exists in current browsers.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This Embed Code Generator Private?</h2>
+            <p>
+                This tool processes all images locally in your browser using JavaScript. No image data is transmitted to any server. The FileReader API reads your file directly from disk into browser memory, and the Base64 encoding and code generation happen entirely on the client side. Your images never leave your device. This makes the tool safe for confidential, proprietary, or sensitive images. Explore <a href="/">all Base64 tools</a> on this site for additional privacy-first utilities.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is a Base64 data URI?</h3>
+                <p>
+                    A Base64 data URI is a string that encodes binary file data as ASCII text and embeds it directly in code. It follows the format <code>data:[MIME type];base64,[encoded data]</code>. Browsers parse this string, decode the Base64 portion, and render the result as an image. Data URIs are defined in <a href="https://datatracker.ietf.org/doc/html/rfc2397" rel="noopener" target="_blank">RFC 2397</a> and are supported by all modern browsers. They allow images to be included inline in HTML, CSS, or JSON without requiring a separate file request.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does embedding Base64 images affect page load speed?</h3>
+                <p>
+                    It depends on image size. For images under <code>10KB</code>, embedding eliminates one HTTP request, which can reduce latency by <code>50-200ms</code> depending on server distance. However, Base64 encoding adds approximately <code>33%</code> to the data size. For images above <code>10KB</code>, the increased payload typically slows rendering more than the saved request helps. Base64-embedded images also cannot be cached separately, so every page load re-downloads the image data as part of the HTML or CSS file. If you need to <a href="/base64-image-decoder/">decode Base64 back to images</a>, use the dedicated decoder tool.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the recommended maximum image size for Base64 embedding?</h3>
+                <p>
+                    The widely accepted threshold is <code>10KB</code>. Below this size, the saved HTTP request offsets the <code>33%</code> encoding overhead. Google Lighthouse and web performance audits flag inline resources above this limit. Icons, small logos, and UI elements typically fall under <code>10KB</code>. Photographs, illustrations, and background images almost always exceed it and should be served as external cached files.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I embed SVG images as Base64?</h3>
+                <p>
+                    Yes. SVG images can be Base64-encoded and embedded using <code>data:image/svg+xml;base64,[data]</code>. However, SVG is already a text-based XML format. You can embed raw SVG markup directly in HTML without Base64 encoding, avoiding the <code>33%</code> size overhead entirely. Base64-encoded SVG is useful in CSS <code>background-image</code> properties where inline SVG markup is not supported. For other contexts, direct SVG embedding is more efficient.
+                </p>
+            </div>
         </section>
     </main>
 

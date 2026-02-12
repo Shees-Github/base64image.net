@@ -54,6 +54,66 @@
         }]
     }
     </script>
+
+    <!-- Structured Data - HowTo -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Bulk Convert Files to Base64",
+        "description": "Step-by-step guide to batch convert multiple files to Base64 format online for free",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Select Multiple Files",
+            "text": "Click the file input and select multiple files at once using Ctrl+Click or Cmd+Click. The tool accepts images, documents, and other file types."
+        }, {
+            "@type": "HowToStep",
+            "name": "Click Convert",
+            "text": "Click the 'Convert All to Base64' button. Each file is processed sequentially in your browser with no server upload."
+        }, {
+            "@type": "HowToStep",
+            "name": "Download Results as JSON",
+            "text": "Copy individual Base64 strings or click 'Download All as JSON' to export all converted files in a single JSON file."
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How many files can I convert at once?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "There is no hard-coded file count limit. The practical limit depends on your browser's available memory. Most modern browsers handle 50-100 files per batch without issues. Batches above 200 files may cause tab slowdowns on devices with less than 8 GB of RAM."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the maximum file size for bulk conversion?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each file can be up to the browser's FileReader limit, which is typically around 500 MB. For best performance, keep individual files under 5 MB and total batch size under 100 MB. Base64 encoding increases output size by approximately 33%."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does bulk conversion maintain the original file names?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. The converter preserves each original file name in the output. When you download results as JSON, each entry includes the filename property mapped to its Base64 string. Individual .txt downloads also retain the source file name."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I convert mixed file types in one batch?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. The bulk converter accepts any file type in a single batch. You can mix images (PNG, JPEG, WebP), documents (PDF, DOCX), text files, and binary files. Each file is independently read and encoded to Base64 regardless of its MIME type."
+            }
+        }]
+    }
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -141,45 +201,121 @@
         </div>
 
         <section class="content-section">
-            <h2><i class="fas fa-question-circle"></i> What is Bulk Conversion?</h2>
+            <h2><i class="fas fa-question-circle"></i> What Is Bulk Base64 Conversion?</h2>
             <p>
-                Bulk Base64 conversion allows you to process multiple files simultaneously, saving time when you need to convert many files at once. Each file is independently converted to Base64, and you can download results individually or as a single JSON file.
+                Bulk Base64 conversion is the process of encoding multiple files into Base64 strings in a single batch operation. Instead of converting one file at a time, the bulk converter reads each file through the browser's <code>FileReader</code> API and outputs a Base64 string for every file in the queue. The result is a collection of encoded strings you can copy individually or export as a single JSON file. This tool processes everything client-side, so no data leaves your device. If you need to <a href="/base64-file-encoder/">encode individual files to Base64</a>, a dedicated single-file tool is also available.
             </p>
 
-            <h2><i class="fas fa-lightbulb"></i> Common Use Cases</h2>
+            <h2><i class="fas fa-lightbulb"></i> What Are the Common Use Cases for Bulk Base64 Conversion?</h2>
             <p>
-                <strong>Batch Image Processing:</strong> Convert multiple product images, thumbnails, or icons to Base64 for embedding in web applications.
+                Bulk Base64 conversion serves four primary scenarios. Each involves converting multiple files at once rather than processing them one by one.
             </p>
             <p>
-                <strong>API Development:</strong> Prepare multiple files for API testing or data migration by converting them to Base64 format.
+                <strong>Batch Image Processing:</strong> Convert product images, thumbnails, or icon sets to Base64 for inline embedding in HTML or CSS. A set of 20 icons can be converted in one operation and used directly in stylesheets without additional HTTP requests. You can also <a href="/base64-image-encoder/">encode single images to Base64</a> when only one file is needed.
             </p>
             <p>
-                <strong>Documentation:</strong> Embed multiple diagrams or screenshots directly into documentation by converting them to Base64.
+                <strong>API Payload Preparation:</strong> REST and GraphQL APIs that accept Base64-encoded file uploads require each file as a string. Bulk conversion generates all strings at once, ready for inclusion in JSON request bodies.
             </p>
             <p>
-                <strong>Data Export:</strong> Export file collections from databases or CMS systems as Base64 for backup or transfer.
-            </p>
-
-            <h2><i class="fas fa-cog"></i> How to Use</h2>
-            <p>
-                <strong>Step 1:</strong> Click the file input and select multiple files (you can select many at once using Ctrl/Cmd + click).
+                <strong>Documentation Embedding:</strong> Technical documentation tools that support inline images accept Base64 data URIs. Convert an entire folder of screenshots or diagrams in one batch to embed them without external image hosting.
             </p>
             <p>
-                <strong>Step 2:</strong> Click "Convert All to Base64" to process all files.
-            </p>
-            <p>
-                <strong>Step 3:</strong> Copy individual Base64 strings or download all results as a JSON file containing all conversions.
+                <strong>Data Migration and Backup:</strong> When moving files between systems, Base64 provides a text-safe transport format. Bulk conversion creates a JSON export that preserves file names and encoded content together.
             </p>
 
-            <h2><i class="fas fa-exclamation-triangle"></i> Performance Notes</h2>
+            <h2><i class="fas fa-cog"></i> How Does the Bulk Base64 Converter Work?</h2>
             <p>
-                Large files (over 10MB each) may take longer to process. For optimal performance, keep individual files under 5MB. Very large batches (100+ files) may cause browser slowdowns depending on your device's capabilities.
+                The converter follows three steps. Each file is processed independently using the browser's native <code>FileReader</code> and <code>btoa()</code> functions. No server-side processing is involved.
+            </p>
+            <p>
+                <strong>Step 1 -- Select Multiple Files:</strong> Click the file input and select multiple files using <code>Ctrl+Click</code> (Windows/Linux) or <code>Cmd+Click</code> (macOS). The tool accepts any file type: images, PDFs, text files, and binary files.
+            </p>
+            <p>
+                <strong>Step 2 -- Click Convert:</strong> Press the "Convert All to Base64" button. The converter reads each file sequentially into an <code>ArrayBuffer</code>, converts the bytes to a binary string, and encodes it with <code>btoa()</code>. A status indicator shows progress for each file.
+            </p>
+            <p>
+                <strong>Step 3 -- Download Results:</strong> Copy any individual Base64 string to the clipboard, download a single file as a <code>.txt</code>, or click "Download All as JSON" to export every file's name and Base64 data in one <code>.json</code> file.
             </p>
 
-            <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
+            <h2><i class="fas fa-table"></i> What Output Formats Are Available?</h2>
             <p>
-                All file processing happens locally in your browser. Your files are never uploaded to any server. This ensures complete privacy for sensitive or confidential files.
+                The bulk converter provides three output options. Each format suits a different integration workflow. You can also use the <a href="/base64-embed-generator/">embed code generator</a> to produce ready-to-use HTML or CSS snippets from Base64 strings.
             </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>Output Option</th>
+                        <th>Format</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Individual Strings</td>
+                        <td>Raw Base64 per file</td>
+                        <td>Copy-paste into code</td>
+                    </tr>
+                    <tr>
+                        <td>JSON Export</td>
+                        <td><code>{"filename": "base64..."}</code></td>
+                        <td>API payloads, config files</td>
+                    </tr>
+                    <tr>
+                        <td>Data URIs</td>
+                        <td><code>data:[MIME];base64,...</code></td>
+                        <td>HTML/CSS embedding</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> What Are the Performance Considerations for Bulk Conversion?</h2>
+            <p>
+                Performance depends on file count, individual file size, and device memory. The converter processes files sequentially in the browser's main thread. Keep these numbers in mind for smooth operation.
+            </p>
+            <p>
+                <strong>File Size:</strong> Individual files under <code>5 MB</code> convert in under 1 second on most devices. Files between <code>5 MB</code> and <code>50 MB</code> may take several seconds each. Base64 encoding increases output size by approximately <code>33%</code>, so a <code>3 MB</code> image produces a roughly <code>4 MB</code> string.
+            </p>
+            <p>
+                <strong>Batch Size:</strong> Batches of <code>50-100</code> files process without issues on modern browsers. Batches above <code>200</code> files may cause tab slowdowns on devices with less than <code>8 GB</code> of RAM. Splitting large sets into smaller batches is recommended.
+            </p>
+            <p>
+                <strong>Browser Limits:</strong> The <code>FileReader</code> API handles files up to approximately <code>500 MB</code>, but practical limits are lower due to memory constraints. Total batch memory consumption equals roughly <code>2.66x</code> the combined original file sizes (raw bytes plus Base64 output).
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is Bulk Base64 Conversion Private and Secure?</h2>
+            <p>
+                Yes. Every file is read and encoded entirely within your browser. No data is transmitted to any server. The tool uses the native <code>FileReader</code> API to read files from your local filesystem and <code>btoa()</code> to perform the encoding. Network activity is zero during conversion. After you close or refresh the page, all file data and Base64 output are cleared from browser memory. This makes the tool suitable for confidential documents, internal assets, and personally identifiable information. To verify output integrity, you can <a href="/base64-validator/">validate Base64 output</a> with a dedicated checker. For more <a href="/">Base64 tools</a>, see the full collection on the homepage.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How many files can I convert at once?</h3>
+                <p>
+                    There is no hard-coded file count limit. The practical limit depends on your browser's available memory. Most modern browsers handle <code>50-100</code> files per batch without issues. Batches above <code>200</code> files may cause tab slowdowns on devices with less than <code>8 GB</code> of RAM. For very large sets, split files into batches of <code>50</code> and process them sequentially.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the maximum file size for bulk conversion?</h3>
+                <p>
+                    Each file can be up to the browser's <code>FileReader</code> limit, which is typically around <code>500 MB</code>. For best performance, keep individual files under <code>5 MB</code> and total batch size under <code>100 MB</code>. Base64 encoding increases output size by approximately <code>33%</code>, so plan memory usage accordingly.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does bulk conversion maintain the original file names?</h3>
+                <p>
+                    Yes. The converter preserves each original file name in the output. When you download results as JSON, each entry includes the <code>filename</code> property mapped to its Base64 string. Individual <code>.txt</code> downloads also retain the source file name with a <code>.base64.txt</code> extension appended.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I convert mixed file types in one batch?</h3>
+                <p>
+                    Yes. The bulk converter accepts any file type in a single batch. You can mix images (PNG, JPEG, WebP), documents (PDF, DOCX), text files, and binary files. Each file is independently read and encoded to Base64 regardless of its MIME type. The JSON export includes all files together.
+                </p>
+            </div>
         </section>
     </main>
 

@@ -74,14 +74,35 @@
             "name": "How do I validate a Base64 string?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Paste your Base64 string into the text area above. The validator will instantly check if it's properly formatted, detect the image format, and provide detailed feedback about any issues."
+                "text": "Paste your Base64 string into the text area above. The validator instantly checks character validity, padding, length, and decodability. Results display within milliseconds."
             }
         }, {
             "@type": "Question",
             "name": "What makes a Base64 string invalid?",
             "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "A Base64 string is invalid if it contains characters outside of A-Z, a-z, 0-9, +, /, and =. It's also invalid if the length isn't a multiple of 4 (when padding is included) or if padding characters appear in incorrect positions."
+                "text": "A Base64 string is invalid if it contains characters outside A-Z, a-z, 0-9, +, /, and =. It is also invalid if the padded length is not a multiple of 4 or if = characters appear in incorrect positions."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can this validator detect the image format?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. The validator detects image formats in 2 ways: by parsing the data URI MIME type prefix and by reading the decoded binary file signature (magic bytes)."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why does my valid-looking Base64 fail validation?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Common causes include invisible whitespace characters, line breaks inserted by email systems (MIME wraps at 76 characters), incomplete copy-paste truncation, or incorrect padding. The validator identifies the specific error type."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is this validator safe for sensitive data?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All validation runs in your browser. Zero data leaves your device. No network requests are made during validation."
             }
         }]
     }
@@ -164,81 +185,99 @@
         <article class="content-section">
             <h2><i class="fas fa-question-circle"></i> What is Base64 Validation?</h2>
             <p>
-                Base64 validation checks whether a string is properly encoded according to the Base64 specification. Valid Base64 strings use only the
-                characters A-Z, a-z, 0-9, +, and /, with = used for padding. The validator verifies the character set, checks padding correctness,
-                and can detect the image format if the string represents image data.
+                Base64 validation checks whether a string conforms to the Base64 encoding specification defined in RFC 4648. A valid Base64 string contains only 64 permitted characters (<code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code>) plus <code>=</code> padding. This validator verifies the character set, padding correctness, and data integrity.
             </p>
 
             <h2><i class="fas fa-lightbulb"></i> Why Validate Base64 Strings?</h2>
             <p>
-                Validating Base64 strings is crucial for debugging and quality assurance. Invalid Base64 can cause applications to crash or display
-                errors when decoding. Validation helps identify truncated or corrupted data, detect encoding errors before they reach production,
-                and verify that API responses contain properly formatted image data. For developers working with Base64 data, validation is an
-                essential step in ensuring data integrity.
+                Invalid Base64 strings cause decoding failures, application crashes, and corrupted data output. Validation catches 4 categories of errors before they reach production systems.
+            </p>
+            <ul>
+                <li><strong>Truncated data:</strong> Incomplete API responses or copy-paste errors produce strings that fail decoding.</li>
+                <li><strong>Character corruption:</strong> Non-Base64 characters inserted during transmission break the encoding.</li>
+                <li><strong>Padding errors:</strong> Missing or misplaced <code>=</code> characters produce incorrect byte alignment.</li>
+                <li><strong>Format mismatches:</strong> A string may be valid Base64 but not represent the expected data type (image, PDF, text).</li>
+            </ul>
+            <p>
+                After validation, use the <a href="/base64-image-decoder/">Base64 image decoder</a> or <a href="/base64-file-decoder/">file decoder</a> to extract the original data.
             </p>
 
-            <h2><i class="fas fa-cog"></i> How This Validator Works</h2>
+            <h2><i class="fas fa-cog"></i> How Does the Base64 Validator Work?</h2>
             <p>
-                This tool performs comprehensive validation on your Base64 string. It checks character validity, ensuring only permitted Base64
-                characters are used. It verifies padding correctness, checking that = characters appear only at the end. It detects data URI
-                prefixes and extracts format information. It estimates the decoded size and attempts to decode the string to verify it represents
-                valid data. For image data, it tries to load and preview the image to confirm validity.
+                The validator runs 5 checks in sequence: character set verification, padding correctness, length divisibility by 4, successful <code>atob()</code> decoding, and file signature detection. If the string includes a data URI prefix, the validator extracts the MIME type automatically.
             </p>
 
-            <h2><i class="fas fa-exclamation-circle"></i> Common Validation Errors</h2>
+            <h3>What Image Formats Does the Validator Detect?</h3>
             <p>
-                Several issues can make a Base64 string invalid. Invalid characters outside the Base64 alphabet will cause validation to fail.
-                Incorrect padding with = characters in wrong positions indicates corruption. Truncated strings that end abruptly suggest incomplete
-                data. Whitespace or line breaks within the encoded string can cause parsing errors. This validator identifies these issues and
-                provides clear feedback to help you fix the problem.
+                The validator identifies image formats by reading the first 4 bytes of decoded data (the file signature or "magic number"). The table below lists the supported signatures.
+            </p>
+            <table class="reference-table">
+                <thead><tr><th>Format</th><th>File Signature (Hex)</th><th>Magic Bytes</th></tr></thead>
+                <tbody>
+                    <tr><td>PNG</td><td><code>89 50 4E 47</code></td><td><code>\x89PNG</code></td></tr>
+                    <tr><td>JPEG</td><td><code>FF D8 FF</code></td><td><code>\xFF\xD8\xFF</code></td></tr>
+                    <tr><td>GIF</td><td><code>47 49 46</code></td><td><code>GIF</code></td></tr>
+                    <tr><td>WebP</td><td><code>52 49 46 46</code></td><td><code>RIFF</code></td></tr>
+                    <tr><td>BMP</td><td><code>42 4D</code></td><td><code>BM</code></td></tr>
+                    <tr><td>SVG</td><td><code>3C 73 76 67</code></td><td><code>&lt;svg</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                For hex-level inspection of encoded data, use the <a href="/base64-hex-converter/">Base64 to HEX converter</a>.
             </p>
 
-            <h2><i class="fas fa-code"></i> Base64 String Structure</h2>
+            <h2><i class="fas fa-exclamation-circle"></i> What Are Common Base64 Validation Errors?</h2>
             <p>
-                A valid Base64 string follows specific rules. It uses only 64 specific characters plus padding. The length must be a multiple of 4
-                when fully padded. Padding characters (=) can only appear at the end. Data URIs include a prefix like "data:image/png;base64,"
-                before the encoded data. Understanding this structure helps identify why validation might fail and how to fix invalid strings.
+                The validator identifies 5 specific error types and provides feedback for each one. Invalid characters outside the 64-character alphabet cause immediate rejection. Padding errors occur when <code>=</code> appears in positions other than the final 2 characters. Length errors indicate the string is not a multiple of 4 characters. Whitespace or line breaks within the string cause parsing failures. Decoding failures suggest the data is corrupted even if the character set is valid.
+            </p>
+
+            <h2><i class="fas fa-code"></i> What is the Structure of a Valid Base64 String?</h2>
+            <p>
+                A valid Base64 string follows 4 structural rules defined in RFC 4648. The string uses only the 64-character alphabet plus optional <code>=</code> padding. The padded length is a multiple of 4. Padding (<code>=</code> or <code>==</code>) appears only at the end. Data URIs prepend a MIME type prefix: <code>data:image/png;base64,</code>.
+            </p>
+            <p>
+                To <a href="/base64-text-encoder/">encode text to Base64</a> or <a href="/base64-url-safe/">convert to URL-safe Base64</a>, use the respective tools and then validate the output here.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This Validator Private and Secure?</h2>
+            <p>
+                All validation runs locally in your browser using JavaScript. Zero data is transmitted to external servers. Your Base64 strings, decoded data, and image previews remain entirely on your device.
             </p>
 
             <h2>Frequently Asked Questions</h2>
 
-            <div class="faq">
+            <div class="faq-item">
                 <h3>How do I validate a Base64 string?</h3>
                 <p>
-                    Paste your Base64 string into the text area above. The validator will instantly check if it's properly formatted, detect the
-                    image format, and provide detailed feedback about any issues.
+                    Paste your Base64 string into the text area above. The validator instantly checks character validity, padding, length, and decodability. Results display within milliseconds.
                 </p>
             </div>
 
-            <div class="faq">
+            <div class="faq-item">
                 <h3>What makes a Base64 string invalid?</h3>
                 <p>
-                    A Base64 string is invalid if it contains characters outside of A-Z, a-z, 0-9, +, /, and =. It's also invalid if the length
-                    isn't a multiple of 4 (when padding is included) or if padding characters appear in incorrect positions.
+                    A Base64 string is invalid if it contains characters outside <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code>, and <code>=</code>. It is also invalid if the padded length is not a multiple of 4 or if <code>=</code> characters appear in incorrect positions.
                 </p>
             </div>
 
-            <div class="faq">
+            <div class="faq-item">
                 <h3>Can this validator detect the image format?</h3>
                 <p>
-                    Yes. If your Base64 string includes a data URI prefix (like "data:image/png;base64,"), the validator will extract the format.
-                    It can also detect the format by examining the decoded binary data's file signature.
+                    Yes. The validator detects image formats in 2 ways: by parsing the data URI MIME type prefix (e.g., <code>data:image/png;base64,</code>) and by reading the decoded binary file signature (magic bytes).
                 </p>
             </div>
 
-            <div class="faq">
+            <div class="faq-item">
                 <h3>Why does my valid-looking Base64 fail validation?</h3>
                 <p>
-                    Common causes include whitespace or line breaks in the string, incomplete or truncated data, or incorrect padding. The validator
-                    will provide specific error messages to help identify the issue.
+                    Common causes include invisible whitespace characters, line breaks inserted by email systems (MIME wraps at 76 characters), incomplete copy-paste truncation, or incorrect padding. The validator identifies the specific error type.
                 </p>
             </div>
 
-            <div class="faq">
+            <div class="faq-item">
                 <h3>Is this validator safe for sensitive data?</h3>
                 <p>
-                    Yes. All validation happens locally in your browser. Your Base64 data never leaves your device, ensuring complete privacy
-                    and security.
+                    Yes. All validation runs in your browser. Zero data leaves your device. No network requests are made during validation.
                 </p>
             </div>
         </article>

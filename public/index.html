@@ -166,7 +166,7 @@
         </div>
 
         <section id="tools">
-            <h2><i class="fas fa-wrench"></i> Online Base64 Encoding & Decoding Tools</h2>
+            <h2><i class="fas fa-wrench"></i> Which Base64 Tools Are Available?</h2>
 
             <div class="tool-list">
                 <div class="tool-card">
@@ -250,6 +250,22 @@
                 <code>background-image</code> property without requiring a separate image file.
             </p>
 
+            <h3>Base64 Encoding Quick Reference</h3>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Property</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Character Set</td><td><code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code> (64 characters)</td></tr>
+                    <tr><td>Padding Character</td><td><code>=</code> (appended to make output a multiple of 4)</td></tr>
+                    <tr><td>Size Overhead</td><td>~33% larger than original binary data (3 bytes → 4 characters)</td></tr>
+                    <tr><td>RFC Standard</td><td>RFC 4648 (2006) — The Base16, Base32, and Base64 Data Encodings</td></tr>
+                    <tr><td>URL-Safe Variant</td><td>Replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code> (RFC 4648 Section 5)</td></tr>
+                    <tr><td>MIME Line Length</td><td>76 characters per line (RFC 2045)</td></tr>
+                    <tr><td>Data URI Format</td><td><code>data:[MIME];base64,[DATA]</code></td></tr>
+                </tbody>
+            </table>
+
             <h2><i class="fas fa-lightbulb"></i> Why Use Base64 for Images?</h2>
             <p>
                 Base64-encoded images are useful in many scenarios across web development and software engineering:
@@ -266,11 +282,9 @@
                 For larger images, use our <a href="/base64-validator/">Base64 validator</a> to check the encoded output before embedding.
             </p>
 
-            <h2><i class="fas fa-lock"></i> Privacy and Security</h2>
+            <h2><i class="fas fa-lock"></i> Is BASE64IMAGE Safe and Private?</h2>
             <p>
-                Unlike many online Base64 converter tools, BASE64IMAGE processes everything locally in your browser using JavaScript.
-                When you encode or decode an image, the data never leaves your device. There are no server uploads, no data storage, and
-                no tracking of your files. This ensures complete privacy and security for sensitive images or confidential data.
+                BASE64IMAGE processes all data locally in your browser using JavaScript — no files are uploaded to servers. When you encode or decode an image, the data never leaves your device. There are zero server uploads, zero data storage, and zero tracking of your files.
             </p>
             <p>
                 Our tools use the browser's native <code>FileReader</code> API and <code>Canvas</code> API to handle encoding and decoding.
@@ -278,7 +292,7 @@
                 The tools even work offline after the page loads.
             </p>
 
-            <h2><i class="fas fa-cog"></i> How to Convert Image to Base64 Online</h2>
+            <h2><i class="fas fa-cog"></i> How Do You Convert an Image to Base64 Online?</h2>
             <p>
                 Converting an image to Base64 with BASE64IMAGE takes three simple steps:
             </p>
@@ -291,7 +305,7 @@
                 To reverse the process, use the <a href="/base64-image-decoder/">Base64 to Image Decoder</a> — paste any Base64 string and instantly preview and download the decoded image. You can also convert to a specific format using the <a href="/base64-to-png/">Base64 to PNG converter</a>.
             </p>
 
-            <h2><i class="fas fa-code"></i> Using Base64 Images in HTML and CSS</h2>
+            <h2><i class="fas fa-code"></i> How Do You Use Base64 Images in HTML and CSS?</h2>
             <p>
                 Once you've encoded an image to Base64, you can embed it directly in your code using a data URI. Here are the most common methods:
             </p>
@@ -308,9 +322,9 @@ img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUh...';</code></pre>
                 Use our <a href="/base64-embed-generator/">Base64 Embed Code Generator</a> to automatically create these code snippets from any image — just upload the file and copy the generated HTML, CSS, or Markdown code.
             </p>
 
-            <h2><i class="fas fa-list-ul"></i> Common Use Cases</h2>
+            <h2><i class="fas fa-list-ul"></i> What Are Common Use Cases for Base64 Images?</h2>
             <p>
-                Developers and designers use Base64 image tools for various purposes across frontend, backend, and DevOps workflows:
+                Base64 image encoding serves 6 primary use cases across frontend, backend, and DevOps workflows. Each use case leverages the ability to represent binary image data as ASCII text.
             </p>
             <ul>
                 <li><strong>Frontend development:</strong> Embed small assets (icons, logos, sprites) to reduce page load requests and improve performance.</li>

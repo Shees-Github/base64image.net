@@ -638,6 +638,53 @@ code {
     color: #764ba2;
 }
 
+/* Reference tables */
+.reference-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0 20px;
+    font-size: 0.95rem;
+}
+
+.reference-table th,
+.reference-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border: 1px solid #e0e0e0;
+}
+
+.reference-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    font-weight: 600;
+}
+
+.reference-table tr:nth-child(even) {
+    background: #f8f8fc;
+}
+
+.reference-table tr:hover {
+    background: #f0f0f8;
+}
+
+.reference-table code {
+    background: #f0f0f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #764ba2;
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .reference-table {
+        font-size: 0.85rem;
+    }
+    .reference-table th,
+    .reference-table td {
+        padding: 8px 10px;
+    }
+}
+
 /* Legal pages */
 .legal-content {
     background: #fff;
