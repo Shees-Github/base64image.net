@@ -3,12 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base64 Image Encoder - Convert Images to Base64 Online</title>
+    <title>Base64 Image Encoder - Convert Images to Base64 Online Free</title>
     <meta name="description" content="Free online Base64 image encoder. Upload any image and convert it to a Base64 string. Perfect for embedding images in HTML, CSS, or JSON. Works locally in your browser.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/base64-image-encoder/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Base64 Image Encoder - Convert Images to Base64 Online Free">
+    <meta property="og:description" content="Upload any image and convert it to a Base64 string instantly. Works locally in your browser — no uploads to servers.">
+    <meta property="og:url" content="https://base64image.net/base64-image-encoder/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 Image Encoder - Convert Images to Base64 Online Free">
+    <meta name="twitter:description" content="Upload any image and convert it to a Base64 string instantly. Works locally in your browser — no uploads to servers.">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
-    <script src="../assets/components.js"></script>
+    <script src="../assets/components.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
@@ -115,6 +131,39 @@
                 "@type": "Answer",
                 "text": "No. This tool processes everything locally in your browser using JavaScript. Your images never leave your device, ensuring complete privacy and security."
             }
+        }, {
+            "@type": "Question",
+            "name": "Why does Base64 increase file size?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 encoding represents binary data using only 64 text characters, which requires more space than raw binary. The encoded string is approximately 33% larger than the original file. This trade-off is acceptable for small images where the convenience of inline embedding outweighs the size increase."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I use the Base64 string in HTML?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Copy the complete Base64 string (including the data:image prefix) and use it as the src attribute of an img tag: <img src=\"data:image/png;base64,iVBORw0KG...\" alt=\"Description\">."
+            }
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 Image Encoder",
+            "item": "https://base64image.net/base64-image-encoder/"
         }]
     }
     </script>
@@ -195,6 +244,7 @@
                 in CSS or HTML. They're essential for data URIs in stylesheets, allowing you to include icons and logos without external files. Email developers
                 use Base64 to embed images in HTML emails. API developers include image data in JSON responses. The technique is particularly effective for
                 small images like icons, buttons, and logos where the convenience outweighs the 33% size increase from encoding.
+                Use our <a href="/base64-embed-generator/">embed code generator</a> to create ready-to-use HTML and CSS snippets.
             </p>
 
             <h2><i class="fas fa-cog"></i> How This Encoder Works</h2>
@@ -209,7 +259,7 @@
                 Developers encode images to Base64 for various purposes. Frontend developers embed small UI elements to reduce HTTP requests and improve
                 page load performance. CSS developers include background images and icons directly in stylesheets. Email template designers embed images
                 to ensure they display in all email clients. API developers transmit image data through JSON. Mobile app developers send images to backends
-                as Base64 strings. Anyone working with data URIs, inline images, or API payloads will find this tool invaluable.
+                as Base64 strings. Anyone working with data URIs, inline images, or API payloads will find this tool invaluable. Need to reverse the process? Use our <a href="/base64-image-decoder/">Base64 Image Decoder</a>. You can also <a href="/base64-validator/">validate your Base64 output</a> before embedding.
             </p>
 
             <h2><i class="fas fa-star"></i> Best Practices</h2>

@@ -99,7 +99,7 @@ const FooterComponent = `
                 </div>
             </div>
             <div class="footer-bottom">
-                <p class="footer-copyright">&copy; 2025 BASE64IMAGE. All tools run locally in your browser.</p>
+                <p class="footer-copyright">&copy; ${new Date().getFullYear()} BASE64IMAGE. All tools run locally in your browser.</p>
             </div>
         </div>
     </footer>

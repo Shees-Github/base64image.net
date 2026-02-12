@@ -3,12 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base64 Image Decoder - Free Online Tool to Decode Base64 to Image</title>
-    <meta name="description" content="Free online Base64 image decoder. Paste your Base64 string and instantly decode it to view, preview, and download images. No uploads required, works entirely in your browser.">
+    <title>Base64 Image Decoder - Decode Base64 to Image Online Free</title>
+    <meta name="description" content="Free online Base64 image decoder. Paste a Base64 string to instantly preview and download images. No uploads, works in your browser.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/base64-image-decoder/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Base64 Image Decoder - Decode Base64 to Image Online Free">
+    <meta property="og:description" content="Paste a Base64 string to instantly preview and download images. No uploads, works entirely in your browser.">
+    <meta property="og:url" content="https://base64image.net/base64-image-decoder/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 Image Decoder - Decode Base64 to Image Online Free">
+    <meta name="twitter:description" content="Paste a Base64 string to instantly preview and download images. No uploads, works entirely in your browser.">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
-    <script src="../assets/components.js"></script>
+    <script src="../assets/components.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
@@ -81,6 +97,39 @@
                 "@type": "Answer",
                 "text": "This decoder supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, and BMP. The format is automatically detected from the Base64 data URI prefix or file signature."
             }
+        }, {
+            "@type": "Question",
+            "name": "Can I decode Base64 without the data URI prefix?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! You can paste either the complete data URI (e.g., data:image/png;base64,iVBORw0KG...) or just the Base64 string itself. The tool automatically handles both formats."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why is my Base64 string showing an error?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Errors typically occur if the Base64 string is malformed, incomplete, or contains invalid characters. Ensure you've copied the entire string without truncation. Base64 strings should only contain A-Z, a-z, 0-9, +, /, and = (for padding)."
+            }
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 Image Decoder",
+            "item": "https://base64image.net/base64-image-decoder/"
         }]
     }
     </script>
@@ -134,7 +183,7 @@
                 A Base64 image decoder is a tool that converts Base64-encoded strings back into their original image format.
                 Base64 encoding is widely used in web development to embed images directly into HTML, CSS, or JSON files without
                 requiring separate image files. This technique is particularly useful for small icons, logos, or when you need
-                to include images in data URIs.
+                to include images in data URIs. You can <a href="/base64-validator/">validate any Base64 string</a> before decoding.
             </p>
 
             <h2><i class="fas fa-cog"></i> How Does Base64 Encoding Work?</h2>
@@ -160,7 +209,7 @@
                 responses, configuration files, or database records. Email developers use Base64 encoding to embed images in
                 HTML emails. Mobile app developers may receive Base64-encoded images from backend services. Quality assurance
                 teams use decoders to verify image data in JSON payloads. Anyone working with data URIs, Canvas exports, or
-                embedded resources will find this tool invaluable.
+                embedded resources will find this tool invaluable. Need to encode images? Use our <a href="/base64-image-encoder/">Base64 Image Encoder</a>. To download as a specific format, try the <a href="/base64-to-png/">Base64 to PNG Converter</a>.
             </p>
 
             <h2><i class="fas fa-star"></i> Features of This Tool</h2>

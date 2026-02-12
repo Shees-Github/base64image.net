@@ -4,11 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base64 Text Decoder - Decode Base64 to Text Online Free</title>
-    <meta name="description" content="Free online Base64 text decoder. Convert Base64 encoded strings back to plain text instantly. No uploads required, works entirely in your browser. Fast, secure, and privacy-focused.">
+    <meta name="description" content="Free online Base64 to text decoder. Convert Base64 strings back to plain text instantly. Decode API responses, JWT tokens, and email headers in your browser.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/base64-text-decoder/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Base64 Text Decoder - Decode Base64 to Text Online Free">
+    <meta property="og:description" content="Convert Base64 encoded strings back to plain text instantly. Decode API responses, JWT tokens, and email headers.">
+    <meta property="og:url" content="https://base64image.net/base64-text-decoder/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 Text Decoder - Decode Base64 to Text Online Free">
+    <meta name="twitter:description" content="Convert Base64 encoded strings back to plain text instantly. Decode API responses, JWT tokens, and email headers.">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
-    <script src="../assets/components.js"></script>
+    <script src="../assets/components.js" defer></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Google tag (gtag.js) -->
@@ -18,6 +34,78 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+
+    <!-- Structured Data - HowTo -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Decode Base64 to Text",
+        "description": "Step-by-step guide to decode Base64 strings to plain text online for free",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Paste your Base64 encoded string into the input area."
+        }, {
+            "@type": "HowToStep",
+            "name": "Click Decode",
+            "text": "Click the 'Decode to Text' button to convert the Base64 string back to plain text."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy or Download",
+            "text": "Copy the decoded text to your clipboard or download it as a text file."
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I decode Base64 to text?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Paste your Base64 string into the input field and click 'Decode to Text'. The tool instantly converts it to readable plain text in your browser. No server uploads required."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why does my decoded text show garbled characters?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show unreadable characters. Use a Base64 image decoder or file decoder for non-text data."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I decode JWT tokens with this tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. JWT tokens contain Base64-encoded payloads. Paste the middle section of a JWT (between the two dots) to decode it and read the claims and user data inside."
+            }
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 Text Decoder",
+            "item": "https://base64image.net/base64-text-decoder/"
+        }]
+    }
     </script>
 </head>
 <body>
@@ -121,13 +209,41 @@
                 <strong>Invalid Base64:</strong> If your Base64 string contains invalid characters or incorrect padding, decoding will fail. Make sure you copied the complete Base64 string without extra spaces or line breaks.
             </p>
             <p>
-                <strong>Binary Data:</strong> If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show garbled characters. Use the appropriate image or file decoder instead.
+                <strong>Binary Data:</strong> If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show garbled characters. Use our <a href="/base64-image-decoder/">Base64 Image Decoder</a> or <a href="/base64-file-decoder/">File Decoder</a> instead.
             </p>
 
             <h2><i class="fas fa-shield-alt"></i> Privacy and Security</h2>
             <p>
                 All decoding happens locally in your browser using JavaScript. Your Base64 data is never sent to any server. This ensures complete privacy when decoding sensitive information like API tokens, passwords, or confidential messages.
             </p>
+
+            <h2><i class="fas fa-code"></i> Base64 Text Decoding Example</h2>
+            <p>Here's how a Base64 string decodes back to text:</p>
+            <p><strong>Base64 encoded:</strong></p>
+            <pre><code>SGVsbG8sIFdvcmxkIQ==</code></pre>
+            <p><strong>Decoded text:</strong></p>
+            <pre><code>Hello, World!</code></pre>
+            <p>
+                The decoder handles UTF-8 encoding automatically, so international characters and special symbols decode correctly.
+                Need to encode text instead? Use our <a href="/base64-text-encoder/">Base64 Text Encoder</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I decode Base64 to text?</h3>
+                <p>Paste your Base64 string into the input field and click "Decode to Text". The tool instantly converts it to readable plain text in your browser. No server uploads required.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why does my decoded text show garbled characters?</h3>
+                <p>If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show unreadable characters. Use our <a href="/base64-image-decoder/">Base64 Image Decoder</a> or <a href="/base64-file-decoder/">File Decoder</a> for non-text data.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I decode JWT tokens with this tool?</h3>
+                <p>Yes. JWT tokens contain Base64-encoded payloads. Paste the middle section of a JWT (between the two dots) to decode it and read the claims and user data. For URL-safe Base64 used in JWTs, try our <a href="/base64-url-safe/">URL-Safe Base64 tool</a>.</p>
+            </div>
         </section>
     </main>
 
