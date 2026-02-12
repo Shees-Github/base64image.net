@@ -31,6 +31,10 @@ const HeaderComponent = `
                         <a href="#" class="dropdown-toggle">Converters <i class="fas fa-chevron-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+                            <li><a href="/base64-to-jpeg/">Base64 to JPEG</a></li>
+                            <li><a href="/base64-to-svg/">Base64 to SVG</a></li>
+                            <li><a href="/base64-to-webp/">Base64 to WebP</a></li>
+                            <li><a href="/base64-to-gif/">Base64 to GIF</a></li>
                             <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
                             <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
                         </ul>
@@ -42,6 +46,18 @@ const HeaderComponent = `
                             <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
                             <li><a href="/base64-embed-generator/">Embed Generator</a></li>
                             <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
+                            <li><a href="/base64-size-calculator/">Size Calculator</a></li>
+                            <li><a href="/base32-encoder-decoder/">Base32 Encoder</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle">Learn <i class="fas fa-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/what-is-base64/">What is Base64?</a></li>
+                            <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
+                            <li><a href="/base64-character-table/">Character Table</a></li>
+                            <li><a href="/data-uri-guide/">Data URI Guide</a></li>
+                            <li><a href="/base64-mime-types/">MIME Types</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -75,6 +91,10 @@ const FooterComponent = `
                     <h3>Converters</h3>
                     <ul>
                         <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+                        <li><a href="/base64-to-jpeg/">Base64 to JPEG</a></li>
+                        <li><a href="/base64-to-svg/">Base64 to SVG</a></li>
+                        <li><a href="/base64-to-webp/">Base64 to WebP</a></li>
+                        <li><a href="/base64-to-gif/">Base64 to GIF</a></li>
                         <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
                         <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
                     </ul>
@@ -86,6 +106,30 @@ const FooterComponent = `
                         <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
                         <li><a href="/base64-embed-generator/">Embed Generator</a></li>
                         <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
+                        <li><a href="/base64-size-calculator/">Size Calculator</a></li>
+                        <li><a href="/base32-encoder-decoder/">Base32 Encoder</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Learn</h3>
+                    <ul>
+                        <li><a href="/what-is-base64/">What is Base64?</a></li>
+                        <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
+                        <li><a href="/base64-character-table/">Character Table</a></li>
+                        <li><a href="/data-uri-guide/">Data URI Guide</a></li>
+                        <li><a href="/base64-vs-binary/">Base64 vs Binary</a></li>
+                        <li><a href="/base64-mime-types/">MIME Types</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Developer Guides</h3>
+                    <ul>
+                        <li><a href="/base64-javascript/">Base64 in JavaScript</a></li>
+                        <li><a href="/base64-python/">Base64 in Python</a></li>
+                        <li><a href="/base64-java/">Base64 in Java</a></li>
+                        <li><a href="/base64-php/">Base64 in PHP</a></li>
+                        <li><a href="/base64-csharp/">Base64 in C#</a></li>
+                        <li><a href="/base64-go/">Base64 in Go</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">

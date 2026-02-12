@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 Encoding in JavaScript - btoa, atob, Buffer, and TextEncoder Guide</title>
+    <meta name="description" content="Learn how to encode and decode Base64 in JavaScript using btoa(), atob(), Buffer, TextEncoder, and FileReader. Code examples for browsers and Node.js.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/base64-javascript/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Base64 Encoding in JavaScript - btoa, atob, Buffer, and TextEncoder Guide">
+    <meta property="og:description" content="Learn how to encode and decode Base64 in JavaScript using btoa(), atob(), Buffer, TextEncoder, and FileReader.">
+    <meta property="og:url" content="https://base64image.net/base64-javascript/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 Encoding in JavaScript - btoa, atob, Buffer, and TextEncoder Guide">
+    <meta name="twitter:description" content="Learn how to encode and decode Base64 in JavaScript using btoa(), atob(), Buffer, TextEncoder, and FileReader.">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js" defer></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in JavaScript",
+            "item": "https://base64image.net/base64-javascript/"
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - Article -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Base64 Encoding in JavaScript - btoa, atob, Buffer, and TextEncoder Guide",
+        "description": "Learn how to encode and decode Base64 in JavaScript using btoa(), atob(), Buffer, TextEncoder, and FileReader. Code examples for browsers and Node.js.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/base64-javascript/"
+        }
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Does JavaScript have built-in Base64 support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. JavaScript provides btoa() and atob() as built-in browser APIs for Base64 encoding and decoding. These functions are available in all modern browsers and in Node.js 16+. No external library or npm package is required for standard Base64 operations."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why does btoa() fail with emoji or Unicode characters?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "btoa() only accepts Latin-1 (ISO 8859-1) characters, which are code points U+0000 through U+00FF. Emoji and most Unicode characters have code points above U+00FF, causing btoa() to throw an InvalidCharacterError. Use TextEncoder to convert the string to UTF-8 bytes first, then encode those bytes with btoa()."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base64 encoding in JavaScript synchronous?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "btoa() and atob() are synchronous functions that return results immediately. FileReader.readAsDataURL() is asynchronous and requires an onload callback or event listener to access the Base64 result. Buffer.from().toString('base64') in Node.js is synchronous."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use Base64 in JavaScript without any library?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Native browser APIs (btoa, atob, FileReader, TextEncoder, TextDecoder) and Node.js Buffer handle all Base64 encoding and decoding operations without any external library. These built-in functions cover standard Base64, UTF-8 handling, and file-to-Base64 conversion."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I Base64 encode a file in the browser?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use FileReader.readAsDataURL() to convert a file to a Base64 data URI. Call readAsDataURL() on a File object from an input element, then access the result in the onload callback via reader.result. The result contains the full data URI including the MIME type prefix."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fab fa-js-square"></i> Base64 in JavaScript</h1>
+        <p class="intro">How to encode and decode Base64 strings in JavaScript for browsers and Node.js</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <!-- Section 1: Encoding -->
+            <h2><i class="fas fa-lock"></i> How Do You Encode a String to Base64 in JavaScript?</h2>
+            <p>
+                Use <code>btoa()</code> in browsers and Node.js 16+. The <code>btoa()</code> function accepts a binary string (each character representing a single byte with code point U+0000 through U+00FF) and returns a Base64-encoded ASCII string. It is available in all modern browsers and runs synchronously.
+            </p>
+            <pre><code>// Encode a string to Base64
+const encoded = btoa('Hello, World!');
+console.log(encoded); // "SGVsbG8sIFdvcmxkIQ=="</code></pre>
+            <p>
+                The <code>btoa()</code> function name stands for "binary to ASCII." It processes the input string one character at a time, reading the low byte of each character's code point. The output follows the standard Base64 alphabet (A-Z, a-z, 0-9, +, /) with <code>=</code> padding. For background on the encoding format, see <a href="/what-is-base64/">What is Base64 Encoding?</a>. To encode text without writing code, use the <a href="/base64-text-encoder/">Base64 text encoder</a>.
+            </p>
+
+            <!-- Section 2: Decoding -->
+            <h2><i class="fas fa-unlock"></i> How Do You Decode Base64 to a String in JavaScript?</h2>
+            <p>
+                Use <code>atob()</code> to decode. The <code>atob()</code> function takes a Base64-encoded string and returns the decoded binary string. It accepts standard Base64 characters (A-Z, a-z, 0-9, +, /, =) and ignores whitespace in the input.
+            </p>
+            <pre><code>// Decode Base64 to a string
+const decoded = atob('SGVsbG8sIFdvcmxkIQ==');
+console.log(decoded); // "Hello, World!"</code></pre>
+            <p>
+                The <code>atob()</code> function name stands for "ASCII to binary." Each group of 4 Base64 characters decodes to 3 bytes. If the input contains characters outside the Base64 alphabet or has incorrect padding, <code>atob()</code> throws a <code>DOMException</code>. To decode Base64 strings interactively, use the <a href="/base64-text-decoder/">Base64 text decoder</a>.
+            </p>
+
+            <!-- Section 3: Unicode -->
+            <h2><i class="fas fa-globe"></i> How Do You Handle Unicode Text with Base64 in JavaScript?</h2>
+            <p>
+                The <code>btoa()</code> function only handles Latin-1 characters (code points U+0000 to U+00FF). Passing Unicode characters such as emoji, Chinese, Arabic, or accented characters above U+00FF causes an <code>InvalidCharacterError</code>. Use <code>TextEncoder</code> and <code>TextDecoder</code> with <code>Uint8Array</code> conversion to handle full UTF-8 text.
+            </p>
+            <pre><code>// Encode UTF-8 string to Base64
+function utf8ToBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    const binary = Array.from(bytes, b =&gt; String.fromCharCode(b)).join('');
+    return btoa(binary);
+}
+
+// Decode Base64 to UTF-8 string
+function base64ToUtf8(base64) {
+    const binary = atob(base64);
+    const bytes = Uint8Array.from(binary, c =&gt; c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+}
+
+// Usage
+const encoded = utf8ToBase64('Hello 🌍');
+console.log(encoded); // "SGVsbG8g8J+MjQ=="
+console.log(base64ToUtf8(encoded)); // "Hello 🌍"</code></pre>
+            <p>
+                <code>TextEncoder.encode()</code> converts a JavaScript string to a <code>Uint8Array</code> of UTF-8 bytes. The <code>Array.from()</code> call maps each byte to a Latin-1 character that <code>btoa()</code> can process. The decoding path reverses this: <code>atob()</code> produces a binary string, <code>Uint8Array.from()</code> extracts the byte values, and <code>TextDecoder.decode()</code> interprets them as UTF-8. For details on how Base64 handles different character sets, see the <a href="/base64-character-table/">Base64 character table</a>.
+            </p>
+
+            <!-- Section 4: Image to Base64 -->
+            <h2><i class="fas fa-image"></i> How Do You Convert an Image to Base64 in JavaScript?</h2>
+            <p>
+                Use <code>FileReader.readAsDataURL()</code> to convert an image file to a Base64 data URI in the browser. The <code>readAsDataURL()</code> method reads a <code>File</code> or <code>Blob</code> object and produces a string in the format <code>data:[mimetype];base64,[encoded data]</code>. This operation is asynchronous and fires the <code>onload</code> event when complete.
+            </p>
+            <pre><code>// Convert an image file to Base64 data URI
+const input = document.querySelector('input[type="file"]');
+input.addEventListener('change', (e) =&gt; {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () =&gt; {
+        const dataUri = reader.result;
+        console.log(dataUri);
+        // "data:image/png;base64,iVBORw0KGgo..."
+    };
+    reader.readAsDataURL(file);
+});</code></pre>
+            <p>
+                The resulting data URI can be assigned directly to an <code>&lt;img&gt;</code> element's <code>src</code> attribute or used in CSS <code>background-image</code> properties. For a ready-to-use tool that handles image encoding with preview, drag-and-drop, and copy-to-clipboard, use the <a href="/base64-image-encoder/">Base64 image encoder</a>. For information about embedding Base64 images in HTML and CSS, see the <a href="/data-uri-guide/">data URI guide</a>.
+            </p>
+
+            <!-- Section 5: Node.js -->
+            <h2><i class="fas fa-server"></i> How Do You Use Base64 in Node.js?</h2>
+            <p>
+                Use the <code>Buffer</code> class in Node.js. <code>Buffer.from(string).toString('base64')</code> encodes a string to Base64. <code>Buffer.from(base64String, 'base64').toString()</code> decodes Base64 back to a string. The <code>Buffer</code> class handles UTF-8 by default, so no additional conversion is needed for Unicode characters.
+            </p>
+            <pre><code>// Node.js: Encode string to Base64
+const encoded = Buffer.from('Hello, World!').toString('base64');
+console.log(encoded); // "SGVsbG8sIFdvcmxkIQ=="
+
+// Node.js: Decode Base64 to string
+const decoded = Buffer.from('SGVsbG8sIFdvcmxkIQ==', 'base64').toString();
+console.log(decoded); // "Hello, World!"
+
+// Node.js: Encode UTF-8 (Unicode works directly)
+const emoji = Buffer.from('Hello 🌍').toString('base64');
+console.log(emoji); // "SGVsbG8g8J+MjQ=="
+
+// Node.js: Encode a file to Base64
+const fs = require('fs');
+const fileBase64 = fs.readFileSync('image.png').toString('base64');
+const dataUri = `data:image/png;base64,${fileBase64}`;</code></pre>
+            <p>
+                <code>Buffer.from()</code> accepts an encoding parameter. When encoding to Base64, pass the source string with the default UTF-8 encoding, then call <code>.toString('base64')</code>. When decoding, specify <code>'base64'</code> as the second argument to <code>Buffer.from()</code> and call <code>.toString('utf-8')</code> for the output. Node.js also supports <code>btoa()</code> and <code>atob()</code> starting from Node.js 16.0.0.
+            </p>
+
+            <!-- Section 6: Reference Table -->
+            <h2><i class="fas fa-table"></i> What Are the JavaScript Base64 Functions?</h2>
+            <p>
+                JavaScript provides 6 built-in APIs for Base64 operations across browser and Node.js environments. The table below lists each function, its runtime environment, primary purpose, and Unicode support level.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Function / API</th><th>Environment</th><th>Purpose</th><th>Unicode Support</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>btoa()</code></td><td>Browser, Node 16+</td><td>Encode binary string to Base64</td><td>Latin-1 only</td></tr>
+                    <tr><td><code>atob()</code></td><td>Browser, Node 16+</td><td>Decode Base64 to binary string</td><td>Latin-1 only</td></tr>
+                    <tr><td><code>Buffer.from().toString('base64')</code></td><td>Node.js</td><td>Encode string or bytes to Base64</td><td>Full UTF-8</td></tr>
+                    <tr><td><code>Buffer.from(str, 'base64')</code></td><td>Node.js</td><td>Decode Base64 to Buffer</td><td>Full UTF-8</td></tr>
+                    <tr><td><code>TextEncoder + btoa</code></td><td>Browser</td><td>Encode UTF-8 string to Base64</td><td>Full UTF-8</td></tr>
+                    <tr><td><code>FileReader.readAsDataURL</code></td><td>Browser</td><td>Convert File/Blob to data URI</td><td>N/A (binary)</td></tr>
+                </tbody>
+            </table>
+            <p>
+                For URL-safe Base64 output (replacing <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code>), apply a string replacement after encoding or use the <a href="/base64-url-safe/">URL-safe Base64 encoder</a>. In Node.js, use <code>Buffer.from(str).toString('base64url')</code> (available since Node.js 15.7.0) for direct URL-safe output.
+            </p>
+
+            <!-- Section 7: Common Errors -->
+            <h2><i class="fas fa-exclamation-triangle"></i> What Are Common JavaScript Base64 Errors?</h2>
+            <p>
+                Two errors occur frequently when using Base64 in JavaScript: <code>InvalidCharacterError</code> from <code>btoa()</code> when encoding non-Latin-1 characters, and <code>DOMException</code> from <code>atob()</code> when decoding invalid Base64 strings. Both are catchable with try/catch.
+            </p>
+
+            <h3><i class="fas fa-times-circle"></i> InvalidCharacterError from btoa()</h3>
+            <p>
+                Calling <code>btoa()</code> with a string containing characters above code point U+00FF throws <code>InvalidCharacterError</code>. This includes emoji, CJK characters, Cyrillic, and many accented characters.
+            </p>
+            <pre><code>// This throws InvalidCharacterError
+try {
+    btoa('Hello 🌍');
+} catch (e) {
+    console.error(e.name);    // "InvalidCharacterError"
+    console.error(e.message); // "The string to be encoded contains characters outside of the Latin1 range."
+}
+
+// Fix: use TextEncoder
+const bytes = new TextEncoder().encode('Hello 🌍');
+const binary = Array.from(bytes, b =&gt; String.fromCharCode(b)).join('');
+const encoded = btoa(binary); // Works correctly</code></pre>
+
+            <h3><i class="fas fa-times-circle"></i> DOMException from atob()</h3>
+            <p>
+                Calling <code>atob()</code> with a string that contains characters outside the Base64 alphabet or has incorrect length/padding throws a <code>DOMException</code>.
+            </p>
+            <pre><code>// This throws DOMException
+try {
+    atob('not-valid-base64!!!');
+} catch (e) {
+    console.error(e.name);    // "InvalidCharacterError"
+    console.error(e.message); // "The string to be decoded is not correctly encoded."
+}
+
+// Fix: validate before decoding
+function isValidBase64(str) {
+    try {
+        atob(str);
+        return true;
+    } catch {
+        return false;
+    }
+}</code></pre>
+            <p>
+                Use the <a href="/base64-validator/">Base64 validator</a> to check whether a string is valid Base64 before processing it in your code.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Does JavaScript have built-in Base64 support?</h3>
+                <p>
+                    Yes. JavaScript provides <code>btoa()</code> and <code>atob()</code> as built-in browser APIs for Base64 encoding and decoding. These functions are available in all modern browsers and in Node.js 16+. No external library or npm package is required for standard Base64 operations.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why does btoa() fail with emoji or Unicode characters?</h3>
+                <p>
+                    <code>btoa()</code> only accepts Latin-1 (ISO 8859-1) characters, which are code points U+0000 through U+00FF. Emoji and most Unicode characters have code points above U+00FF, causing <code>btoa()</code> to throw an <code>InvalidCharacterError</code>. Use <code>TextEncoder</code> to convert the string to UTF-8 bytes first, then encode those bytes with <code>btoa()</code>.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Base64 encoding in JavaScript synchronous?</h3>
+                <p>
+                    <code>btoa()</code> and <code>atob()</code> are synchronous functions that return results immediately. <code>FileReader.readAsDataURL()</code> is asynchronous and requires an <code>onload</code> callback or event listener to access the Base64 result. <code>Buffer.from().toString('base64')</code> in Node.js is synchronous.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use Base64 in JavaScript without any library?</h3>
+                <p>
+                    Yes. Native browser APIs (<code>btoa</code>, <code>atob</code>, <code>FileReader</code>, <code>TextEncoder</code>, <code>TextDecoder</code>) and Node.js <code>Buffer</code> handle all Base64 encoding and decoding operations without any external library. These built-in functions cover standard Base64, UTF-8 handling, and file-to-Base64 conversion.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I Base64 encode a file in the browser?</h3>
+                <p>
+                    Use <code>FileReader.readAsDataURL()</code> to convert a file to a Base64 data URI. Call <code>readAsDataURL()</code> on a <code>File</code> object from an <code>&lt;input type="file"&gt;</code> element, then access the result in the <code>onload</code> callback via <code>reader.result</code>. The result contains the full data URI including the MIME type prefix. For a drag-and-drop interface, use the <a href="/base64-image-encoder/">Base64 image encoder</a>.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+</body>
+</html>

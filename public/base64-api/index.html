@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 in APIs - How to Send and Receive Base64 Data in REST APIs</title>
+    <meta name="description" content="Learn how to use Base64 encoding in REST APIs. Examples for sending images, files, and binary data as Base64 strings in JSON request and response payloads.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/base64-api/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Base64 in APIs - How to Send and Receive Base64 Data in REST APIs">
+    <meta property="og:description" content="Learn how to use Base64 encoding in REST APIs. Examples for sending images, files, and binary data as Base64 strings in JSON request and response payloads.">
+    <meta property="og:url" content="https://base64image.net/base64-api/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 in APIs - How to Send and Receive Base64 Data in REST APIs">
+    <meta name="twitter:description" content="Learn how to use Base64 encoding in REST APIs. Examples for sending images, files, and binary data as Base64 strings in JSON request and response payloads.">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js" defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in APIs",
+            "item": "https://base64image.net/base64-api/"
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Should I use Base64 or multipart for file uploads?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use Base64 for small files under 1 MB in JSON-based APIs where a single content type simplifies client implementation. Use multipart form data for files over 1 MB where the 33% Base64 size overhead becomes significant. Multipart avoids the encoding overhead and is the standard approach for file upload endpoints."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does Base64 affect API response time?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Base64 encoding adds 33% to the payload size, increasing transfer time proportionally. A 1 MB binary file becomes 1.33 MB as Base64 text in JSON. The server also spends CPU cycles encoding the data, and the client spends cycles decoding it. For high-throughput APIs serving many concurrent requests, this overhead is measurable."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I validate Base64 data from an API?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Check that the string contains only valid Base64 characters (A-Z, a-z, 0-9, +, /) and correct padding (= or ==). Verify the decoded output matches the expected file format by checking magic bytes (e.g., PNG files start with 0x89504E47). Use a Base64 validator tool to test strings before processing them in application code."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can GraphQL APIs use Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Base64-encoded data can be sent as a String scalar field in GraphQL mutations and returned in query responses. Define a field of type String to hold the Base64 content. Some GraphQL implementations define a custom Base64 scalar type for explicit typing. For file uploads, the GraphQL multipart request specification is an alternative to Base64."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base64 required for sending binary data in APIs?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Multipart form data (multipart/form-data) transmits binary data without encoding overhead. Binary content types (application/octet-stream) send raw bytes directly. Base64 is one option among several. Its advantage is compatibility with text-based formats like JSON and XML that cannot contain raw binary bytes."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-plug"></i> Base64 in APIs</h1>
+
+        <p class="intro">
+            How to send and receive Base64-encoded data in REST API requests and responses
+        </p>
+
+        <article class="content-section" style="margin-top:0;padding-top:0;border-top:none;">
+            <h2><i class="fas fa-question-circle"></i> Why Do APIs Use Base64 Encoding?</h2>
+            <p>
+                JSON and XML are text-based formats that cannot contain raw binary data. Binary bytes outside the printable ASCII range would break JSON parsing and corrupt XML documents. Base64 converts binary files (images, PDFs, documents) into text strings containing only ASCII characters that JSON and XML can transport safely.
+            </p>
+            <p>
+                Using Base64 in a JSON API avoids multipart form data and simplifies client implementations. The client sends a single <code>application/json</code> request body containing both metadata fields and file data in one payload. The server parses one JSON object instead of processing multipart boundaries and separate form fields. This approach is common in APIs that accept user avatars, document attachments, and image uploads under 1 MB.
+            </p>
+            <p>
+                For a detailed explanation of the Base64 encoding algorithm and character set, see <a href="/what-is-base64/">What is Base64</a>.
+            </p>
+
+            <h2><i class="fas fa-upload"></i> How Do You Send Base64 Images in API Requests?</h2>
+            <p>
+                Include the Base64-encoded file data as a string field in the JSON request body. Alongside the data field, include metadata fields for the filename, content type, and any other information the server needs to process the file. The server decodes the Base64 string back to binary bytes and stores or processes the file.
+            </p>
+            <pre><code>POST /api/v1/upload HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "profile-photo.png",
+  "content_type": "image/png",
+  "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJ
+          AAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5E
+          rkJggg=="
+}</code></pre>
+            <p>
+                Some APIs expect the data URI prefix (<code>data:image/png;base64,</code>) included with the Base64 string; others expect raw Base64 without the prefix. Check the API documentation for the expected format. Use the <a href="/base64-image-encoder/">Base64 Image Encoder</a> to convert an image file to a Base64 string. For encoding non-image files, use the <a href="/base64-file-encoder/">Base64 File Encoder</a>.
+            </p>
+
+            <h2><i class="fas fa-download"></i> How Do You Receive Base64 Data from API Responses?</h2>
+            <p>
+                Parse the JSON response and extract the Base64 string field. Decode the Base64 string to binary data, then create a file object or download link. In JavaScript, the <code>atob()</code> function decodes Base64, and the <code>Blob</code> constructor creates a file object from the decoded bytes.
+            </p>
+            <pre><code>// Parse API response containing Base64 image data
+const response = await fetch('/api/v1/document/123');
+const json = await response.json();
+
+// Decode Base64 to binary
+const binaryString = atob(json.data);
+const bytes = new Uint8Array(binaryString.length);
+for (let i = 0; i &lt; binaryString.length; i++) {
+  bytes[i] = binaryString.charCodeAt(i);
+}
+
+// Create downloadable file
+const blob = new Blob([bytes], { type: json.content_type });
+const url = URL.createObjectURL(blob);
+
+// Trigger download
+const link = document.createElement('a');
+link.href = url;
+link.download = json.name;
+link.click();</code></pre>
+            <p>
+                To decode and preview Base64 image data from an API response, use the <a href="/base64-image-decoder/">Base64 Image Decoder</a>. For non-image files, use the <a href="/base64-file-decoder/">Base64 File Decoder</a>.
+            </p>
+
+            <h2><i class="fas fa-exchange-alt"></i> What Is the Difference Between Base64 and Multipart Form Data?</h2>
+            <p>
+                Base64 in JSON and multipart form data are two approaches for transmitting files through HTTP APIs. Each has different tradeoffs in size overhead, implementation complexity, and use cases. The table below compares the key factors.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Factor</th><th>Base64 in JSON</th><th>Multipart Form Data</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Content Type</td><td><code>application/json</code></td><td><code>multipart/form-data</code></td></tr>
+                    <tr><td>File Size Overhead</td><td>33% larger</td><td>~0% overhead</td></tr>
+                    <tr><td>Multiple Files</td><td>Array of Base64 strings</td><td>Multiple parts</td></tr>
+                    <tr><td>Metadata</td><td>JSON fields alongside</td><td>Form fields alongside</td></tr>
+                    <tr><td>Binary Safety</td><td>Full (text transport)</td><td>Full (binary transport)</td></tr>
+                    <tr><td>Simplicity</td><td>Single JSON body</td><td>Boundary parsing needed</td></tr>
+                </tbody>
+            </table>
+            <p>
+                Base64 encoding is simpler for API clients because the entire request is a single JSON object. Multipart form data is more efficient for large files because it avoids the 33% Base64 overhead. Most HTTP libraries and frameworks provide built-in support for both approaches. Choose based on file size and whether a unified JSON body simplifies your API design.
+            </p>
+
+            <h2><i class="fas fa-server"></i> What Are the Size Limits for Base64 in APIs?</h2>
+            <p>
+                Most API gateways and web servers impose request body size limits. Base64 encoding increases payload size by 33%, so a 7.5 MB file produces a 10 MB Base64 string. The table below lists default body size limits for common platforms.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Platform</th><th>Default Body Size Limit</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>AWS API Gateway</td><td>10 MB</td></tr>
+                    <tr><td>Nginx</td><td>1 MB (<code>client_max_body_size</code>)</td></tr>
+                    <tr><td>Express.js</td><td>100 KB (configurable via <code>body-parser</code>)</td></tr>
+                    <tr><td>CloudFlare</td><td>100 MB</td></tr>
+                    <tr><td>Azure API Management</td><td>2 MB</td></tr>
+                    <tr><td>Google Cloud Endpoints</td><td>32 MB</td></tr>
+                </tbody>
+            </table>
+            <p>
+                These limits apply to the raw request body, which includes the full Base64 string plus all other JSON fields. A 750 KB image file becomes approximately 1 MB of Base64 text, which already reaches Nginx's default limit. Adjust server limits or use multipart uploads for larger files. Use the <a href="/base64-size-calculator/">Base64 Size Calculator</a> to determine the encoded size before sending.
+            </p>
+
+            <h2><i class="fas fa-cloud-upload-alt"></i> How Do You Handle Large Files in APIs?</h2>
+            <p>
+                For files over 1 MB, alternatives to Base64 in JSON reduce bandwidth usage and improve upload reliability. Three common approaches handle large file uploads without Base64 overhead.
+            </p>
+            <p>
+                <strong>Presigned URLs (S3):</strong> The API returns a presigned upload URL. The client uploads the file directly to object storage (AWS S3, Google Cloud Storage, Azure Blob) using a PUT request with the raw binary file. No Base64 encoding is needed. The server receives a notification or the client sends the object key in a follow-up API call.
+            </p>
+            <p>
+                <strong>Chunked uploads:</strong> The client splits the file into chunks (1-5 MB each) and uploads each chunk in a separate request. The server reassembles the chunks. This approach handles network interruptions gracefully because only the failed chunk needs retransmission.
+            </p>
+            <p>
+                <strong>Multipart form data:</strong> The client sends the file as a binary MIME part with <code>Content-Type: multipart/form-data</code>. No Base64 encoding overhead. Most HTTP libraries handle multipart construction automatically.
+            </p>
+            <p>
+                Base64 in JSON is best suited for thumbnails, avatars, and small documents under 1 MB where the 33% overhead is acceptable and the simplified JSON interface is preferred. For verifying that Base64 data is valid before processing, use the <a href="/base64-validator/">Base64 Validator</a>.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Should I use Base64 or multipart for file uploads?</h3>
+                <p>
+                    Use Base64 for small files under 1 MB in JSON-based APIs where a single content type (<code>application/json</code>) simplifies client implementation. Use multipart form data for files over 1 MB where the 33% Base64 size overhead becomes significant. Multipart avoids encoding overhead and is the standard approach for dedicated file upload endpoints handling large files.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does Base64 affect API response time?</h3>
+                <p>
+                    Yes. Base64 encoding adds 33% to the payload size, increasing transfer time proportionally. A 1 MB binary file becomes 1.33 MB as Base64 text in JSON. The server spends CPU cycles encoding the data, and the client spends cycles decoding it. For high-throughput APIs serving many concurrent requests, this overhead is measurable in both bandwidth and compute costs.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I validate Base64 data from an API?</h3>
+                <p>
+                    Check that the string contains only valid Base64 characters (A-Z, a-z, 0-9, +, /) and correct padding (= or ==). Verify the string length is a multiple of 4. Decode the output and check magic bytes to confirm the expected file format (PNG files start with <code>0x89504E47</code>). Use the <a href="/base64-validator/">Base64 Validator</a> to test strings before processing them in application code.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can GraphQL APIs use Base64?</h3>
+                <p>
+                    Yes. Base64-encoded data can be sent as a <code>String</code> scalar field in GraphQL mutations and returned in query responses. Define a field of type <code>String</code> to hold the Base64 content. Some GraphQL implementations define a custom <code>Base64</code> scalar type for explicit validation. For file uploads, the GraphQL multipart request specification is an alternative to Base64 encoding.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Base64 required for sending binary data in APIs?</h3>
+                <p>
+                    No. Multipart form data (<code>multipart/form-data</code>) transmits binary data without encoding overhead. Binary content types (<code>application/octet-stream</code>) send raw bytes directly in the request body. Base64 is one option among several. Its advantage is compatibility with text-based formats like JSON and XML that cannot contain raw binary bytes natively.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+</body>
+</html>

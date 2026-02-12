@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 to GIF Converter - Convert Base64 to GIF Image Online</title>
+    <meta name="description" content="Free online Base64 to GIF converter. Paste your Base64-encoded GIF string and convert it to a downloadable GIF file. Supports animated GIFs with full frame preservation.">
+    <link rel="canonical" href="https://base64image.net/base64-to-gif/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Base64 to GIF Converter - Convert Base64 to GIF Image Online">
+    <meta property="og:description" content="Free online Base64 to GIF converter. Paste your Base64-encoded GIF string and download the GIF file. Supports animated GIFs.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://base64image.net/base64-to-gif/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 to GIF Converter - Convert Base64 to GIF Image Online">
+    <meta name="twitter:description" content="Free online Base64 to GIF converter. Paste your Base64-encoded GIF string and download the GIF file. Supports animated GIFs.">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script defer src="../assets/components.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+
+    <!-- Structured Data - HowTo -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert Base64 to GIF",
+        "description": "Step-by-step guide to convert Base64 strings to GIF image files online",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Copy your Base64-encoded GIF string and paste it into the text area. The data:image/gif prefix is optional."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Validation",
+            "text": "The tool decodes the Base64 string and validates that it contains GIF image data by checking for the GIF87a or GIF89a signature."
+        }, {
+            "@type": "HowToStep",
+            "name": "Preview GIF Image",
+            "text": "View the decoded GIF in the preview section. Animated GIFs will play their animation in the preview."
+        }, {
+            "@type": "HowToStep",
+            "name": "Download GIF",
+            "text": "Click the 'Download GIF' button to save the image as a .gif file to your device."
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to GIF Converter",
+            "item": "https://base64image.net/base64-to-gif/"
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Does this tool support animated GIFs?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. When your Base64 string contains an animated GIF, the tool preserves all animation frames, timing, and loop settings. The downloaded file will play exactly as the original animated GIF. The preview also shows the animation."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why is GIF limited to 256 colors?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "GIF uses an indexed color model with a palette of up to 256 colors per frame. This design dates to 1987 when memory and bandwidth were limited. Each pixel stores an 8-bit index into the palette rather than full 24-bit color data, which keeps file sizes small for simple graphics but makes GIF unsuitable for photographs."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I convert a JPEG or PNG to GIF using this tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool is designed to decode Base64 strings that already contain GIF data. Converting from JPEG or PNG to GIF requires color quantization (reducing to 256 colors) and dithering, which are specialized operations not available through the browser Canvas API. The tool will warn you if the input is not in GIF format."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does GIF support transparency?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "GIF supports binary transparency only, meaning each pixel is either fully transparent or fully opaque. There is no partial transparency or alpha blending. One color in the 256-color palette is designated as transparent. For smooth transparency with anti-aliasing, use PNG or WebP instead."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is this tool safe for sensitive images?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All decoding happens locally in your browser. Your Base64 data and GIF images never leave your device. No data is uploaded to any server."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main x-data="base64ToGif()">
+        <h1><i class="fas fa-file-image"></i> Base64 to GIF Converter</h1>
+        <p class="intro">Convert Base64 strings to downloadable GIF image files</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="decodeGif"
+                    placeholder="Paste your Base64-encoded GIF string here..."
+                    rows="6"
+                ></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+                <div class="error" x-show="warning" x-text="warning" style="color: #f59e0b;"></div>
+            </div>
+
+            <div class="actions">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+
+            <div class="preview-container" x-show="imageUrl">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imageUrl" alt="Converted GIF preview" x-show="imageUrl">
+                </div>
+                <div class="image-info" x-show="imageInfo">
+                    <p><strong>Format:</strong> <span x-text="imageInfo.format"></span></p>
+                    <p><strong>Type:</strong> <span x-text="imageInfo.type"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                </div>
+                <button @click="downloadGif" class="btn-primary" x-show="isGif">Download GIF</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What Is Base64 to GIF Conversion?</h2>
+            <p>
+                Base64 to GIF conversion decodes a Base64-encoded string containing GIF image data into a downloadable GIF file. The tool validates the decoded binary data by checking for the GIF87a or GIF89a magic bytes that identify the GIF format. Unlike JPEG or PNG conversion, GIF files cannot be reliably generated from other formats using the browser Canvas API because GIF requires indexed color quantization. This tool extracts and preserves the original GIF data, including all animation frames.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Why Use GIF Format?</h2>
+            <p>
+                GIF remains the dominant format for short animated graphics on the web. GIF supports frame-based animation with configurable timing and loop counts, which no other legacy format matches. GIF also supports binary transparency, allowing one palette color to be designated as transparent. The format is universally supported by every browser, email client, and messaging platform. GIF is ideal for simple animations, reaction images, UI demonstrations, and loading spinners. For static images or photographs, <a href="/base64-to-png/">PNG</a> and <a href="/base64-to-jpeg/">JPEG</a> are more appropriate.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does the GIF Converter Work?</h2>
+            <p>
+                The converter follows 4 steps. First, it strips any <code>data:image/gif;base64,</code> prefix from the input. Second, it decodes the Base64 string into binary data using the browser's native <code>atob()</code> function. Third, it examines the first 6 bytes of the decoded data for the GIF signature: either "GIF87a" or "GIF89a". If the signature matches, the tool creates a Blob from the binary data and generates a download link. If the signature does not match, it warns that the input is not GIF format.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> What Are the Limitations of GIF Format?</h2>
+            <p>
+                GIF has 4 significant limitations compared to modern formats. It restricts each frame to a 256-color palette, which produces visible banding in photographs and gradients. It supports only binary transparency (on/off), not the smooth alpha blending available in PNG and WebP. Animated GIF files are large because each frame stores a full or partial image with lossless LZW compression. GIF does not support lossy compression, so photographic content produces larger files than equivalent JPEG or <a href="/base64-to-webp/">WebP</a> output.
+            </p>
+
+            <h2><i class="fas fa-table"></i> How Does GIF Compare to Other Image Formats?</h2>
+            <p>
+                GIF occupies a specific niche among image formats. The following table compares GIF against PNG, JPEG, and WebP across 5 criteria to clarify when each format is appropriate.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>GIF</th>
+                        <th>PNG</th>
+                        <th>JPEG</th>
+                        <th>WebP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Colors</td>
+                        <td>256 per frame</td>
+                        <td>16.7M (24-bit)</td>
+                        <td>16.7M (24-bit)</td>
+                        <td>16.7M (24-bit)</td>
+                    </tr>
+                    <tr>
+                        <td>Transparency</td>
+                        <td>Binary (on/off)</td>
+                        <td>Full alpha channel</td>
+                        <td>Not supported</td>
+                        <td>Full alpha channel</td>
+                    </tr>
+                    <tr>
+                        <td>Animation</td>
+                        <td>Full support</td>
+                        <td>APNG (limited)</td>
+                        <td>Not supported</td>
+                        <td>Full support</td>
+                    </tr>
+                    <tr>
+                        <td>Compression</td>
+                        <td>Lossless (LZW)</td>
+                        <td>Lossless (DEFLATE)</td>
+                        <td>Lossy (DCT)</td>
+                        <td>Lossy and lossless</td>
+                    </tr>
+                    <tr>
+                        <td>Best Use Case</td>
+                        <td>Simple animations</td>
+                        <td>Graphics, logos</td>
+                        <td>Photographs</td>
+                        <td>All web images</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>Does this tool support animated GIFs?</h3>
+                <p>
+                    Yes. When your Base64 string contains an animated GIF, the tool preserves all animation frames, timing, and loop settings. The downloaded file will play exactly as the original animated GIF. The preview also shows the animation.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Why is GIF limited to 256 colors?</h3>
+                <p>
+                    GIF uses an indexed color model with a palette of up to 256 colors per frame. This design dates to 1987 when memory and bandwidth were limited. Each pixel stores an 8-bit index into the palette rather than full 24-bit color data, which keeps file sizes small for simple graphics but makes GIF unsuitable for photographs.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can I convert a JPEG or PNG to GIF using this tool?</h3>
+                <p>
+                    This tool is designed to decode Base64 strings that already contain GIF data. Converting from JPEG or PNG to GIF requires color quantization (reducing to 256 colors) and dithering, which are specialized operations not available through the browser Canvas API. The tool will warn you if the input is not in GIF format.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does GIF support transparency?</h3>
+                <p>
+                    GIF supports binary transparency only, meaning each pixel is either fully transparent or fully opaque. There is no partial transparency or alpha blending. For smooth transparency with anti-aliasing, use <a href="/base64-to-png/">PNG</a> or <a href="/base64-to-webp/">WebP</a> instead.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is this tool safe for sensitive images?</h3>
+                <p>
+                    Yes. All decoding happens locally in your browser. Your Base64 data and GIF images never leave your device. No data is uploaded to any server. Learn more about <a href="/what-is-base64/">what Base64 encoding is</a> and how it works.
+                </p>
+            </div>
+
+            <p>
+                Related tools: <a href="/base64-to-png/">Base64 to PNG</a> | <a href="/base64-to-webp/">Base64 to WebP</a> | <a href="/base64-image-decoder/">Base64 Image Decoder</a> | <a href="/base64-image-encoder/">Base64 Image Encoder</a> | <a href="/what-is-base64/">What Is Base64?</a>
+            </p>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        function base64ToGif() {
+            return {
+                base64Input: '',
+                imageUrl: '',
+                error: '',
+                warning: '',
+                imageInfo: null,
+                isGif: false,
+                blobUrl: null,
+
+                decodeGif() {
+                    this.error = '';
+                    this.warning = '';
+                    this.imageUrl = '';
+                    this.imageInfo = null;
+                    this.isGif = false;
+
+                    // Clean up previous blob URL
+                    if (this.blobUrl) {
+                        URL.revokeObjectURL(this.blobUrl);
+                        this.blobUrl = null;
+                    }
+
+                    if (!this.base64Input.trim()) {
+                        return;
+                    }
+
+                    try {
+                        // Strip data URI prefix if present
+                        let base64String = this.base64Input.trim();
+                        let declaredFormat = 'unknown';
+                        const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+
+                        if (dataUriMatch) {
+                            declaredFormat = dataUriMatch[1];
+                            base64String = dataUriMatch[2];
+                        }
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64 to binary
+                        let binaryString;
+                        try {
+                            binaryString = atob(base64String);
+                        } catch (e) {
+                            throw new Error('Failed to decode Base64 string. The input may be corrupted.');
+                        }
+
+                        // Check GIF magic bytes (GIF87a or GIF89a)
+                        const signature = binaryString.substring(0, 6);
+                        const isGifFormat = (signature === 'GIF87a' || signature === 'GIF89a');
+
+                        if (!isGifFormat) {
+                            this.warning = 'The decoded data is not in GIF format (missing GIF87a/GIF89a signature). This tool extracts existing GIF data from Base64. Converting other formats to GIF requires color quantization not available in browsers.';
+
+                            // Still try to display as image if it has a declared format
+                            if (declaredFormat !== 'unknown' && declaredFormat !== 'gif') {
+                                const img = new Image();
+                                img.onload = () => {
+                                    this.imageUrl = `data:image/${declaredFormat};base64,${base64String}`;
+                                    this.imageInfo = {
+                                        format: declaredFormat.toUpperCase() + ' (not GIF)',
+                                        type: 'Static image',
+                                        size: this.formatBytes(binaryString.length)
+                                    };
+                                };
+                                img.onerror = () => {
+                                    this.error = 'Failed to load image. Please check your Base64 string.';
+                                };
+                                img.src = `data:image/${declaredFormat};base64,${base64String}`;
+                                return;
+                            }
+
+                            // Try loading as generic image
+                            const img = new Image();
+                            img.onload = () => {
+                                this.imageUrl = `data:image/gif;base64,${base64String}`;
+                                this.imageInfo = {
+                                    format: 'Unknown (not GIF)',
+                                    type: 'Static image',
+                                    size: this.formatBytes(binaryString.length)
+                                };
+                            };
+                            img.onerror = () => {
+                                this.error = 'The decoded data is not a valid image. Please provide a Base64-encoded GIF.';
+                                this.warning = '';
+                            };
+                            img.src = `data:image/gif;base64,${base64String}`;
+                            return;
+                        }
+
+                        // Valid GIF - create Blob for download
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const blob = new Blob([bytes], { type: 'image/gif' });
+                        this.blobUrl = URL.createObjectURL(blob);
+
+                        // Determine if animated (check for multiple image descriptors)
+                        // GIF89a with extension blocks typically indicates animation
+                        const gifVersion = signature;
+                        let isAnimated = false;
+                        let imageBlockCount = 0;
+                        for (let i = 6; i < binaryString.length - 1; i++) {
+                            // Image descriptor starts with 0x2C
+                            if (binaryString.charCodeAt(i) === 0x2C) {
+                                imageBlockCount++;
+                                if (imageBlockCount > 1) {
+                                    isAnimated = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Display preview
+                        this.imageUrl = `data:image/gif;base64,${base64String}`;
+                        this.isGif = true;
+
+                        this.imageInfo = {
+                            format: 'GIF (' + gifVersion + ')',
+                            type: isAnimated ? 'Animated GIF' : 'Static GIF',
+                            size: this.formatBytes(binaryString.length)
+                        };
+
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.imageUrl = '';
+                        this.imageInfo = null;
+                        this.isGif = false;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                downloadGif() {
+                    if (!this.blobUrl) return;
+
+                    const timestamp = Date.now();
+                    const filename = `converted-image-${timestamp}.gif`;
+
+                    const link = document.createElement('a');
+                    link.href = this.blobUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+
+                clearAll() {
+                    if (this.blobUrl) {
+                        URL.revokeObjectURL(this.blobUrl);
+                    }
+                    this.base64Input = '';
+                    this.imageUrl = '';
+                    this.error = '';
+                    this.warning = '';
+                    this.imageInfo = null;
+                    this.isGif = false;
+                    this.blobUrl = null;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

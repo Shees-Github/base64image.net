@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data URI Guide - How to Use Data URIs with Base64 in HTML and CSS</title>
+    <meta name="description" content="Complete guide to data URIs. Learn the data URI syntax, browser support limits, Base64 encoding for images, and when to use inline data vs external files.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/data-uri-guide/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Data URI Guide - How to Use Data URIs with Base64 in HTML and CSS">
+    <meta property="og:description" content="Complete guide to data URIs. Learn the data URI syntax, browser support limits, Base64 encoding for images, and when to use inline data vs external files.">
+    <meta property="og:url" content="https://base64image.net/data-uri-guide/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Data URI Guide - How to Use Data URIs with Base64 in HTML and CSS">
+    <meta name="twitter:description" content="Complete guide to data URIs. Learn the data URI syntax, browser support limits, Base64 encoding for images, and when to use inline data vs external files.">
+
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js" defer></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Data URI Guide",
+            "item": "https://base64image.net/data-uri-guide/"
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What is the difference between a data URI and a URL?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A URL references an external resource located on a server, requiring an HTTP request to retrieve it. A data URI embeds the resource content directly inline as text using the data: scheme defined in RFC 2397. URLs point to files; data URIs contain the file data itself. URLs are cacheable independently; data URIs are cached only as part of the containing document."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Do data URIs work in all browsers?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Data URIs are supported in all modern browsers including Chrome, Firefox, Safari, and Edge with no hard size limits for most content types. Internet Explorer 8 introduced data URI support with a 32 KB size limit. IE 11 increased the limit to 4 KB for certain contexts. All browsers released after 2015 have full data URI support."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can data URIs contain non-Base64 data?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. When the ;base64 flag is omitted from a data URI, the content is interpreted as percent-encoded text. For example, data:text/html,%3Ch1%3EHello%3C%2Fh1%3E embeds an HTML heading without Base64 encoding. Text-based content like HTML, CSS, and SVG can use percent-encoding, which avoids the 33% size overhead of Base64. Binary data such as PNG and JPEG images requires Base64 encoding."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Do data URIs affect page performance?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Data URIs reduce HTTP requests by embedding resources inline, which speeds up first paint for small assets. However, Base64 encoding increases data size by 33%, and embedded resources cannot be cached separately from the containing HTML or CSS file. For assets under 10 KB, the saved HTTP request (50-200 ms round-trip) typically outweighs the size increase. For assets over 10 KB, external files with browser caching are more efficient."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I create a data URI from an image?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use a Base64 image encoder tool to convert the image file to a Base64 string, then prepend the data URI prefix data:[MIME type];base64, followed by the encoded string. Programmatically, the JavaScript FileReader API reads a file and outputs a complete data URI via the readAsDataURL() method. Command-line tools like base64 on Linux can encode files, after which you manually add the data URI prefix."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fas fa-link"></i> Data URI Guide</h1>
+
+        <p class="intro">
+            How to embed Base64-encoded data directly in HTML, CSS, and JavaScript using data URIs
+        </p>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What Is a Data URI?</h2>
+            <p>
+                A data URI embeds file content directly in a document using the format <code>data:[mediatype][;base64],&lt;data&gt;</code>. Defined in <a href="https://datatracker.ietf.org/doc/html/rfc2397" rel="noopener" target="_blank">RFC 2397</a>, data URIs eliminate HTTP requests by inlining file data as text. They support any MIME type including images, fonts, PDFs, and SVGs.
+            </p>
+            <p>
+                When a browser encounters a data URI, it decodes the embedded content and renders it as if it were loaded from an external file. The data URI scheme was published in 1998 and is now supported by every modern browser. Unlike a standard URL that references a resource on a remote server, a data URI contains the resource itself. This makes data URIs self-contained: the document carrying a data URI has no external dependency for that resource.
+            </p>
+            <p>
+                Data URIs are commonly used to inline small images, icons, and fonts in HTML and CSS. They reduce the total number of HTTP requests a page makes, which can improve load time for pages with many small assets. For a broader overview of the encoding that powers data URIs, see the <a href="/what-is-base64/">What is Base64</a> guide.
+            </p>
+
+            <h2><i class="fas fa-code"></i> What Is the Data URI Syntax?</h2>
+            <p>
+                A data URI consists of 4 components: the <code>data:</code> scheme, an optional MIME type, an optional <code>;base64</code> encoding flag, and the encoded content after a comma. Each component serves a specific purpose in telling the browser how to interpret the embedded data.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Component</th><th>Description</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>data:</code></td><td>URI scheme (required prefix)</td><td><code>data:</code></td></tr>
+                    <tr><td>mediatype</td><td>MIME type of the content</td><td><code>image/png</code>, <code>text/html</code></td></tr>
+                    <tr><td><code>;base64</code></td><td>Encoding flag (required for binary data)</td><td><code>;base64</code></td></tr>
+                    <tr><td><code>,&lt;data&gt;</code></td><td>The encoded content</td><td><code>,iVBORw0KGgo...</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                A complete data URI for a PNG image looks like this:
+            </p>
+            <pre><code>data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA...</code></pre>
+            <p>
+                If the MIME type is omitted, it defaults to <code>text/plain;charset=US-ASCII</code>. If the <code>;base64</code> flag is omitted, the data portion uses percent-encoding (URL encoding) instead. Text content like HTML or SVG can use either encoding method. Binary content like PNG, JPEG, and WOFF fonts requires Base64 encoding because percent-encoding would produce significantly longer strings.
+            </p>
+
+            <h2><i class="fab fa-html5"></i> How Do You Use Data URIs in HTML?</h2>
+            <p>
+                Data URIs can replace any URL in HTML attributes that accept a URI. The 3 most common HTML uses are <code>&lt;img&gt;</code> tags, <code>&lt;a&gt;</code> download links, and <code>&lt;iframe&gt;</code> elements. Each embeds content directly in the markup without referencing an external file.
+            </p>
+            <p>
+                <strong>Image tag:</strong> Replace the <code>src</code> attribute with a data URI to embed an image inline.
+            </p>
+            <pre><code>&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUh..." alt="Inline icon" width="32" height="32"&gt;</code></pre>
+            <p>
+                <strong>Anchor tag:</strong> Create a downloadable file link without a server-side file.
+            </p>
+            <pre><code>&lt;a href="data:text/plain;base64,SGVsbG8gV29ybGQ=" download="hello.txt"&gt;Download&lt;/a&gt;</code></pre>
+            <p>
+                <strong>Iframe:</strong> Embed an HTML document directly inside a page.
+            </p>
+            <pre><code>&lt;iframe src="data:text/html;base64,PCFET0NUWVBFIGh0bWw+..."&gt;&lt;/iframe&gt;</code></pre>
+            <p>
+                The <a href="/base64-embed-generator/">Base64 Embed Code Generator</a> produces ready-to-use HTML snippets with the correct data URI syntax for any uploaded image. You can also <a href="/base64-image-encoder/">encode images to Base64</a> first, then construct the data URI manually.
+            </p>
+
+            <h2><i class="fab fa-css3-alt"></i> How Do You Use Data URIs in CSS?</h2>
+            <p>
+                CSS accepts data URIs anywhere the <code>url()</code> function is used. The 3 primary CSS use cases are <code>background-image</code>, <code>@font-face</code> declarations, and <code>cursor</code> properties. Embedding in CSS eliminates HTTP requests for small assets that would otherwise require separate files.
+            </p>
+            <p>
+                <strong>Background image:</strong> Embed a small icon or pattern directly in a stylesheet.
+            </p>
+            <pre><code>.icon-check {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0i...');
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+}</code></pre>
+            <p>
+                <strong>Font face:</strong> Embed a WOFF2 font file to avoid a separate font request.
+            </p>
+            <pre><code>@font-face {
+  font-family: 'CustomFont';
+  src: url('data:font/woff2;base64,d09GMgABAAAAA...') format('woff2');
+}</code></pre>
+            <p>
+                <strong>Custom cursor:</strong> Set a custom cursor image without an external file.
+            </p>
+            <pre><code>.custom-cursor {
+  cursor: url('data:image/png;base64,iVBORw0KGgo...'), auto;
+}</code></pre>
+            <p>
+                For generating CSS-specific Base64 code, use the <a href="/base64-css/">Base64 CSS Background Generator</a>. This tool outputs the complete CSS rule with the data URI already formatted. To calculate the size impact before embedding, use the <a href="/base64-size-calculator/">Base64 Size Calculator</a>.
+            </p>
+
+            <h2><i class="fas fa-ruler-combined"></i> What Are the Browser Size Limits for Data URIs?</h2>
+            <p>
+                Browser support for data URIs is universal in modern browsers, but maximum size limits vary. Chrome and Edge impose a 2 MB limit on data URIs used in image elements. Firefox and Safari have no documented hard limit. Internet Explorer 11 restricts data URIs to 4 KB in certain contexts.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Browser</th><th>Maximum Data URI Size</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Chrome</td><td>2 MB (images), no limit (other)</td></tr>
+                    <tr><td>Firefox</td><td>No hard limit</td></tr>
+                    <tr><td>Safari</td><td>No hard limit</td></tr>
+                    <tr><td>Edge</td><td>2 MB (images)</td></tr>
+                    <tr><td>IE 11</td><td>4 KB</td></tr>
+                </tbody>
+            </table>
+            <p>
+                These limits apply to the total length of the data URI string, including the <code>data:</code> prefix, MIME type, and encoded content. A 1 MB binary file produces approximately 1.33 MB of Base64 text, so the effective binary file limit in Chrome is roughly 1.5 MB. In practice, data URIs are most beneficial for files under 10 KB where the saved HTTP request outweighs the 33% size overhead.
+            </p>
+            <p>
+                To check the encoded size of your file before creating a data URI, use the <a href="/base64-size-calculator/">Base64 Size Calculator</a>. For files that exceed browser limits, serve them as external binary files instead. See <a href="/base64-vs-binary/">Base64 vs Binary</a> for guidance on choosing between inline and external delivery.
+            </p>
+
+            <h2><i class="fas fa-balance-scale"></i> When Should You Use Data URIs Instead of External Files?</h2>
+            <p>
+                Data URIs reduce HTTP requests at the cost of increased document size and lost cacheability. The decision depends on file size, reuse frequency, and delivery context. Files under 10 KB that appear on a single page are the strongest candidates for data URI embedding.
+            </p>
+            <p>
+                <strong>Use data URIs for:</strong>
+            </p>
+            <ul>
+                <li>Images under 10 KB (icons, small logos, UI elements)</li>
+                <li>Single-use decorative images that appear on one page</li>
+                <li>HTML email templates where external image loading is blocked</li>
+                <li>Reducing HTTP/1.1 request overhead on pages with many small assets</li>
+                <li>Self-contained single-file HTML documents</li>
+                <li>CSS sprites replaced by individual inline icons</li>
+            </ul>
+            <p>
+                <strong>Avoid data URIs for:</strong>
+            </p>
+            <ul>
+                <li>Images over 10 KB where the 33% size overhead exceeds the HTTP request cost</li>
+                <li>Assets reused across multiple pages (external files cache once, data URIs re-download with each page)</li>
+                <li>Frequently updated resources where cache invalidation matters</li>
+                <li>Assets that benefit from CDN distribution</li>
+                <li>Lazy-loaded images that should not increase initial page weight</li>
+                <li>Responsive images that need <code>srcset</code> for different viewport sizes</li>
+            </ul>
+            <p>
+                For a detailed comparison of performance tradeoffs, read the <a href="/base64-vs-binary/">Base64 vs Binary</a> comparison. To convert images for embedding, use the <a href="/base64-image-encoder/">Base64 Image Encoder</a>.
+            </p>
+
+            <h2><i class="fas fa-file-alt"></i> What MIME Types Work with Data URIs?</h2>
+            <p>
+                Data URIs support any valid MIME type registered with IANA. The MIME type tells the browser how to interpret and render the encoded content. The table below lists the MIME types most frequently used in data URIs for web development.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>MIME Type</th><th>File Format</th><th>Common Use</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>image/png</code></td><td>PNG</td><td>Icons, screenshots, graphics with transparency</td></tr>
+                    <tr><td><code>image/jpeg</code></td><td>JPEG</td><td>Photographs, thumbnails</td></tr>
+                    <tr><td><code>image/svg+xml</code></td><td>SVG</td><td>Vector icons, logos, illustrations</td></tr>
+                    <tr><td><code>image/webp</code></td><td>WebP</td><td>Modern image format with smaller file sizes</td></tr>
+                    <tr><td><code>image/gif</code></td><td>GIF</td><td>Simple animations, small graphics</td></tr>
+                    <tr><td><code>font/woff2</code></td><td>WOFF2</td><td>Web fonts embedded in CSS</td></tr>
+                    <tr><td><code>font/woff</code></td><td>WOFF</td><td>Web fonts (legacy format)</td></tr>
+                    <tr><td><code>application/pdf</code></td><td>PDF</td><td>Embedded documents in iframes</td></tr>
+                    <tr><td><code>text/html</code></td><td>HTML</td><td>Iframe content, email templates</td></tr>
+                    <tr><td><code>text/css</code></td><td>CSS</td><td>Inline stylesheets</td></tr>
+                    <tr><td><code>text/plain</code></td><td>Plain text</td><td>Default MIME type when none specified</td></tr>
+                    <tr><td><code>application/json</code></td><td>JSON</td><td>Configuration data, API payloads</td></tr>
+                </tbody>
+            </table>
+            <p>
+                Using the correct MIME type is critical. If the MIME type does not match the actual content, browsers may refuse to render the data URI or display it incorrectly. For example, encoding a JPEG file but specifying <code>image/png</code> as the MIME type can cause rendering failures in strict parsers. The <a href="/base64-image-encoder/">Base64 Image Encoder</a> automatically detects and includes the correct MIME type. For more details on MIME type handling, see <a href="/base64-mime-types/">Base64 MIME Types</a>.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is the difference between a data URI and a URL?</h3>
+                <p>
+                    A URL (Uniform Resource Locator) references an external resource located on a server. The browser sends an HTTP request to fetch the resource. A data URI embeds the resource content directly inline using the <code>data:</code> scheme defined in <a href="https://datatracker.ietf.org/doc/html/rfc2397" rel="noopener" target="_blank">RFC 2397</a>. No HTTP request is needed because the data is already present in the document. URLs are cacheable independently by the browser; data URIs are cached only as part of the HTML or CSS file that contains them.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do data URIs work in all browsers?</h3>
+                <p>
+                    Data URIs are supported in all modern browsers: Chrome, Firefox, Safari, Edge, and Opera. Internet Explorer added data URI support in version 8 with a 32 KB size limit, which was increased in later versions. IE 11 supports data URIs up to 4 KB in certain security contexts. All browsers released after 2015 support data URIs with no practical size constraints for typical web use. For current size limits by browser, see the browser limits table above.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can data URIs contain non-Base64 data?</h3>
+                <p>
+                    Yes. When the <code>;base64</code> flag is omitted, the content portion uses percent-encoding (URL encoding) instead of Base64. For example, <code>data:text/html,%3Ch1%3EHello%3C%2Fh1%3E</code> embeds an HTML heading using percent-encoded characters. This approach avoids the 33% size overhead of Base64 and works well for text-based content like HTML, CSS, SVG, and plain text. Binary formats like PNG, JPEG, and font files require Base64 encoding because percent-encoding binary data produces significantly longer strings.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Do data URIs affect page performance?</h3>
+                <p>
+                    Data URIs have both positive and negative performance effects. On the positive side, each data URI eliminates 1 HTTP request, saving 50-200 ms of round-trip latency per asset. On the negative side, Base64 encoding increases the data size by 33%, the embedded content cannot be cached separately from the page, and large data URIs increase the initial HTML payload that blocks rendering. For a 5 KB icon, the 1.65 KB Base64 overhead is smaller than the cost of an HTTP request. For a 100 KB photo, the 33 KB overhead far exceeds the request cost. The <a href="/base64-size-calculator/">Base64 Size Calculator</a> helps determine the tradeoff for specific files.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I create a data URI from an image?</h3>
+                <p>
+                    The fastest method is to use the <a href="/base64-image-encoder/">Base64 Image Encoder</a> on this site: upload an image, and the tool outputs the complete data URI with the correct MIME type prefix. Programmatically, the JavaScript <code>FileReader</code> API provides a <code>readAsDataURL()</code> method that reads a file and returns a complete data URI. On the command line, encode the file with <code>base64</code> (Linux/macOS) or <code>certutil -encode</code> (Windows), then prepend <code>data:[MIME type];base64,</code> to the output. The <a href="/base64-embed-generator/">Embed Code Generator</a> produces ready-to-paste HTML and CSS snippets from any image.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+</body>
+</html>

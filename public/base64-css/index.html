@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 in CSS - How to Use Base64 Images in Stylesheets</title>
+    <meta name="description" content="Learn how to embed Base64 images in CSS using data URIs. Code examples for background-image, cursors, @font-face, and list-style-image with performance tips.">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="canonical" href="https://base64image.net/base64-css/">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Base64 in CSS - How to Use Base64 Images in Stylesheets">
+    <meta property="og:description" content="Learn how to embed Base64 images in CSS using data URIs. Code examples for background-image, cursors, @font-face, and list-style-image with performance tips.">
+    <meta property="og:url" content="https://base64image.net/base64-css/">
+    <meta property="og:site_name" content="BASE64IMAGE">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Base64 in CSS - How to Use Base64 Images in Stylesheets">
+    <meta name="twitter:description" content="Learn how to embed Base64 images in CSS using data URIs. Code examples for background-image, cursors, @font-face, and list-style-image with performance tips.">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../assets/components.js" defer></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-R2ZZ9P0P25');
+    </script>
+
+    <!-- Structured Data - BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in CSS",
+            "item": "https://base64image.net/base64-css/"
+        }]
+    }
+    </script>
+
+    <!-- Structured Data - FAQPage -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Does Base64 in CSS affect page load speed?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Small images under 5 KB improve load speed by eliminating HTTP requests. Each saved request avoids 50-200 ms of round-trip latency. Large images hurt load speed because CSS files are render-blocking. A 100 KB Base64 string in a CSS file delays first paint by the time needed to download that extra data before any content renders."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use SVG Base64 in CSS background-image?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Use the MIME type image/svg+xml with the data URI format: background-image: url('data:image/svg+xml;base64,...'). SVG files encode well as Base64, though for simple SVGs, percent-encoded (unencoded) SVG in data URIs without Base64 can produce smaller strings since SVG is text-based XML."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base64 CSS cached by browsers?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 data embedded in a CSS file is cached as part of that CSS file, not independently. When the browser caches style.css, all Base64 strings inside it are cached together. If the CSS file changes for any reason, the entire file including all Base64 data must be re-downloaded. External image files can be cached independently with their own cache headers and expiration times."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I convert an image to Base64 for CSS?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use a Base64 image encoder tool to upload an image file and receive the Base64 string output. Then wrap the string in the CSS url() function with the correct data URI prefix: url('data:image/png;base64,...'). The embed code generator tool produces CSS-ready code with the data URI already formatted for direct use in stylesheets."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Should I use Base64 or CSS sprites?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use Base64 for 1-5 small images (under 5 KB each) where eliminating HTTP requests is the priority. Use CSS sprites when you have many small images (10+) that can be combined into a single file. Sprites require one HTTP request for all images and allow independent caching. Base64 avoids sprites' complexity of managing background-position values for each icon."
+            }
+        }]
+    }
+    </script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <h1><i class="fab fa-css3-alt"></i> Base64 in CSS</h1>
+
+        <p class="intro">
+            How to embed Base64-encoded images and fonts directly in CSS stylesheets
+        </p>
+
+        <article class="content-section" style="margin-top:0;padding-top:0;border-top:none;">
+            <h2><i class="fas fa-code"></i> How Do You Use Base64 Images in CSS?</h2>
+            <p>
+                Use the <code>url()</code> function with a data URI as the value. The data URI contains the MIME type and the Base64-encoded image data: <code>background-image: url('data:image/png;base64,...');</code>. The Base64 string replaces an external file URL. This eliminates an HTTP request for the image, embedding it directly in the CSS file.
+            </p>
+            <pre><code>.icon-notification {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAH0lEQVQ4T2NkoBAwUqifYdQAhtEwYBgNA4bRMGAYDQMAcKAEEUQMKqcAAAAASUVORK5CYII=');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+}</code></pre>
+            <p>
+                The browser decodes the Base64 string and renders the image as if it were loaded from an external file. No additional HTTP request is made. The <a href="/base64-embed-generator/">Base64 Embed Code Generator</a> produces CSS-ready code with the data URI already formatted. For encoding an image file to Base64, use the <a href="/base64-image-encoder/">Base64 Image Encoder</a>.
+            </p>
+
+            <h2><i class="fas fa-list"></i> What CSS Properties Support Base64 Data URIs?</h2>
+            <p>
+                Any CSS property that accepts the <code>url()</code> function supports Base64 data URIs. The browser treats data URIs identically to external URLs in all CSS contexts. The table below lists the CSS properties where Base64 data URIs are commonly used.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>CSS Property</th><th>Data URI Support</th><th>Common Use</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>background-image</code></td><td>Yes</td><td>Icons, patterns, gradients</td></tr>
+                    <tr><td><code>list-style-image</code></td><td>Yes</td><td>Custom bullet points</td></tr>
+                    <tr><td><code>cursor</code></td><td>Yes</td><td>Custom cursors</td></tr>
+                    <tr><td><code>border-image</code></td><td>Yes</td><td>Decorative borders</td></tr>
+                    <tr><td><code>content</code> (::before/::after)</td><td>Yes</td><td>Pseudo-element images</td></tr>
+                    <tr><td><code>@font-face src</code></td><td>Yes</td><td>Inline web fonts</td></tr>
+                </tbody>
+            </table>
+            <p>
+                The <code>background-image</code> property is the most frequent use case for Base64 in CSS. Small UI icons, loading spinners, and repeating patterns are common candidates. The <code>content</code> property on <code>::before</code> and <code>::after</code> pseudo-elements accepts data URIs wrapped in <code>url()</code>, enabling icon insertion without additional HTML markup.
+            </p>
+
+            <h2><i class="fas fa-font"></i> How Do You Embed Base64 Fonts in CSS?</h2>
+            <p>
+                Use the <code>@font-face</code> rule with a data URI in the <code>src</code> property. The MIME type for WOFF2 fonts is <code>font/woff2</code>. Embedding fonts as Base64 eliminates the separate font file request and avoids FOIT (Flash of Invisible Text) caused by slow font loading.
+            </p>
+            <pre><code>@font-face {
+  font-family: 'CustomIcons';
+  src: url('data:font/woff2;base64,d09GMgABAAAAA...') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}</code></pre>
+            <p>
+                Font files are typically 20-100 KB, which produces 27-133 KB of Base64 text. This is larger than the recommended 10 KB limit for Base64 in CSS. Embed fonts as Base64 only when reducing HTTP requests is a priority and the font file is small (under 30 KB). For larger font files, serve them as external WOFF2 files with appropriate cache headers. For more about MIME types used in data URIs, see the <a href="/base64-mime-types/">Base64 MIME Types Reference</a>.
+            </p>
+
+            <h2><i class="fas fa-tachometer-alt"></i> What Are the Performance Implications of Base64 in CSS?</h2>
+            <p>
+                CSS files are render-blocking resources. The browser cannot render any content until all CSS files in the <code>&lt;head&gt;</code> finish downloading and parsing. Large Base64 strings increase CSS file size, directly delaying first paint. A 10 KB icon becomes approximately 13.3 KB as Base64 text after the 33% encoding overhead.
+            </p>
+            <p>
+                <strong>Benefits of Base64 in CSS:</strong>
+            </p>
+            <ul>
+                <li>Eliminates HTTP requests for each embedded asset</li>
+                <li>No CORS issues since the data is inline</li>
+                <li>Works offline once the CSS file is cached</li>
+                <li>Simplifies deployment by reducing file count</li>
+            </ul>
+            <p>
+                <strong>Drawbacks of Base64 in CSS:</strong>
+            </p>
+            <ul>
+                <li>No separate caching; images re-download with every CSS change</li>
+                <li>Increases CSS parse time proportional to file size</li>
+                <li>Blocks rendering until the full CSS file loads</li>
+                <li>33% size overhead compared to binary files</li>
+            </ul>
+            <p>
+                For a detailed analysis of when Base64 encoding outperforms external files, see <a href="/base64-vs-binary/">Base64 vs Binary</a>. Use the <a href="/base64-size-calculator/">Base64 Size Calculator</a> to determine the encoded size of an asset before embedding.
+            </p>
+
+            <h2><i class="fas fa-ruler"></i> What Is the Recommended Size Limit for Base64 in CSS?</h2>
+            <p>
+                Keep individual Base64 assets under 10 KB (before encoding) for optimal performance. After Base64 encoding, a 10 KB file becomes approximately 13.3 KB of text. Total Base64 data across an entire CSS file should stay under 50 KB to avoid significant render-blocking delays.
+            </p>
+            <p>
+                For multiple small icons, consider these approaches based on count and size:
+            </p>
+            <ul>
+                <li>1-5 icons under 5 KB each: Base64 data URIs in CSS</li>
+                <li>6-20 icons: CSS sprite sheet as a single external file</li>
+                <li>20+ icons: SVG icon font or SVG sprite with <code>&lt;use&gt;</code> references</li>
+            </ul>
+            <p>
+                Images that exceed 10 KB should be served as external files with browser caching headers. The HTTP/2 protocol reduces the cost of multiple small requests through multiplexing, which diminishes the benefit of inlining assets. On HTTP/2 connections, external files with caching are often faster than Base64 embedding for any file over 2-3 KB.
+            </p>
+
+            <h2><i class="fas fa-tools"></i> How Do You Generate Base64 CSS Code?</h2>
+            <p>
+                Upload an image to the <a href="/base64-embed-generator/">Base64 Embed Code Generator</a> to receive CSS-ready code with the data URI already formatted. The tool outputs a complete CSS rule including <code>background-image</code>, <code>background-size</code>, and dimension properties. Alternatively, use the <a href="/base64-image-encoder/">Base64 Image Encoder</a> to get the raw Base64 string, then construct the CSS rule manually.
+            </p>
+            <pre><code>/* Generated CSS for a 24x24 icon */
+.icon-star {
+  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PC9zdmc+');
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+}</code></pre>
+            <p>
+                For SVG images, the <a href="/svg-to-base64/">SVG to Base64 Converter</a> handles the encoding and outputs the correct <code>image/svg+xml</code> MIME type. To understand the full data URI syntax used in these CSS rules, see the <a href="/data-uri-guide/">Data URI Guide</a>. For more about how Base64 encoding works at the byte level, read <a href="/what-is-base64/">What is Base64</a>.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Does Base64 in CSS affect page load speed?</h3>
+                <p>
+                    Small images under 5 KB improve load speed by eliminating HTTP requests. Each saved request avoids 50-200 ms of round-trip latency. Large images hurt load speed because CSS files are render-blocking. A 100 KB Base64 string in a CSS file delays first paint by the time required to download and parse that extra data before any content renders on screen.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use SVG Base64 in CSS background-image?</h3>
+                <p>
+                    Yes. Use the MIME type <code>image/svg+xml</code> with the data URI format: <code>background-image: url('data:image/svg+xml;base64,...');</code>. SVG files encode well as Base64. For simple SVGs, percent-encoded (unencoded) SVG in data URIs without the <code>;base64</code> flag can produce smaller strings since SVG is text-based XML. The <a href="/svg-to-base64/">SVG to Base64 Converter</a> handles the encoding automatically.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Base64 CSS cached by browsers?</h3>
+                <p>
+                    Base64 data embedded in a CSS file is cached as part of that CSS file, not independently. When the browser caches <code>style.css</code>, all Base64 strings inside it are cached together. If the CSS file changes for any reason, the entire file including all Base64 data must be re-downloaded. External image files can be cached independently with their own cache headers and expiration times.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I convert an image to Base64 for CSS?</h3>
+                <p>
+                    Use the <a href="/base64-image-encoder/">Base64 Image Encoder</a> to upload an image file and receive the Base64 string. Then wrap it in the CSS <code>url()</code> function with the data URI prefix: <code>url('data:image/png;base64,...')</code>. The <a href="/base64-embed-generator/">Embed Code Generator</a> produces CSS-ready code with the data URI already formatted for direct use in stylesheets.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Should I use Base64 or CSS sprites?</h3>
+                <p>
+                    Use Base64 for 1-5 small images (under 5 KB each) where eliminating individual HTTP requests is the priority. Use CSS sprites when you have many small images (10+) that can be combined into a single file. Sprites require one HTTP request for all images and allow independent caching. Base64 avoids the complexity of managing <code>background-position</code> values that sprites require for each icon.
+                </p>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+</body>
+</html>
