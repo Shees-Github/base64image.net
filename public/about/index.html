@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - BASE64IMAGE</title>
-    <meta name="description" content="Learn about BASE64IMAGE, our privacy-first approach to Base64 image tools, and why we built this free service.">
+    <title>About BASE64IMAGE - Who We Are & How the Tools Work</title>
+    <meta name="description" content="BASE64IMAGE is a developer-built, privacy-first set of 40+ free Base64 tools. Learn who built it, how the client-side processing works, and why zero data ever leaves your browser.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="canonical" href="https://base64image.net/about/">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="About BASE64IMAGE - Free Base64 Tools">
-    <meta property="og:description" content="Learn about BASE64IMAGE — free, privacy-focused Base64 encoding and decoding tools that run in your browser.">
+    <meta property="og:title" content="About BASE64IMAGE - Who We Are & How the Tools Work">
+    <meta property="og:description" content="BASE64IMAGE is a developer-built set of 40+ free Base64 tools. All processing happens client-side — nothing ever leaves your browser.">
     <meta property="og:url" content="https://base64image.net/about/">
     <meta property="og:site_name" content="BASE64IMAGE">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="About BASE64IMAGE - Free Base64 Tools">
-    <meta name="twitter:description" content="Free, privacy-focused Base64 encoding and decoding tools that run entirely in your browser.">
+    <meta name="twitter:title" content="About BASE64IMAGE - Who We Are & How the Tools Work">
+    <meta name="twitter:description" content="Developer-built, privacy-first Base64 tools. 40+ tools, zero uploads, all processing in your browser.">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../assets/style.css">
@@ -26,7 +26,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-R2ZZ9P0P25');
     </script>
 
@@ -49,19 +48,34 @@
     }
     </script>
 
-    <!-- Structured Data - AboutPage -->
+    <!-- Structured Data - AboutPage + Organization -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "AboutPage",
         "name": "About BASE64IMAGE",
-        "description": "Learn about BASE64IMAGE, our privacy-first approach to Base64 image tools, and why we built this free service.",
+        "description": "BASE64IMAGE is a developer-built, privacy-first set of 40+ free Base64 encoding and decoding tools.",
         "url": "https://base64image.net/about/",
         "mainEntity": {
             "@type": "Organization",
             "name": "BASE64IMAGE",
             "url": "https://base64image.net",
-            "description": "Free, privacy-focused Base64 image tools for developers and designers"
+            "foundingDate": "2024",
+            "description": "Free, privacy-focused Base64 encoding and decoding tools for developers and designers. All processing happens client-side — no uploads, no data collection.",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+92-315-3079965",
+                "email": "sheeszubair@gmail.com",
+                "contactType": "technical support",
+                "availableLanguage": "English"
+            },
+            "knowsAbout": [
+                "Base64 encoding",
+                "Data URI",
+                "Image encoding",
+                "Web development",
+                "Browser APIs"
+            ]
         }
     }
     </script>
@@ -73,133 +87,120 @@
     <!-- Main Content -->
     <main>
         <h1><i class="fas fa-info-circle"></i> About BASE64IMAGE</h1>
-        <p class="intro">Free, privacy-focused Base64 image tools for developers and designers</p>
+        <p class="intro">Developer-built. Privacy-first. 40+ free Base64 tools — all running in your browser.</p>
 
         <div class="legal-content">
-            <h2>Our Mission</h2>
+
+            <h2>Who Built This?</h2>
             <p>
-                BASE64IMAGE provides free, fast, and privacy-focused tools for working with Base64-encoded images. Our mission is
-                simple: offer developers and designers reliable tools that respect their privacy while making Base64 operations
-                quick and easy.
+                BASE64IMAGE was built by Shees Zubair, a web developer who kept reaching for Base64 tools while working on real projects — encoding images for CSS sprites, debugging API payloads containing Base64 strings, converting images for email clients that strip external resources. Most existing tools were either ad-heavy, required sign-ups, or quietly uploaded your data to a server. So this was built from scratch to do the job cleanly.
+            </p>
+            <p>
+                The site launched in 2024 and has grown from 4 tools to 40+ covering every common Base64 workflow: encoding, decoding, format conversion, validation, language-specific guides, and educational content. Questions or feedback? Reach out directly at <a href="mailto:sheeszubair@gmail.com">sheeszubair@gmail.com</a> or via <a href="/contact/">the contact page</a>.
             </p>
 
-            <h2>Why We Built This</h2>
+            <h2>How Does the Client-Side Processing Actually Work?</h2>
             <p>
-                As developers ourselves, we frequently needed to encode and decode Base64 images. Most online tools either required
-                uploading sensitive data to unknown servers or were cluttered with ads and tracking scripts. We wanted something
-                better—a clean, fast, privacy-respecting alternative.
-            </p>
-            <p>
-                That's why we built BASE64IMAGE to run entirely in your browser. No uploads, no data collection of your images
-                or Base64 strings. Just simple tools that do exactly what they're supposed to do.
-            </p>
-
-            <h2>Privacy-First Approach</h2>
-            <p>
-                Privacy isn't just a feature for us—it's fundamental to how we designed BASE64IMAGE. Here's what makes us different:
+                Every tool on this site uses native browser APIs — no server round-trips, no third-party processing services. Here is exactly what happens when you use each tool type:
             </p>
             <ul>
-                <li><strong>Client-Side Processing:</strong> All tools run in your browser using JavaScript. Your data never leaves your device.</li>
-                <li><strong>No Data Collection:</strong> We don't collect, store, or transmit your images or Base64 strings.</li>
-                <li><strong>Minimal Analytics:</strong> We use Google Analytics only to understand website traffic and improve our services, but it never accesses your tool data.</li>
-                <li><strong>No Accounts Required:</strong> Use all tools immediately without signing up or logging in.</li>
-                <li><strong>Open and Transparent:</strong> Our approach is straightforward—what you see is what you get.</li>
-            </ul>
-
-            <h2>How It Works</h2>
-            <p>
-                When you use our tools, everything happens locally in your browser:
-            </p>
-            <ul>
-                <li>Images are read using the FileReader API</li>
-                <li>Base64 encoding and decoding use native browser functions</li>
-                <li>Image previews are generated using Blob URLs</li>
-                <li>Downloads create temporary links in your browser's memory</li>
+                <li><strong>Image encoding:</strong> Files are read with the <code>FileReader</code> API into an <code>ArrayBuffer</code>, then converted to Base64 using <code>btoa()</code> or the <code>Buffer</code> equivalent for binary safety.</li>
+                <li><strong>Image decoding:</strong> The Base64 string is decoded with <code>atob()</code>, written into a <code>Uint8Array</code>, wrapped in a <code>Blob</code> with the correct MIME type, and rendered via <code>URL.createObjectURL()</code>.</li>
+                <li><strong>Format conversion (PNG, JPEG, WebP):</strong> Decoded image data is painted onto an off-screen <code>Canvas</code> element, then re-exported using <code>canvas.toDataURL('image/png')</code> or equivalent.</li>
+                <li><strong>Validation:</strong> Character-set regex (<code>/^[A-Za-z0-9+/]*={0,2}$/</code>) plus length-mod-4 checks run synchronously in the browser.</li>
+                <li><strong>Downloads:</strong> A temporary <code>Blob</code> URL is created, a hidden <code>&lt;a&gt;</code> element is clicked programmatically, then the URL is immediately revoked.</li>
             </ul>
             <p>
-                No network requests are made to our servers or any third party (except for loading the page itself). Your data
-                stays on your device from start to finish.
+                No image data, Base64 string, or file name is sent to BASE64IMAGE's servers at any point. The only network requests are the initial page load (HTML, CSS, JS assets) and Google Analytics page-view events (which never have access to your tool input data).
             </p>
 
-            <h2>Our Tools</h2>
-            <p>We currently offer four essential Base64 tools:</p>
+            <h2>What Tools Are Available?</h2>
+
+            <h3>Encoders</h3>
             <ul>
-                <li><strong><a href="/base64-image-decoder/">Base64 Image Decoder</a>:</strong> Decode Base64 strings to images</li>
-                <li><strong><a href="/base64-image-encoder/">Base64 Image Encoder</a>:</strong> Convert images to Base64 strings</li>
-                <li><strong><a href="/base64-to-png/">Base64 to PNG Converter</a>:</strong> Convert Base64 to PNG format</li>
-                <li><strong><a href="/base64-validator/">Base64 Validator</a>:</strong> Validate and verify Base64 strings</li>
+                <li><a href="/base64-image-encoder/">Base64 Image Encoder</a> — Convert any image to a Base64 string</li>
+                <li><a href="/base64-text-encoder/">Base64 Text Encoder</a> — Encode plain text to Base64</li>
+                <li><a href="/base64-file-encoder/">Base64 File Encoder</a> — Encode any file type</li>
+                <li><a href="/base64-url-safe/">Base64 URL-Safe Encoder</a> — RFC 4648 URL-safe variant (+/ replaced with -_)</li>
             </ul>
+
+            <h3>Decoders</h3>
+            <ul>
+                <li><a href="/base64-image-decoder/">Base64 Image Decoder</a> — Decode Base64 strings back to images</li>
+                <li><a href="/base64-text-decoder/">Base64 Text Decoder</a> — Decode Base64 to plain text</li>
+                <li><a href="/base64-file-decoder/">Base64 File Decoder</a> — Decode Base64 to any file type</li>
+            </ul>
+
+            <h3>Converters</h3>
+            <ul>
+                <li><a href="/base64-to-png/">Base64 to PNG</a>, <a href="/base64-to-jpeg/">Base64 to JPEG</a>, <a href="/base64-to-webp/">Base64 to WebP</a>, <a href="/base64-to-gif/">Base64 to GIF</a>, <a href="/base64-to-svg/">Base64 to SVG</a></li>
+                <li><a href="/png-to-base64/">PNG to Base64</a>, <a href="/jpeg-to-base64/">JPEG to Base64</a>, <a href="/svg-to-base64/">SVG to Base64</a></li>
+                <li><a href="/base64-to-pdf/">Base64 to PDF</a>, <a href="/base64-hex-converter/">Base64 ↔ Hex</a></li>
+            </ul>
+
+            <h3>Tools</h3>
+            <ul>
+                <li><a href="/base64-validator/">Base64 Validator</a> — Check if a string is valid Base64</li>
+                <li><a href="/base64-size-calculator/">Size Calculator</a> — Calculate encoded vs. decoded sizes</li>
+                <li><a href="/base64-bulk-converter/">Bulk Converter</a> — Process multiple images at once</li>
+                <li><a href="/base64-embed-generator/">Embed Generator</a> — Generate ready-to-paste HTML/CSS embed code</li>
+                <li><a href="/base32-encoder-decoder/">Base32 Encoder / Decoder</a></li>
+                <li><a href="/ascii-to-base64/">ASCII to Base64 Converter</a></li>
+            </ul>
+
+            <h3>Learn</h3>
+            <ul>
+                <li><a href="/what-is-base64/">What is Base64?</a> — Complete guide to the encoding format</li>
+                <li><a href="/base64-algorithm/">Base64 Algorithm Explained</a> — How the bit-splitting works</li>
+                <li><a href="/base64-character-table/">Character Table</a> — Full 64-character reference</li>
+                <li><a href="/data-uri-guide/">Data URI Guide</a> — Syntax, browser limits, MIME types</li>
+                <li><a href="/base64-vs-binary/">Base64 vs Binary</a> — When to use each</li>
+            </ul>
+
+            <h3>Developer Guides</h3>
+            <ul>
+                <li>
+                    <a href="/base64-javascript/">JavaScript</a>,
+                    <a href="/base64-python/">Python</a>,
+                    <a href="/base64-java/">Java</a>,
+                    <a href="/base64-php/">PHP</a>,
+                    <a href="/base64-csharp/">C#</a>,
+                    <a href="/base64-go/">Go</a>
+                </li>
+            </ul>
+
+            <h2>Why Is Everything Free?</h2>
+            <p>
+                BASE64IMAGE doesn't have a business model that requires monetising your data. The site has no paywalls, no premium tiers, and no account system. Running a static site on a CDN is cheap enough that it doesn't need to be. The tools exist because they are useful — the same reason most developer tools get built.
+            </p>
+
+            <h2>Privacy Commitment — Specific and Verifiable</h2>
+            <p>
+                "Privacy-first" is a claim many sites make. Here is what it means concretely on BASE64IMAGE:
+            </p>
+            <ul>
+                <li><strong>No image or Base64 data is transmitted.</strong> The network tab in browser DevTools will show zero POST requests or data uploads when using any tool.</li>
+                <li><strong>No cookies are set by the site itself.</strong> Google Analytics sets its own cookies for session tracking; the site does not.</li>
+                <li><strong>No account is required.</strong> There is no login, registration, or email capture anywhere on the site.</li>
+                <li><strong>Blob URLs are revoked after use.</strong> Temporary object URLs created for downloads are cleaned up immediately after the download is triggered.</li>
+            </ul>
+            <p>
+                For full details, see the <a href="/privacy-policy/">Privacy Policy</a>.
+            </p>
 
             <h2>Technology Stack</h2>
             <p>
-                We believe in keeping things simple and fast. BASE64IMAGE is built with:
+                BASE64IMAGE is intentionally minimal:
             </p>
             <ul>
-                <li><strong>Static HTML:</strong> No complex server-side processing</li>
-                <li><strong>Pure CSS:</strong> System fonts and minimal styling for fast load times</li>
-                <li><strong>Alpine.js:</strong> Lightweight JavaScript framework for interactive features</li>
-                <li><strong>Native Browser APIs:</strong> FileReader, Canvas, Blob for core functionality</li>
-            </ul>
-            <p>
-                This minimal tech stack ensures fast page loads, reliable performance, and complete transparency about what code
-                is running in your browser.
-            </p>
-
-            <h2>Our Commitment</h2>
-            <p>
-                BASE64IMAGE will always be:
-            </p>
-            <ul>
-                <li><strong>Free:</strong> No subscriptions, no premium tiers, no hidden costs</li>
-                <li><strong>Private:</strong> Client-side processing with no data collection</li>
-                <li><strong>Simple:</strong> Clean interface focused on getting work done</li>
-                <li><strong>Fast:</strong> Optimized for quick page loads and instant results</li>
-                <li><strong>Accessible:</strong> Works on all modern browsers without special requirements</li>
+                <li><strong>Static HTML/CSS/JS</strong> — no server-side framework, no build pipeline</li>
+                <li><strong>Alpine.js v3</strong> (CDN) — lightweight reactivity for interactive tool state</li>
+                <li><strong>Font Awesome 6.5.1</strong> (CDN) — icons</li>
+                <li><strong>Native browser APIs</strong> — <code>FileReader</code>, <code>Canvas</code>, <code>Blob</code>, <code>btoa</code>/<code>atob</code> for all encoding operations</li>
+                <li><strong>Nginx on Docker</strong> — static file serving with gzip, security headers, and clean URL rewrites</li>
+                <li><strong>Deployed via Coolify</strong> — self-hosted PaaS on a VPS</li>
             </ul>
 
-            <h2>Who Uses BASE64IMAGE?</h2>
-            <p>
-                Our tools are used by developers, designers, QA engineers, and anyone working with Base64 image data. Whether you're
-                debugging API responses, embedding images in emails, or converting data formats, BASE64IMAGE provides the tools
-                you need with the privacy you deserve.
-            </p>
-
-            <h2>Feedback and Support</h2>
-            <p>
-                We're constantly working to improve BASE64IMAGE. If you have suggestions, feature requests, or encounter any issues,
-                we'd love to hear from you. While we don't provide email support, you can reach out through the following channels:
-            </p>
-            <ul>
-                <li>Report issues or suggest features on our project page</li>
-                <li>Share your feedback through our contact form</li>
-                <li>Connect with us on social media</li>
-            </ul>
-
-            <h2>Open Source</h2>
-            <p>
-                We believe in transparency and giving back to the developer community. The core concepts and approaches used in
-                BASE64IMAGE are straightforward and use standard web technologies that anyone can implement.
-            </p>
-
-            <h2>Future Plans</h2>
-            <p>
-                We're committed to maintaining and improving BASE64IMAGE. Future enhancements may include:
-            </p>
-            <ul>
-                <li>Additional image format conversions</li>
-                <li>Batch processing capabilities</li>
-                <li>Enhanced validation features</li>
-                <li>Image optimization tools</li>
-            </ul>
-            <p>
-                All future features will maintain our commitment to privacy-first, client-side processing.
-            </p>
-
-            <h2>Thank You</h2>
-            <p>
-                Thank you for using BASE64IMAGE. By choosing our tools, you're supporting a privacy-respecting alternative to
-                data-hungry online services. We're grateful for your trust and will continue working to earn it every day.
-            </p>
         </div>
     </main>
 
