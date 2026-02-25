@@ -389,23 +389,28 @@
 
                     const filename = `decoded-image-${timestamp}.${extension}`;
 
+                    // Create a dedicated blob URL for download — reusing the preview URL
+                    // causes Chrome to stall while coordinating the same blob reference
+                    // between the image renderer and download manager.
+                    const downloadUrl = URL.createObjectURL(this.imageBlob);
                     const link = document.createElement('a');
-                    link.href = this.imageUrl;
+                    link.href = downloadUrl;
                     link.download = filename;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 100);
                 },
 
                 clearAll() {
                     this.base64Input = '';
-                    this.imageUrl = '';
                     this.error = '';
                     this.imageInfo = null;
                     if (this.imageBlob) {
                         URL.revokeObjectURL(this.imageUrl);
                         this.imageBlob = null;
                     }
+                    this.imageUrl = '';
                 }
             }
         }
