@@ -399,7 +399,9 @@
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 100);
+                    // Revoke after 60s — gives Chrome's download manager enough time
+                    // to fully acquire the blob data regardless of image size.
+                    setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
                 },
 
                 clearAll() {
