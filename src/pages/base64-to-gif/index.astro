@@ -32,9 +32,9 @@ const mainHtml = `<main x-data="base64ToGif()">
                     <img :src="imageUrl" alt="Converted GIF preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Format:</strong> <span x-text="imageInfo.format"></span></p>
-                    <p><strong>Type:</strong> <span x-text="imageInfo.type"></span></p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                    <p><strong>Format:</strong> <span x-text="imageInfo && imageInfo.format"></span></p>
+                    <p><strong>Type:</strong> <span x-text="imageInfo && imageInfo.type"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadGif" class="btn-primary" x-show="isGif">Download GIF</button>
             </div>
@@ -425,4 +425,5 @@ const mainHtml = `<main x-data="base64ToGif()">
             }
         }</script>
 </BaseLayout>
+
 

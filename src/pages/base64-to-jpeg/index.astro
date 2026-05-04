@@ -46,10 +46,10 @@ const mainHtml = `<main x-data="base64ToJpeg()">
                     <img :src="imageUrl" alt="Converted JPEG preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Original Format:</strong> <span x-text="imageInfo.originalFormat"></span></p>
+                    <p><strong>Original Format:</strong> <span x-text="imageInfo && imageInfo.originalFormat"></span></p>
                     <p><strong>Output Format:</strong> JPEG</p>
-                    <p><strong>Quality:</strong> <span x-text="imageInfo.quality"></span></p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                    <p><strong>Quality:</strong> <span x-text="imageInfo && imageInfo.quality"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadJpeg" class="btn-primary">Download JPEG</button>
             </div>
@@ -367,4 +367,5 @@ const mainHtml = `<main x-data="base64ToJpeg()">
             }
         }</script>
 </BaseLayout>
+
 

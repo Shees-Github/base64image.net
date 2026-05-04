@@ -31,9 +31,9 @@ const mainHtml = `<main x-data="base64ToPng()">
                     <img :src="imageUrl" alt="Converted PNG preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Original Format:</strong> <span x-text="imageInfo.originalFormat"></span></p>
+                    <p><strong>Original Format:</strong> <span x-text="imageInfo && imageInfo.originalFormat"></span></p>
                     <p><strong>Output Format:</strong> PNG</p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadPng" class="btn-primary">Download PNG</button>
             </div>
@@ -309,4 +309,5 @@ const mainHtml = `<main x-data="base64ToPng()">
             }
         }</script>
 </BaseLayout>
+
 
