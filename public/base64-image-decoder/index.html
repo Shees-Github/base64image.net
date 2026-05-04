@@ -170,8 +170,8 @@
                     <img :src="imageUrl" alt="Decoded image preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Format:</strong> <span x-text="imageInfo.format"></span></p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                    <p><strong>Format:</strong> <span x-text="imageInfo && imageInfo.format"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadImage" class="btn-primary">Download Image</button>
             </div>
@@ -292,6 +292,7 @@
                     this.error = '';
                     this.imageUrl = '';
                     this.imageInfo = null;
+                    this.imageBlob = null;
 
                     if (!this.base64Input.trim()) {
                         return;
@@ -377,7 +378,7 @@
                 },
 
                 downloadImage() {
-                    if (!this.imageBlob) return;
+                    if (!this.imageBlob || !this.imageInfo) return;
 
                     const format = this.imageInfo.format.toLowerCase();
                     const timestamp = Date.now();
