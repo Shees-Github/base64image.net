@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-plug"></i> Base64 in APIs</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -164,11 +164,15 @@ link.click();</code></pre>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 in APIs - How to Send and Receive Base64 Data in REST APIs"
   description="Learn how to use Base64 encoding in REST APIs. Examples for sending images, files, and binary data as Base64 strings in JSON request and response payloads."
   canonical="https://base64image.net/base64-api/"
-  ogType="article"
+  h1="Base64 in APIs"
+  lede="How to send and receive Base64-encoded data in REST API requests and responses"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in APIs'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -255,5 +259,5 @@ link.click();</code></pre>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="jpegToBase64()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="jpegToBase64()">
         <div x-show="isProcessing" x-cloak class="processing-overlay">
             <div class="processing-spinner">
                 <div class="spinner"></div>
@@ -174,11 +174,16 @@ const mainHtml = `<main x-data="jpegToBase64()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="JPEG to Base64 Converter - Encode JPEG Images to Base64 Online"
   description="Convert JPEG images to Base64 strings online. Upload any JPEG file and get a Base64-encoded data URI for embedding in HTML, CSS, or JavaScript."
   canonical="https://base64image.net/jpeg-to-base64/"
-  ogType="website"
+  h1="JPEG to Base64 Converter"
+  mono="// readAsDataURL()"
+  lede="Upload a JPEG image and get its Base64-encoded data URI instantly"
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'JPEG → Base64'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -267,8 +272,7 @@ const mainHtml = `<main x-data="jpegToBase64()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function jpegToBase64() {
             return {
                 imagePreview: '',
@@ -366,5 +370,4 @@ const mainHtml = `<main x-data="jpegToBase64()">
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

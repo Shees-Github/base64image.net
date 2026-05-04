@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="svgToBase64()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="svgToBase64()">
         <div x-show="isProcessing" x-cloak class="processing-overlay">
             <div class="processing-spinner">
                 <div class="spinner"></div>
@@ -182,11 +182,16 @@ const mainHtml = `<main x-data="svgToBase64()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="SVG to Base64 Converter - Encode SVG Files to Base64 Online"
   description="Convert SVG files and code to Base64 strings online. Upload SVG files or paste SVG markup and get a Base64-encoded data URI for CSS and HTML."
   canonical="https://base64image.net/svg-to-base64/"
-  ogType="website"
+  h1="SVG to Base64 Converter"
+  mono="// btoa(svg)"
+  lede="Upload an SVG file or paste SVG markup to get a Base64-encoded data URI"
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'SVG → Base64'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -275,8 +280,7 @@ const mainHtml = `<main x-data="svgToBase64()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function svgToBase64() {
             return {
                 svgInput: '',
@@ -410,5 +414,4 @@ const mainHtml = `<main x-data="svgToBase64()">
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

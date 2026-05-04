@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-balance-scale"></i> Base64 vs Binary</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -187,11 +187,15 @@ const mainHtml = `<main>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 vs Binary - When to Use Base64 Encoding vs Raw Binary Files"
   description="Compare Base64 encoding versus raw binary files. Learn when to embed Base64 data inline and when to serve separate files for optimal web performance."
   canonical="https://base64image.net/base64-vs-binary/"
-  ogType="website"
+  h1="Base64 vs Binary"
+  lede="When to use Base64 encoding versus serving raw binary files"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 vs Binary'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -278,5 +282,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fab fa-js-square"></i> Base64 in JavaScript</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
         <p class="intro">How to encode and decode Base64 strings in JavaScript for browsers and Node.js</p>
@@ -214,11 +214,15 @@ function isValidBase64(str) {
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 Encoding in JavaScript - btoa, atob, Buffer, and TextEncoder Guide"
   description="Learn how to encode and decode Base64 in JavaScript using btoa(), atob(), Buffer, TextEncoder, and FileReader. Code examples for browsers and Node.js."
   canonical="https://base64image.net/base64-javascript/"
-  ogType="article"
+  h1="Base64 in JavaScript"
+  lede="How to encode and decode Base64 strings in JavaScript for browsers and Node.js"
+  tag="learn"
+  tagLabel="Developer Guide"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in JavaScript'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -305,5 +309,5 @@ function isValidBase64(str) {
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

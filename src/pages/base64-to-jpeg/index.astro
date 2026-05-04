@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="base64ToJpeg()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64ToJpeg()">
         <h1><i class="fas fa-file-image"></i> Base64 to JPEG Converter</h1>
         <p class="intro">Convert Base64 strings to JPEG images with adjustable quality</p>
 
@@ -46,10 +46,10 @@ const mainHtml = `<main x-data="base64ToJpeg()">
                     <img :src="imageUrl" alt="Converted JPEG preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Original Format:</strong> <span x-text="imageInfo && imageInfo.originalFormat"></span></p>
+                    <p><strong>Original Format:</strong> <span x-text="imageInfo.originalFormat"></span></p>
                     <p><strong>Output Format:</strong> JPEG</p>
-                    <p><strong>Quality:</strong> <span x-text="imageInfo && imageInfo.quality"></span></p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
+                    <p><strong>Quality:</strong> <span x-text="imageInfo.quality"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadJpeg" class="btn-primary">Download JPEG</button>
             </div>
@@ -160,11 +160,16 @@ const mainHtml = `<main x-data="base64ToJpeg()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 to JPEG Converter - Convert Base64 to JPEG Image Online"
   description="Free online Base64 to JPEG converter. Paste your Base64 string and convert it to JPEG format with adjustable quality. Download compressed JPEG images instantly."
   canonical="https://base64image.net/base64-to-jpeg/"
-  ogType="website"
+  h1="Base64 to JPEG Converter"
+  mono="// Canvas API"
+  lede="Convert Base64 strings to JPEG images with adjustable quality"
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → JPEG'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -253,8 +258,7 @@ const mainHtml = `<main x-data="base64ToJpeg()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64ToJpeg() {
             return {
                 base64Input: '',
@@ -366,6 +370,4 @@ const mainHtml = `<main x-data="base64ToJpeg()">
                 }
             }
         }</script>
-</BaseLayout>
-
-
+</ToolLayout>

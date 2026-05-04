@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fab fa-java"></i> Base64 in Java</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
         <p class="intro">How to encode and decode Base64 in Java using the java.util.Base64 class</p>
@@ -219,11 +219,15 @@ try (InputStream in = Base64.getDecoder().wrap(
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 Encoding in Java - java.util.Base64 Guide with Examples"
   description="Learn how to encode and decode Base64 in Java using java.util.Base64. Code examples for basic, URL-safe, and MIME encoding with the Encoder and Decoder classes."
   canonical="https://base64image.net/base64-java/"
-  ogType="article"
+  h1="Base64 in Java"
+  lede="How to encode and decode Base64 in Java using the java.util.Base64 class"
+  tag="learn"
+  tagLabel="Developer Guide"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in Java'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -310,5 +314,5 @@ try (InputStream in = Base64.getDecoder().wrap(
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

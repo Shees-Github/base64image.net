@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-code"></i> Base64 to HEX Converter</h1>
 
         <p class="intro">
@@ -159,11 +159,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 to HEX Converter Online Free"
   description="Free online Base64 to HEX converter. Convert between Base64 and hexadecimal for debugging and cryptography. Works in your browser."
   canonical="https://base64image.net/base64-hex-converter/"
-  ogType="website"
+  h1="Base64 to HEX Converter"
+  mono="// hex encode"
+  lede="Convert between Base64 and hexadecimal (HEX) formats. Essential for developers working with binary data, cryptography, and low-level programming."
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 ⇄ HEX'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -241,8 +246,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64HexConverter() {
             return {
                 input: '',
@@ -340,5 +344,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

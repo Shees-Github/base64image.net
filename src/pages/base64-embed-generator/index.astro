@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-code"></i> Base64 Embed Code Generator</h1>
 
         <p class="intro">
@@ -194,11 +194,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 Embed Code Generator - HTML & CSS Snippets Online"
   description="Free Base64 embed code generator. Convert images to ready-to-use HTML img tags, CSS backgrounds, and data URIs for web pages."
   canonical="https://base64image.net/base64-embed-generator/"
-  ogType="website"
+  h1="Base64 Embed Code Generator"
+  mono="// embed()"
+  lede="Upload an image or paste Base64 to generate ready-to-use HTML, CSS, and Markdown embed code snippets. Perfect for embedding images directly in web pages without external files."
+  tag="tools"
+  tagLabel="Utility"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Embed Generator'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -276,8 +281,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function embedGenerator() {
             return {
                 base64Input: '',
@@ -379,5 +383,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import InfoLayout from '../../layouts/InfoLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-envelope"></i> Contact Us</h1>
         <p class="intro">We'd love to hear from you!</p>
 
@@ -77,11 +77,13 @@ const mainHtml = `<main>
         </div>
     </main>`;
 ---
-<BaseLayout
+<InfoLayout
   title="Contact Us - BASE64IMAGE"
   description="Get in touch with BASE64IMAGE. Contact us via WhatsApp or email for questions, feedback, or support."
   canonical="https://base64image.net/contact/"
-  ogType="website"
+  h1="Contact Us"
+  lede="We'd love to hear from you!"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Contact'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -111,5 +113,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</InfoLayout>

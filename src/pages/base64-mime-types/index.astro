@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-list-alt"></i> Base64 MIME Types Reference</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -165,11 +165,15 @@ const mainHtml = `<main>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 MIME Types Reference - Complete Data URI MIME Type List"
   description="Complete reference of MIME types used with Base64 data URIs. Includes image, document, font, audio, and video MIME types with data URI prefix examples."
   canonical="https://base64image.net/base64-mime-types/"
-  ogType="article"
+  h1="Base64 MIME Types Reference"
+  lede="Complete reference of MIME types used with Base64 encoding and data URIs"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'MIME Types'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -256,5 +260,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

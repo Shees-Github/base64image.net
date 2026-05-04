@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="base64ToGif()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64ToGif()">
         <h1><i class="fas fa-file-image"></i> Base64 to GIF Converter</h1>
         <p class="intro">Convert Base64 strings to downloadable GIF image files</p>
 
@@ -32,9 +32,9 @@ const mainHtml = `<main x-data="base64ToGif()">
                     <img :src="imageUrl" alt="Converted GIF preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Format:</strong> <span x-text="imageInfo && imageInfo.format"></span></p>
-                    <p><strong>Type:</strong> <span x-text="imageInfo && imageInfo.type"></span></p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
+                    <p><strong>Format:</strong> <span x-text="imageInfo.format"></span></p>
+                    <p><strong>Type:</strong> <span x-text="imageInfo.type"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadGif" class="btn-primary" x-show="isGif">Download GIF</button>
             </div>
@@ -157,11 +157,16 @@ const mainHtml = `<main x-data="base64ToGif()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 to GIF Converter - Convert Base64 to GIF Image Online"
   description="Free online Base64 to GIF converter. Paste your Base64-encoded GIF string and convert it to a downloadable GIF file. Supports animated GIFs with full frame preservation."
   canonical="https://base64image.net/base64-to-gif/"
-  ogType="website"
+  h1="Base64 to GIF Converter"
+  mono="// Blob()"
+  lede="Convert Base64 strings to downloadable GIF image files"
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → GIF'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -250,8 +255,7 @@ const mainHtml = `<main x-data="base64ToGif()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64ToGif() {
             return {
                 base64Input: '',
@@ -424,6 +428,4 @@ const mainHtml = `<main x-data="base64ToGif()">
                 }
             }
         }</script>
-</BaseLayout>
-
-
+</ToolLayout>

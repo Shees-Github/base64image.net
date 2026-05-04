@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="base64ToPdf()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64ToPdf()">
         <h1><i class="fas fa-file-pdf"></i> Base64 to PDF Converter</h1>
         <p class="intro">Encode PDF files to Base64 or decode Base64 to PDF</p>
 
@@ -184,11 +184,16 @@ const mainHtml = `<main x-data="base64ToPdf()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 to PDF Converter - Encode & Decode PDF Files Online"
   description="Free online Base64 to PDF converter. Encode PDF files to Base64 strings or decode Base64 to PDF. Fast, secure, and privacy-focused."
   canonical="https://base64image.net/base64-to-pdf/"
-  ogType="website"
+  h1="Base64 to PDF Converter"
+  mono="// PDF decode"
+  lede="Encode PDF files to Base64 or decode Base64 to PDF"
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → PDF'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -277,8 +282,7 @@ const mainHtml = `<main x-data="base64ToPdf()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64ToPdf() {
             return {
                 mode: 'encode',
@@ -423,5 +427,4 @@ const mainHtml = `<main x-data="base64ToPdf()">
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

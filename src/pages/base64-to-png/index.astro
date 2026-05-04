@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="base64ToPng()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64ToPng()">
         <h1><i class="fas fa-file-image"></i> Base64 to PNG Converter</h1>
         <p class="intro">Convert Base64 strings directly to PNG images</p>
 
@@ -31,9 +31,9 @@ const mainHtml = `<main x-data="base64ToPng()">
                     <img :src="imageUrl" alt="Converted PNG preview" x-show="imageUrl">
                 </div>
                 <div class="image-info" x-show="imageInfo">
-                    <p><strong>Original Format:</strong> <span x-text="imageInfo && imageInfo.originalFormat"></span></p>
+                    <p><strong>Original Format:</strong> <span x-text="imageInfo.originalFormat"></span></p>
                     <p><strong>Output Format:</strong> PNG</p>
-                    <p><strong>Size:</strong> <span x-text="imageInfo && imageInfo.size"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
                 </div>
                 <button @click="downloadPng" class="btn-primary">Download PNG</button>
             </div>
@@ -116,11 +116,16 @@ const mainHtml = `<main x-data="base64ToPng()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 to PNG Converter - Convert Base64 to PNG Image Online"
   description="Free online Base64 to PNG converter. Paste your Base64 string and convert it directly to PNG format. Download high-quality PNG images from Base64 data."
   canonical="https://base64image.net/base64-to-png/"
-  ogType="website"
+  h1="Base64 to PNG Converter"
+  mono="// Canvas API"
+  lede="Convert Base64 strings directly to PNG images"
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → PNG'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -209,8 +214,7 @@ const mainHtml = `<main x-data="base64ToPng()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64ToPng() {
             return {
                 base64Input: '',
@@ -308,6 +312,4 @@ const mainHtml = `<main x-data="base64ToPng()">
                 }
             }
         }</script>
-</BaseLayout>
-
-
+</ToolLayout>

@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="base64Validator()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64Validator()">
         <h1><i class="fas fa-check-circle"></i> Base64 Validator</h1>
         <p class="intro">Validate Base64 strings and verify image data</p>
 
@@ -151,11 +151,16 @@ const mainHtml = `<main x-data="base64Validator()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 Validator - Validate Base64 Strings Online"
   description="Free online Base64 validator. Check if your Base64 strings are valid, detect image format, and verify encoding. Instant validation with detailed feedback."
   canonical="https://base64image.net/base64-validator/"
-  ogType="website"
+  h1="Base64 Validator"
+  mono="// validate()"
+  lede="Validate Base64 strings and verify image data"
+  tag="tools"
+  tagLabel="Utility"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Validator'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -244,8 +249,7 @@ const mainHtml = `<main x-data="base64Validator()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64Validator() {
             return {
                 base64Input: '',
@@ -358,5 +362,4 @@ const mainHtml = `<main x-data="base64Validator()">
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

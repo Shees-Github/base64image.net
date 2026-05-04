@@ -172,10 +172,20 @@ const year = new Date().getFullYear();
 
   <script is:inline>
     const dropdowns = document.querySelectorAll('.dropdown');
+    const closeTimers = new Map();
     dropdowns.forEach(d => {
       const toggle = d.querySelector('.dropdown-toggle');
-      d.addEventListener('mouseenter', () => { if (innerWidth > 768) d.classList.add('active'); });
-      d.addEventListener('mouseleave', () => { if (innerWidth > 768) d.classList.remove('active'); });
+      d.addEventListener('mouseenter', () => {
+        if (innerWidth > 768) {
+          clearTimeout(closeTimers.get(d));
+          d.classList.add('active');
+        }
+      });
+      d.addEventListener('mouseleave', () => {
+        if (innerWidth > 768) {
+          closeTimers.set(d, setTimeout(() => d.classList.remove('active'), 200));
+        }
+      });
       toggle?.addEventListener('click', e => {
         e.preventDefault();
         if (innerWidth <= 768) {

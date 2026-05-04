@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-unlock"></i> Base64 Text Decoder</h1>
 
         <p class="intro">
@@ -134,11 +134,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 Text Decoder - Decode Base64 to Text Online Free"
   description="Free online Base64 to text decoder. Convert Base64 strings back to plain text instantly. Decode API responses, JWT tokens, and email headers in your browser."
   canonical="https://base64image.net/base64-text-decoder/"
-  ogType="website"
+  h1="Base64 Text Decoder"
+  mono="// atob()"
+  lede="Decode Base64 encoded strings back to plain text instantly. Extract text from Base64 data, decode API responses, or reverse Base64 encoding for any text data."
+  tag="decode"
+  tagLabel="Decoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Decoders',href:'#'},{label:'Base64 → Text'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -209,8 +214,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function textDecoder() {
             return {
                 base64Input: '',
@@ -271,5 +275,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

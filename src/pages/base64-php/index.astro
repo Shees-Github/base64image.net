@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fab fa-php"></i> Base64 in PHP</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
         <p class="intro">How to encode and decode Base64 in PHP using built-in functions</p>
@@ -180,11 +180,15 @@ echo isValidBase64("not!valid") ? "valid" : "invalid"; // invalid</code></pre>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 Encoding in PHP - base64_encode and base64_decode Guide"
   description="Learn how to encode and decode Base64 in PHP using base64_encode() and base64_decode(). Code examples for strings, files, images, and email attachments."
   canonical="https://base64image.net/base64-php/"
-  ogType="article"
+  h1="Base64 in PHP"
+  lede="How to encode and decode Base64 in PHP using built-in functions"
+  tag="learn"
+  tagLabel="Developer Guide"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in PHP'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -271,5 +275,5 @@ echo isValidBase64("not!valid") ? "valid" : "invalid"; // invalid</code></pre>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

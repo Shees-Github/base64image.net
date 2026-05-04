@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-layer-group"></i> Bulk Base64 Converter</h1>
 
         <p class="intro">
@@ -199,11 +199,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Bulk Base64 Converter - Batch Convert Files Online Free"
   description="Free bulk Base64 converter. Upload and convert multiple files to Base64 at once. Batch process images and documents in your browser."
   canonical="https://base64image.net/base64-bulk-converter/"
-  ogType="website"
+  h1="Bulk Base64 Converter"
+  mono="// bulk()"
+  lede="Convert multiple files to Base64 at once. Upload several images, documents, or files and get Base64-encoded output for all of them simultaneously."
+  tag="tools"
+  tagLabel="Utility"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Bulk Converter'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -281,8 +286,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function bulkConverter() {
             return {
                 files: [],
@@ -408,5 +412,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

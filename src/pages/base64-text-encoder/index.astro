@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-font"></i> Base64 Text Encoder</h1>
 
         <p class="intro">
@@ -134,11 +134,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Text to Base64 Encoder - Convert Text to Base64 Online Free"
   description="Free online text to Base64 encoder. Convert any text, API keys, or config data to Base64 instantly in your browser. No uploads required."
   canonical="https://base64image.net/base64-text-encoder/"
-  ogType="website"
+  h1="Base64 Text Encoder"
+  mono="// btoa()"
+  lede="Encode any text string to Base64 format instantly. Perfect for encoding passwords, API tokens, configuration data, or any text that needs to be transmitted in Base64 format."
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Encoders',href:'#'},{label:'Text → Base64'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -216,8 +221,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function textEncoder() {
             return {
                 textInput: '',
@@ -270,5 +274,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

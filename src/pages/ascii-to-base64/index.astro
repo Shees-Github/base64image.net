@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-font"></i> ASCII to Base64 Converter</h1>
         <p class="intro">Convert ASCII text to Base64 and decode Base64 back to ASCII</p>
 
@@ -221,11 +221,16 @@ const decoded = decodeURIComponent(escape(atob(encoded)));</code></pre>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="ASCII to Base64 Converter - Encode ASCII Text to Base64 Online"
   description="Convert ASCII text to Base64 and Base64 back to ASCII online. Includes ASCII character table with Base64 mappings and code examples for developers."
   canonical="https://base64image.net/ascii-to-base64/"
-  ogType="article"
+  h1="ASCII to Base64 Converter"
+  mono="// charCodeAt()"
+  lede="Convert ASCII text to Base64 and decode Base64 back to ASCII"
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'ASCII → Base64'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -289,8 +294,7 @@ const decoded = decodeURIComponent(escape(atob(encoded)));</code></pre>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function asciiToBase64() {
             return {
                 input: '',
@@ -388,5 +392,4 @@ const decoded = decodeURIComponent(escape(atob(encoded)));</code></pre>
                 }
             };
         }</script>
-</BaseLayout>
-
+</ToolLayout>

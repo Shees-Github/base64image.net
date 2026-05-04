@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fab fa-css3-alt"></i> Base64 in CSS</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -158,11 +158,15 @@ const mainHtml = `<main>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 in CSS - How to Use Base64 Images in Stylesheets"
   description="Learn how to embed Base64 images in CSS using data URIs. Code examples for background-image, cursors, @font-face, and list-style-image with performance tips."
   canonical="https://base64image.net/base64-css/"
-  ogType="article"
+  h1="Base64 in CSS"
+  lede="How to embed Base64-encoded images and fonts directly in CSS stylesheets"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in CSS'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -249,5 +253,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

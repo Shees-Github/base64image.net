@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-exchange-alt"></i> Base32 Encoder & Decoder</h1>
         <p class="intro">Encode text to Base32 and decode Base32 strings back to text</p>
 
@@ -188,11 +188,16 @@ const mainHtml = `<main>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base32 Encoder & Decoder - Encode and Decode Base32 Online"
   description="Free online Base32 encoder and decoder. Convert text to Base32 and Base32 to text. Learn how Base32 differs from Base64 and when to use each encoding."
   canonical="https://base64image.net/base32-encoder-decoder/"
-  ogType="article"
+  h1="Base32 Encoder & Decoder"
+  mono="// base32()"
+  lede="Encode text to Base32 and decode Base32 strings back to text"
+  tag="tools"
+  tagLabel="Utility"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Base32 Encoder'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -256,8 +261,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base32Tool() {
             const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 
@@ -369,5 +373,4 @@ const mainHtml = `<main>
                 }
             };
         }</script>
-</BaseLayout>
-
+</ToolLayout>

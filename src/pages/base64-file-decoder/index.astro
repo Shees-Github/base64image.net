@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-file-download"></i> Base64 File Decoder</h1>
 
         <p class="intro">
@@ -154,11 +154,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 File Decoder - Decode Base64 to File Online Free"
   description="Free online Base64 to file decoder. Convert Base64 strings back to downloadable files. Supports all file types. Works in your browser."
   canonical="https://base64image.net/base64-file-decoder/"
-  ogType="website"
+  h1="Base64 File Decoder"
+  mono="// Blob()"
+  lede="Decode Base64 encoded strings back to downloadable files instantly. Extract files from Base64 data, API responses, or data URIs. Supports all file types."
+  tag="decode"
+  tagLabel="Decoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Decoders',href:'#'},{label:'Base64 → File'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -236,8 +241,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function fileDecoder() {
             return {
                 base64Input: '',
@@ -331,5 +335,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

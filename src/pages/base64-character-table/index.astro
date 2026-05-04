@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-table"></i> Base64 Character Table</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -216,14 +216,17 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 Character Table - Complete Base64 Alphabet Reference"
   description="Complete Base64 character table showing all 64 characters with their index values, binary representations, and ASCII mappings. Includes URL-safe Base64 variant characters."
   canonical="https://base64image.net/base64-character-table/"
-  ogType="website"
+  h1="Base64 Character Table"
+  lede="Complete reference of all 64 Base64 characters defined in RFC 4648, with index values, 6-bit binary representations, and ASCII code points."
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Character Table'}]}
 >
   <Fragment slot="head">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -322,5 +325,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

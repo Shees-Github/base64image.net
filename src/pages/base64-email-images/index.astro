@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-envelope"></i> Base64 Images in Email</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -146,11 +146,15 @@ rkJggg==
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Base64 Images in Email - How to Embed Images in HTML Emails"
   description="Learn how to embed Base64 images in HTML emails. Compare CID, linked, and inline Base64 methods. Email client support table for Gmail, Outlook, and Apple Mail."
   canonical="https://base64image.net/base64-email-images/"
-  ogType="article"
+  h1="Base64 Images in Email"
+  lede="How to embed images in HTML emails using Base64 encoding"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 Email Images'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -237,5 +241,5 @@ rkJggg==
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import InfoLayout from '../../layouts/InfoLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-info-circle"></i> About BASE64IMAGE</h1>
         <p class="intro">Developer-built. Privacy-first. 40+ free Base64 tools — all running in your browser.</p>
 
@@ -119,11 +119,13 @@ const mainHtml = `<main>
         </div>
     </main>`;
 ---
-<BaseLayout
+<InfoLayout
   title="About BASE64IMAGE - Who We Are & How the Tools Work"
   description="BASE64IMAGE is a developer-built, privacy-first set of 40+ free Base64 tools. Learn who built it, how the client-side processing works, and why zero data ever leaves your browser."
   canonical="https://base64image.net/about/"
-  ogType="website"
+  h1="About BASE64IMAGE"
+  lede="Developer-built. Privacy-first. 40+ free Base64 tools — all running in your browser."
+  breadcrumbs={[{label:'Home',href:'/'},{label:'About'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -174,5 +176,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</InfoLayout>

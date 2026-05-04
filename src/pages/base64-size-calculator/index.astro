@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-calculator"></i> Base64 Size Calculator</h1>
 
         <p class="intro">
@@ -157,11 +157,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 Size Calculator - Calculate Encoded String Length"
   description="Calculate the exact size of Base64 encoded output from any input size. Interactive calculator shows encoded length, padding, and size overhead percentage."
   canonical="https://base64image.net/base64-size-calculator/"
-  ogType="website"
+  h1="Base64 Size Calculator"
+  mono="// sizeof()"
+  lede="Calculate the exact size of Base64 encoded output for any input. Enter a file size to see the encoded length, padding characters, and overhead percentage."
+  tag="tools"
+  tagLabel="Utility"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Size Calculator'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -266,8 +271,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64SizeCalc() {
             return {
                 inputSize: '',
@@ -316,5 +320,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

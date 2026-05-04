@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import InfoLayout from '../../layouts/InfoLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-shield-alt"></i> Privacy Policy</h1>
         <p class="intro">Last updated: January 2025</p>
 
@@ -147,13 +147,15 @@ const mainHtml = `<main>
         </div>
     </main>`;
 ---
-<BaseLayout
+<InfoLayout
   title="Privacy Policy - BASE64IMAGE"
   description="Privacy Policy for BASE64IMAGE. Learn how we protect your privacy with client-side processing, no data collection, and no tracking."
   canonical="https://base64image.net/privacy-policy/"
-  ogType="website"
+  h1="Privacy Policy"
+  lede="Last updated: January 2025"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Privacy Policy'}]}
 >
   <Fragment slot="head">
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</InfoLayout>

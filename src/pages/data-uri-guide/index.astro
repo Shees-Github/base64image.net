@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-link"></i> Data URI Guide</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
 
@@ -212,11 +212,15 @@ const mainHtml = `<main>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="Data URI Guide - How to Use Data URIs with Base64 in HTML and CSS"
   description="Complete guide to data URIs. Learn the data URI syntax, browser support limits, Base64 encoding for images, and when to use inline data vs external files."
   canonical="https://base64image.net/data-uri-guide/"
-  ogType="website"
+  h1="Data URI Guide"
+  lede="How to embed Base64-encoded data directly in HTML, CSS, and JavaScript using data URIs"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Data URI Guide'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -303,5 +307,5 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

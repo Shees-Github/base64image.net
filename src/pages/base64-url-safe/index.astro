@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-link"></i> URL-Safe Base64 Encoder/Decoder</h1>
 
         <p class="intro">
@@ -146,11 +146,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="URL-Safe Base64 Encoder & Decoder Online Free"
   description="Free URL-safe Base64 encoder and decoder. Convert Base64 for URLs, query parameters, and JWT tokens. Works in your browser."
   canonical="https://base64image.net/base64-url-safe/"
-  ogType="website"
+  h1="URL-Safe Base64 Encoder/Decoder"
+  mono="// RFC 4648 §5"
+  lede="Convert Base64 strings to URL-safe format by replacing problematic characters. Perfect for query parameters, filenames, and web APIs."
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Encoders',href:'#'},{label:'URL-Safe Encoder'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -228,8 +233,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function urlSafeBase64() {
             return {
                 textInput: '',
@@ -312,5 +316,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

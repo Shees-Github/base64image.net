@@ -158,9 +158,20 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-cta:hover { border-color: var(--line-strong); background: var(--bg-3) !important; }
 
 .dropdown { position: relative; }
+/* Invisible bridge fills the gap between nav item and dropdown menu */
+.dropdown::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: transparent;
+}
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 6px);
+  top: 100%;
+  padding-top: 10px;
   left: 0;
   min-width: 240px;
   background: var(--bg-1);

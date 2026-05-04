@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main x-data="base64Encoder()">
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64Encoder()">
         <div x-show="isProcessing" x-cloak class="processing-overlay">
             <div class="processing-spinner">
                 <div class="spinner"></div>
@@ -139,11 +139,16 @@ const mainHtml = `<main x-data="base64Encoder()">
         </article>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 Image Encoder - Convert Images to Base64 Online Free"
   description="Free online Base64 image encoder. Upload any image and convert it to a Base64 string. Perfect for embedding images in HTML, CSS, or JSON. Works locally in your browser."
   canonical="https://base64image.net/base64-image-encoder/"
-  ogType="website"
+  h1="Base64 Image Encoder"
+  mono="// readAsDataURL()"
+  lede="Convert images to Base64 strings instantly in your browser"
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Encoders',href:'#'},{label:'Image → Base64'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -232,8 +237,7 @@ const mainHtml = `<main x-data="base64Encoder()">
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function base64Encoder() {
             return {
                 imagePreview: '',
@@ -314,5 +318,4 @@ const mainHtml = `<main x-data="base64Encoder()">
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-file-upload"></i> Base64 File Encoder</h1>
 
         <p class="intro">
@@ -149,11 +149,16 @@ const mainHtml = `<main>
         </section>
     </main>`;
 ---
-<BaseLayout
+<ToolLayout
   title="Base64 File Encoder - Convert Any File to Base64 Online Free"
   description="Free online file to Base64 encoder. Convert any file type to Base64 — documents, archives, images, and more. Works locally in your browser."
   canonical="https://base64image.net/base64-file-encoder/"
-  ogType="website"
+  h1="Base64 File Encoder"
+  mono="// FileReader"
+  lede="Convert any file to Base64 format instantly. Supports all file types including documents, archives, executables, and binary files. Perfect for embedding files in JSON, APIs, or data URIs."
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Encoders',href:'#'},{label:'File → Base64'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -224,8 +229,7 @@ const mainHtml = `<main>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-
+  <Fragment set:html={bodyHtml} />
   <script is:inline>function fileEncoder() {
             return {
                 file: null,
@@ -337,5 +341,4 @@ const mainHtml = `<main>
                 }
             }
         }</script>
-</BaseLayout>
-
+</ToolLayout>

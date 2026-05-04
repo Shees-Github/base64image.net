@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import InfoLayout from '../../layouts/InfoLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-file-contract"></i> Terms of Service</h1>
         <p class="intro">Last updated: January 2025</p>
 
@@ -133,13 +133,15 @@ const mainHtml = `<main>
         </div>
     </main>`;
 ---
-<BaseLayout
+<InfoLayout
   title="Terms of Service - BASE64IMAGE"
   description="Terms of Service for BASE64IMAGE. Review the terms and conditions for using our free Base64 image tools."
   canonical="https://base64image.net/terms-of-service/"
-  ogType="website"
+  h1="Terms of Service"
+  lede="Last updated: January 2025"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Terms of Service'}]}
 >
   <Fragment slot="head">
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</InfoLayout>

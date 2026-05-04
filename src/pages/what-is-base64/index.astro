@@ -1,6 +1,6 @@
 ﻿---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-const mainHtml = `<main>
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
         <h1><i class="fas fa-book"></i> What is Base64 Encoding?</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
         <p class="intro">A comprehensive guide to the Base64 encoding format, algorithm, and practical applications</p>
@@ -326,11 +326,15 @@ data:application/pdf;base64,JVBERi0x...</code></pre>
         </article>
     </main>`;
 ---
-<BaseLayout
+<ArticleLayout
   title="What is Base64 Encoding? Complete Guide to Base64 Format"
   description="Learn what Base64 encoding is, how the algorithm works, and why developers use it. Comprehensive guide covering RFC 4648, character sets, padding, data URIs, and practical use cases."
   canonical="https://base64image.net/what-is-base64/"
-  ogType="article"
+  h1="What is Base64 Encoding?"
+  lede="A comprehensive guide to the Base64 encoding format, algorithm, and practical applications"
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'What is Base64?'}]}
 >
   <Fragment slot="head">
     <script type="application/ld+json">
@@ -417,5 +421,5 @@ data:application/pdf;base64,JVBERi0x...</code></pre>
     }
         </script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
-</BaseLayout>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>
