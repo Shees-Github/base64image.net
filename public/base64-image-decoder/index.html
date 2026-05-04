@@ -281,25 +281,26 @@
 
     <script>
         function base64Decoder() {
+            // Stored outside Alpine's reactive Proxy so URL.createObjectURL
+            // always receives the raw Blob — not a Proxy-wrapped copy of it.
+            let _blob = null;
+
             return {
                 base64Input: '',
                 imageUrl: '',
                 error: '',
                 imageInfo: null,
-                imageBlob: null,
 
                 decodeImage() {
                     this.error = '';
+                    if (this.imageUrl) URL.revokeObjectURL(this.imageUrl);
                     this.imageUrl = '';
                     this.imageInfo = null;
-                    this.imageBlob = null;
+                    _blob = null;
 
-                    if (!this.base64Input.trim()) {
-                        return;
-                    }
+                    if (!this.base64Input.trim()) return;
 
                     try {
-                        // Strip data URI prefix if present
                         let base64String = this.base64Input.trim();
                         const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
 
@@ -309,32 +310,24 @@
                             base64String = dataUriMatch[2];
                         }
 
-                        // Validate Base64
                         if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
                             throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
                         }
 
-                        // Decode Base64
                         const binaryString = atob(base64String);
                         const bytes = new Uint8Array(binaryString.length);
                         for (let i = 0; i < binaryString.length; i++) {
                             bytes[i] = binaryString.charCodeAt(i);
                         }
 
-                        // Detect format from file signature if not from data URI
-                        if (format === 'unknown') {
-                            format = this.detectImageFormat(bytes);
-                        }
+                        if (format === 'unknown') format = this.detectImageFormat(bytes);
 
-                        // Create blob and URL
                         const mimeType = this.getMimeType(format);
-                        this.imageBlob = new Blob([bytes], { type: mimeType });
-                        this.imageUrl = URL.createObjectURL(this.imageBlob);
-
-                        // Set image info
+                        _blob = new Blob([bytes], { type: mimeType });
+                        this.imageUrl = URL.createObjectURL(_blob);
                         this.imageInfo = {
                             format: format.toUpperCase(),
-                            size: this.formatBytes(this.imageBlob.size)
+                            size: this.formatBytes(_blob.size)
                         };
 
                     } catch (err) {
@@ -345,26 +338,20 @@
                 },
 
                 detectImageFormat(bytes) {
-                    // Check file signatures
                     if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xD8) return 'jpeg';
                     if (bytes.length >= 4 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) return 'png';
                     if (bytes.length >= 3 && bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) return 'gif';
                     if (bytes.length >= 4 && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) return 'webp';
                     if (bytes.length >= 2 && bytes[0] === 0x42 && bytes[1] === 0x4D) return 'bmp';
                     if (bytes.length >= 5 && bytes[0] === 0x3C && bytes[1] === 0x73 && bytes[2] === 0x76 && bytes[3] === 0x67) return 'svg+xml';
-                    return 'png'; // Default fallback
+                    return 'png';
                 },
 
                 getMimeType(format) {
                     const mimeTypes = {
-                        'png': 'image/png',
-                        'jpeg': 'image/jpeg',
-                        'jpg': 'image/jpeg',
-                        'gif': 'image/gif',
-                        'webp': 'image/webp',
-                        'bmp': 'image/bmp',
-                        'svg+xml': 'image/svg+xml',
-                        'svg': 'image/svg+xml'
+                        'png': 'image/png', 'jpeg': 'image/jpeg', 'jpg': 'image/jpeg',
+                        'gif': 'image/gif', 'webp': 'image/webp', 'bmp': 'image/bmp',
+                        'svg+xml': 'image/svg+xml', 'svg': 'image/svg+xml'
                     };
                     return mimeTypes[format.toLowerCase()] || 'image/png';
                 },
@@ -378,30 +365,22 @@
                 },
 
                 downloadImage() {
-                    if (!this.imageBlob || !this.imageInfo) return;
+                    if (!_blob || !this.imageInfo) return;
 
                     const format = this.imageInfo.format.toLowerCase();
                     const timestamp = Date.now();
-
-                    // Map format to proper file extension
                     let extension = format;
                     if (format === 'jpeg') extension = 'jpg';
                     else if (format === 'svg+xml') extension = 'svg';
 
                     const filename = `decoded-image-${timestamp}.${extension}`;
-
-                    // Create a dedicated blob URL for download — reusing the preview URL
-                    // causes Chrome to stall while coordinating the same blob reference
-                    // between the image renderer and download manager.
-                    const downloadUrl = URL.createObjectURL(this.imageBlob);
+                    const downloadUrl = URL.createObjectURL(_blob);
                     const link = document.createElement('a');
                     link.href = downloadUrl;
                     link.download = filename;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                    // Revoke after 60s — gives Chrome's download manager enough time
-                    // to fully acquire the blob data regardless of image size.
                     setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
                 },
 
@@ -409,11 +388,9 @@
                     this.base64Input = '';
                     this.error = '';
                     this.imageInfo = null;
-                    if (this.imageBlob) {
-                        URL.revokeObjectURL(this.imageUrl);
-                        this.imageBlob = null;
-                    }
+                    if (this.imageUrl) URL.revokeObjectURL(this.imageUrl);
                     this.imageUrl = '';
+                    _blob = null;
                 }
             }
         }
