@@ -1030,7 +1030,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .hero { padding: 36px 20px 24px; }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
   .trust-cell { flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 16px; }
-  .tile.span-3, .tile.span-4, .tile.span-6 { grid-column: span 12; }
+  /* All bento tiles go full-width — use 1/-1 (first to last column)
+     instead of span N so implicit columns aren't created in the 12-col grid */
+  .tile, .tile.feat, .tile.span-3, .tile.span-4, .tile.span-6 { grid-column: 1 / -1; }
+  .tile.feat { min-height: auto; }
+  .tile.feat .glyph { font-size: 80px; }
+  .tile.feat .demo { white-space: normal; word-break: break-all; }
   .footer-bottom { flex-direction: column; gap: 10px; }
   .hero-inner { gap: 28px; }
   .converter { margin: 0; }
@@ -1038,7 +1043,4 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .trust-inner { flex-direction: column; border-radius: 12px; }
   .trust-cell { border-right: none; border-bottom: 1px solid var(--line); }
   .trust-cell:last-child { border-bottom: none; }
-  .bento { grid-template-columns: 1fr; }
-  .tile.feat { grid-column: span 1; min-height: 200px; }
-  .tile.feat .glyph { font-size: 100px; }
 }
