@@ -118,12 +118,16 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     }
     textarea.addEventListener('input', decode);
     dlBtn.addEventListener('click', function() {
-      if (!_blob) return;
-      var url = URL.createObjectURL(_blob);
+      // Reuse the preview's blob URL directly — it's guaranteed valid
+      // since the image is visible. Creating a new URL from _blob on
+      // each click causes Chrome to fail silently on subsequent downloads.
+      if (!img.src || !img.src.startsWith('blob:')) return;
       var a = document.createElement('a');
-      a.href = url; a.download = 'decoded-image-' + Date.now() + '.' + _ext;
-      document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setTimeout(function(){ URL.revokeObjectURL(url); }, 60000);
+      a.href = img.src;
+      a.download = 'decoded-image-' + Date.now() + '.' + _ext;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     });
     clrBtn.addEventListener('click', function() {
       textarea.value = ''; errorDiv.style.display = 'none'; errorDiv.textContent = '';
