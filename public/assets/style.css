@@ -971,7 +971,59 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .faq-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  .main-nav { display: none; }
+  /* Mobile nav hidden by default, shown when .open toggled */
+  .main-nav {
+    display: none;
+    position: fixed;
+    top: var(--header-h);
+    left: 0; right: 0; bottom: 0;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    overflow-y: auto;
+    z-index: 49;
+    padding: 12px 0 40px;
+  }
+  .main-nav.open { display: block; }
+  .main-nav > ul {
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 12px;
+  }
+  .main-nav > ul > li { width: 100%; }
+  .nav-link, .main-nav > ul > li > a {
+    width: 100%;
+    justify-content: space-between;
+    height: 48px;
+    padding: 0 14px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
+  /* Mobile dropdowns */
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    display: none;
+    box-shadow: none;
+    background: var(--bg-1);
+    border: none;
+    border-radius: 10px;
+    padding: 4px 8px 8px;
+    margin: 2px 0 6px 14px;
+    width: calc(100% - 14px);
+  }
+  .dropdown.active .dropdown-menu { display: block; }
+  .dropdown-menu li a {
+    height: 42px;
+    font-size: 14px;
+    padding: 0 12px;
+    border-radius: 8px;
+  }
+  /* Chevron rotation on mobile open */
+  .dropdown.active .chev { transform: rotate(180deg); }
+  .chev { transition: transform .2s ease; }
+
   .mobile-menu-toggle { display: inline-flex; }
   .section { padding: 64px 20px; }
   .how { padding: 64px 20px; }
@@ -980,4 +1032,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .trust-cell { flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 16px; }
   .tile.span-3, .tile.span-4, .tile.span-6 { grid-column: span 12; }
   .footer-bottom { flex-direction: column; gap: 10px; }
+  .hero-inner { gap: 28px; }
+  .converter { margin: 0; }
+  .trust-strip { padding: 0 16px; }
+  .trust-inner { flex-direction: column; border-radius: 12px; }
+  .trust-cell { border-right: none; border-bottom: 1px solid var(--line); }
+  .trust-cell:last-child { border-bottom: none; }
+  .bento { grid-template-columns: 1fr; }
+  .tile.feat { grid-column: span 1; min-height: 200px; }
+  .tile.feat .glyph { font-size: 100px; }
 }
