@@ -210,4 +210,66 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function textDecoder() {
+            return {
+                base64Input: '',
+                textOutput: '',
+                error: '',
+                copySuccess: false,
+
+                decodeText() {
+                    this.error = '';
+                    this.copySuccess = false;
+
+                    if (!this.base64Input.trim()) {
+                        this.error = 'Please enter a Base64 string to decode.';
+                        return;
+                    }
+
+                    try {
+                        // Remove whitespace and newlines
+                        const cleanBase64 = this.base64Input.replace(/\s/g, '');
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(cleanBase64)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64 to text
+                        this.textOutput = decodeURIComponent(escape(atob(cleanBase64)));
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.textOutput = '';
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.textOutput).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                downloadAsText() {
+                    const blob = new Blob([this.textOutput], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `decoded-text-${Date.now()}.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.textOutput = '';
+                    this.error = '';
+                    this.copySuccess = false;
+                }
+            }
+        }</script>
 </BaseLayout>
+

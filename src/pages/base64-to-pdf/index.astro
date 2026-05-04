@@ -278,4 +278,150 @@ const mainHtml = `<main x-data="base64ToPdf()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base64ToPdf() {
+            return {
+                mode: 'encode',
+                base64Input: '',
+                base64Output: '',
+                pdfUrl: '',
+                error: '',
+                fileInfo: null,
+                decodedInfo: null,
+                copyButtonText: 'Copy Base64',
+
+                encodePdf(event) {
+                    this.error = '';
+                    this.base64Output = '';
+                    this.fileInfo = null;
+
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    if (file.type !== 'application/pdf') {
+                        this.error = 'Please upload a valid PDF file.';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const base64String = e.target.result.split(',')[1];
+                            this.base64Output = base64String;
+                            this.fileInfo = {
+                                name: file.name,
+                                size: this.formatBytes(file.size)
+                            };
+                        } catch (err) {
+                            this.error = 'Failed to encode PDF. Please try again.';
+                        }
+                    };
+                    reader.onerror = () => {
+                        this.error = 'Failed to read PDF file.';
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                decodePdf() {
+                    this.error = '';
+                    this.pdfUrl = '';
+                    this.decodedInfo = null;
+
+                    if (!this.base64Input.trim()) {
+                        return;
+                    }
+
+                    try {
+                        let base64String = this.base64Input.trim();
+
+                        // Strip data URI prefix if present
+                        const dataUriMatch = base64String.match(/^data:application\/pdf;base64,(.+)$/);
+                        if (dataUriMatch) {
+                            base64String = dataUriMatch[1];
+                        }
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64 to binary
+                        const binaryString = atob(base64String);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+
+                        // Check PDF signature
+                        const pdfSignature = String.fromCharCode(...bytes.slice(0, 4));
+                        if (pdfSignature !== '%PDF') {
+                            throw new Error('Invalid PDF data. The Base64 string does not represent a valid PDF file.');
+                        }
+
+                        // Create Blob and URL
+                        const blob = new Blob([bytes], { type: 'application/pdf' });
+                        this.pdfUrl = URL.createObjectURL(blob);
+
+                        this.decodedInfo = {
+                            size: this.formatBytes(bytes.length)
+                        };
+
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.pdfUrl = '';
+                        this.decodedInfo = null;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                copyBase64() {
+                    if (!this.base64Output) return;
+
+                    navigator.clipboard.writeText(this.base64Output).then(() => {
+                        this.copyButtonText = 'Copied!';
+                        setTimeout(() => {
+                            this.copyButtonText = 'Copy Base64';
+                        }, 2000);
+                    }).catch(() => {
+                        this.error = 'Failed to copy to clipboard.';
+                    });
+                },
+
+                downloadPdf() {
+                    if (!this.pdfUrl) return;
+
+                    const timestamp = Date.now();
+                    const filename = `decoded-document-${timestamp}.pdf`;
+
+                    const link = document.createElement('a');
+                    link.href = this.pdfUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.base64Output = '';
+                    this.pdfUrl = '';
+                    this.error = '';
+                    this.fileInfo = null;
+                    this.decodedInfo = null;
+                    this.copyButtonText = 'Copy Base64';
+
+                    // Clear file input
+                    const fileInput = document.getElementById('pdfFile');
+                    if (fileInput) fileInput.value = '';
+                }
+            }
+        }</script>
 </BaseLayout>
+

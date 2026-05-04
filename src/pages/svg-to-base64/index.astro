@@ -276,4 +276,139 @@ const mainHtml = `<main x-data="svgToBase64()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function svgToBase64() {
+            return {
+                svgInput: '',
+                svgPreview: '',
+                base64Output: '',
+                error: '',
+                success: '',
+                fileInfo: null,
+                isProcessing: false,
+
+                handleFileUpload(event) {
+                    this.isProcessing = true;
+                    this.error = '';
+                    this.success = '';
+                    this.base64Output = '';
+                    this.svgPreview = '';
+                    this.fileInfo = null;
+                    this.svgInput = '';
+
+                    const file = event.target.files[0];
+                    if (!file) {
+                        this.isProcessing = false;
+                        return;
+                    }
+
+                    // Validate file type
+                    if (file.type !== 'image/svg+xml' && !file.name.toLowerCase().endsWith('.svg')) {
+                        this.error = 'Please select a valid SVG file. Other image formats are not accepted by this tool.';
+                        this.isProcessing = false;
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const dataUrl = e.target.result;
+                        this.svgPreview = dataUrl;
+                        this.base64Output = dataUrl;
+
+                        this.fileInfo = {
+                            source: 'File upload',
+                            name: file.name,
+                            type: 'image/svg+xml',
+                            size: this.formatBytes(file.size),
+                            base64Size: this.formatBytes(dataUrl.length)
+                        };
+                        this.success = 'SVG successfully encoded to Base64!';
+                        this.isProcessing = false;
+                    };
+                    reader.onerror = () => {
+                        this.error = 'Failed to read the SVG file. Please try again.';
+                        this.isProcessing = false;
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                encodePastedSvg() {
+                    this.error = '';
+                    this.success = '';
+                    this.base64Output = '';
+                    this.svgPreview = '';
+                    this.fileInfo = null;
+
+                    const markup = this.svgInput.trim();
+                    if (!markup) {
+                        this.error = 'Please paste SVG markup into the text area.';
+                        return;
+                    }
+
+                    // Basic validation: check for <svg tag
+                    if (!markup.includes('<svg')) {
+                        this.error = 'Invalid SVG markup. The input must contain an <svg> element.';
+                        return;
+                    }
+
+                    this.isProcessing = true;
+
+                    try {
+                        // UTF-8 encode and then Base64 encode
+                        const base64 = btoa(unescape(encodeURIComponent(markup)));
+                        const dataUri = 'data:image/svg+xml;base64,' + base64;
+
+                        this.svgPreview = dataUri;
+                        this.base64Output = dataUri;
+
+                        const originalBytes = new Blob([markup]).size;
+                        this.fileInfo = {
+                            source: 'Pasted markup',
+                            name: '',
+                            type: 'image/svg+xml',
+                            size: this.formatBytes(originalBytes),
+                            base64Size: this.formatBytes(dataUri.length)
+                        };
+                        this.success = 'SVG markup successfully encoded to Base64!';
+                        this.isProcessing = false;
+
+                        // Clear file input if any
+                        const fileInput = document.getElementById('fileInput');
+                        if (fileInput) fileInput.value = '';
+                    } catch (err) {
+                        this.error = 'Failed to encode SVG markup. Please check your input for invalid characters.';
+                        this.isProcessing = false;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                copyToClipboard() {
+                    const textarea = document.getElementById('base64Output');
+                    textarea.select();
+                    document.execCommand('copy');
+                    this.success = 'Base64 string copied to clipboard!';
+                    setTimeout(() => {
+                        this.success = '';
+                    }, 3000);
+                },
+
+                clearAll() {
+                    this.svgInput = '';
+                    this.svgPreview = '';
+                    this.base64Output = '';
+                    this.error = '';
+                    this.success = '';
+                    this.fileInfo = null;
+                    document.getElementById('fileInput').value = '';
+                }
+            }
+        }</script>
 </BaseLayout>
+

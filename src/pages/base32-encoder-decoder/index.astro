@@ -257,4 +257,117 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base32Tool() {
+            const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+
+            return {
+                input: '',
+                output: '',
+                error: '',
+                copySuccess: false,
+                mode: '',
+                outputLabel: 'Output',
+
+                encode() {
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.mode = 'Encode';
+                    this.outputLabel = 'Base32 Encoded Output';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter text to encode.';
+                        return;
+                    }
+
+                    try {
+                        const bytes = new TextEncoder().encode(this.input);
+                        let bits = '';
+                        for (let i = 0; i < bytes.length; i++) {
+                            bits += bytes[i].toString(2).padStart(8, '0');
+                        }
+
+                        // Pad bits to multiple of 5
+                        while (bits.length % 5 !== 0) {
+                            bits += '0';
+                        }
+
+                        let encoded = '';
+                        for (let i = 0; i < bits.length; i += 5) {
+                            const index = parseInt(bits.substring(i, i + 5), 2);
+                            encoded += BASE32_ALPHABET[index];
+                        }
+
+                        // Add padding to make output a multiple of 8
+                        while (encoded.length % 8 !== 0) {
+                            encoded += '=';
+                        }
+
+                        this.output = encoded;
+                    } catch (err) {
+                        this.error = 'Failed to encode text. Please check your input.';
+                        this.output = '';
+                    }
+                },
+
+                decode() {
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.mode = 'Decode';
+                    this.outputLabel = 'Decoded Text Output';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter a Base32 string to decode.';
+                        return;
+                    }
+
+                    try {
+                        const cleaned = this.input.trim().replace(/=+$/, '').toUpperCase();
+
+                        // Validate characters
+                        for (let i = 0; i < cleaned.length; i++) {
+                            if (BASE32_ALPHABET.indexOf(cleaned[i]) === -1) {
+                                this.error = 'Invalid Base32 character: "' + cleaned[i] + '". Base32 uses only A-Z and 2-7.';
+                                this.output = '';
+                                return;
+                            }
+                        }
+
+                        let bits = '';
+                        for (let i = 0; i < cleaned.length; i++) {
+                            const index = BASE32_ALPHABET.indexOf(cleaned[i]);
+                            bits += index.toString(2).padStart(5, '0');
+                        }
+
+                        // Extract bytes (groups of 8 bits)
+                        const bytes = [];
+                        for (let i = 0; i + 8 <= bits.length; i += 8) {
+                            bytes.push(parseInt(bits.substring(i, i + 8), 2));
+                        }
+
+                        this.output = new TextDecoder().decode(new Uint8Array(bytes));
+                    } catch (err) {
+                        this.error = 'Failed to decode Base32 string. Please check your input.';
+                        this.output = '';
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                clearAll() {
+                    this.input = '';
+                    this.output = '';
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.mode = '';
+                    this.outputLabel = 'Output';
+                }
+            };
+        }</script>
 </BaseLayout>
+

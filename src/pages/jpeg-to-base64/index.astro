@@ -268,4 +268,103 @@ const mainHtml = `<main x-data="jpegToBase64()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function jpegToBase64() {
+            return {
+                imagePreview: '',
+                base64Output: '',
+                error: '',
+                success: '',
+                fileInfo: null,
+                isProcessing: false,
+
+                handleFileUpload(event) {
+                    this.isProcessing = true;
+                    this.error = '';
+                    this.success = '';
+                    this.base64Output = '';
+                    this.imagePreview = '';
+                    this.fileInfo = null;
+
+                    const file = event.target.files[0];
+                    if (!file) {
+                        this.isProcessing = false;
+                        return;
+                    }
+
+                    // Validate file type
+                    if (file.type !== 'image/jpeg') {
+                        this.error = 'Please select a valid JPEG file (.jpg or .jpeg). Other image formats are not accepted by this tool.';
+                        this.isProcessing = false;
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const dataUrl = e.target.result;
+                        this.imagePreview = dataUrl;
+                        this.base64Output = dataUrl;
+
+                        // Get dimensions via Image element
+                        const img = new Image();
+                        img.onload = () => {
+                            this.fileInfo = {
+                                name: file.name,
+                                type: file.type,
+                                size: this.formatBytes(file.size),
+                                dimensions: img.width + ' x ' + img.height + ' px',
+                                base64Size: this.formatBytes(dataUrl.length)
+                            };
+                            this.success = 'JPEG successfully encoded to Base64!';
+                            this.isProcessing = false;
+                        };
+                        img.onerror = () => {
+                            this.fileInfo = {
+                                name: file.name,
+                                type: file.type,
+                                size: this.formatBytes(file.size),
+                                dimensions: 'Unknown',
+                                base64Size: this.formatBytes(dataUrl.length)
+                            };
+                            this.success = 'JPEG successfully encoded to Base64!';
+                            this.isProcessing = false;
+                        };
+                        img.src = dataUrl;
+                    };
+                    reader.onerror = () => {
+                        this.error = 'Failed to read the JPEG file. Please try again.';
+                        this.isProcessing = false;
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                copyToClipboard() {
+                    const textarea = document.getElementById('base64Output');
+                    textarea.select();
+                    document.execCommand('copy');
+                    this.success = 'Base64 string copied to clipboard!';
+                    setTimeout(() => {
+                        this.success = '';
+                    }, 3000);
+                },
+
+                clearAll() {
+                    this.imagePreview = '';
+                    this.base64Output = '';
+                    this.error = '';
+                    this.success = '';
+                    this.fileInfo = null;
+                    document.getElementById('fileInput').value = '';
+                }
+            }
+        }</script>
 </BaseLayout>
+

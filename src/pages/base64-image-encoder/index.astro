@@ -233,4 +233,86 @@ const mainHtml = `<main x-data="base64Encoder()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base64Encoder() {
+            return {
+                imagePreview: '',
+                base64Output: '',
+                error: '',
+                success: '',
+                fileInfo: null,
+                isProcessing: false,
+
+                handleFileUpload(event) {
+                    this.isProcessing = true;
+                    this.error = '';
+                    this.success = '';
+                    this.base64Output = '';
+                    this.imagePreview = '';
+                    this.fileInfo = null;
+
+                    const file = event.target.files[0];
+                    if (!file) {
+                        this.isProcessing = false;
+                        return;
+                    }
+
+                    // Validate file type
+                    if (!file.type.startsWith('image/')) {
+                        this.error = 'Please select a valid image file.';
+                        this.isProcessing = false;
+                        return;
+                    }
+
+                    // Store file info
+                    this.fileInfo = {
+                        name: file.name,
+                        type: file.type,
+                        size: this.formatBytes(file.size)
+                    };
+
+                    // Read file and convert to Base64
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.imagePreview = e.target.result;
+                        this.base64Output = e.target.result;
+                        this.success = 'Image successfully encoded to Base64!';
+                        this.isProcessing = false;
+                    };
+                    reader.onerror = () => {
+                        this.error = 'Failed to read the image file. Please try again.';
+                        this.isProcessing = false;
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                copyToClipboard() {
+                    const textarea = document.getElementById('base64Output');
+                    textarea.select();
+                    document.execCommand('copy');
+                    this.success = 'Base64 string copied to clipboard!';
+                    setTimeout(() => {
+                        this.success = '';
+                    }, 3000);
+                },
+
+                clearAll() {
+                    this.imagePreview = '';
+                    this.base64Output = '';
+                    this.error = '';
+                    this.success = '';
+                    this.fileInfo = null;
+                    document.getElementById('fileInput').value = '';
+                }
+            }
+        }</script>
 </BaseLayout>
+

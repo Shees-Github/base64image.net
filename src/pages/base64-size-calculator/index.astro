@@ -267,4 +267,54 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base64SizeCalc() {
+            return {
+                inputSize: '',
+                unit: 'KB',
+                result: null,
+
+                calculate() {
+                    let bytes = parseFloat(this.inputSize);
+                    if (isNaN(bytes) || bytes < 0) {
+                        this.result = null;
+                        return;
+                    }
+                    if (this.unit === 'KB') bytes *= 1024;
+                    if (this.unit === 'MB') bytes *= 1024 * 1024;
+                    bytes = Math.floor(bytes);
+
+                    const encodedChars = Math.ceil(bytes / 3) * 4;
+                    const paddingChars = bytes % 3 === 0 ? 0 : (3 - (bytes % 3));
+                    const encodedBytes = encodedChars;
+                    const overhead = encodedBytes - bytes;
+                    const overheadPct = bytes > 0 ? ((overhead / bytes) * 100).toFixed(1) : '0.0';
+
+                    this.result = {
+                        originalBytes: bytes,
+                        originalFormatted: this.formatBytes(bytes),
+                        encodedChars: encodedChars,
+                        encodedFormatted: this.formatBytes(encodedChars),
+                        paddingChars: paddingChars,
+                        overhead: overhead,
+                        overheadFormatted: this.formatBytes(overhead),
+                        overheadPct: overheadPct
+                    };
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+                },
+
+                clear() {
+                    this.inputSize = '';
+                    this.result = null;
+                }
+            }
+        }</script>
 </BaseLayout>
+

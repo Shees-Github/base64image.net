@@ -290,4 +290,103 @@ const decoded = decodeURIComponent(escape(atob(encoded)));</code></pre>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function asciiToBase64() {
+            return {
+                input: '',
+                output: '',
+                error: '',
+                copySuccess: false,
+                mode: '',
+                outputLabel: 'Output',
+                showMapping: false,
+                charMap: [],
+
+                encode() {
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.mode = 'ASCII to Base64';
+                    this.outputLabel = 'Base64 Encoded Output';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter ASCII text to encode.';
+                        return;
+                    }
+
+                    try {
+                        this.output = btoa(unescape(encodeURIComponent(this.input)));
+                        this.buildCharMap();
+                    } catch (err) {
+                        this.error = 'Failed to encode text. Please check your input.';
+                        this.output = '';
+                        this.charMap = [];
+                    }
+                },
+
+                decode() {
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.mode = 'Base64 to ASCII';
+                    this.outputLabel = 'Decoded ASCII Output';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter a Base64 string to decode.';
+                        return;
+                    }
+
+                    try {
+                        this.output = decodeURIComponent(escape(atob(this.input.trim())));
+                        this.buildCharMapFromDecoded();
+                    } catch (err) {
+                        this.error = 'Failed to decode Base64 string. Please check that the input is valid Base64.';
+                        this.output = '';
+                        this.charMap = [];
+                    }
+                },
+
+                buildCharMap() {
+                    this.charMap = [];
+                    for (let i = 0; i < this.input.length; i++) {
+                        const code = this.input.charCodeAt(i);
+                        this.charMap.push({
+                            char: this.input[i] === ' ' ? '(space)' : this.input[i],
+                            decimal: code,
+                            hex: '0x' + code.toString(16).toUpperCase().padStart(2, '0'),
+                            binary: code.toString(2).padStart(8, '0')
+                        });
+                    }
+                },
+
+                buildCharMapFromDecoded() {
+                    this.charMap = [];
+                    for (let i = 0; i < this.output.length; i++) {
+                        const code = this.output.charCodeAt(i);
+                        this.charMap.push({
+                            char: this.output[i] === ' ' ? '(space)' : this.output[i],
+                            decimal: code,
+                            hex: '0x' + code.toString(16).toUpperCase().padStart(2, '0'),
+                            binary: code.toString(2).padStart(8, '0')
+                        });
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                clearAll() {
+                    this.input = '';
+                    this.output = '';
+                    this.error = '';
+                    this.copySuccess = false;
+                    this.mode = '';
+                    this.outputLabel = 'Output';
+                    this.charMap = [];
+                }
+            };
+        }</script>
 </BaseLayout>
+

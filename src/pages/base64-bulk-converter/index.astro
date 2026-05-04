@@ -282,4 +282,131 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function bulkConverter() {
+            return {
+                files: [],
+                processing: false,
+                converted: 0,
+                error: '',
+                success: '',
+
+                handleFiles(event) {
+                    this.error = '';
+                    this.success = '';
+
+                    const selectedFiles = Array.from(event.target.files);
+                    if (selectedFiles.length === 0) return;
+
+                    this.files = selectedFiles.map(file => ({
+                        name: file.name,
+                        size: file.size,
+                        file: file,
+                        base64: null,
+                        status: 'pending'
+                    }));
+
+                    this.success = `${selectedFiles.length} file(s) loaded. Click "Convert All to Base64" to start.`;
+                },
+
+                async convertAll() {
+                    this.processing = true;
+                    this.error = '';
+                    this.converted = 0;
+
+                    for (let i = 0; i < this.files.length; i++) {
+                        this.files[i].status = 'processing';
+
+                        try {
+                            const base64 = await this.fileToBase64(this.files[i].file);
+                            this.files[i].base64 = base64;
+                            this.files[i].status = 'completed';
+                            this.converted++;
+                        } catch (err) {
+                            this.files[i].status = 'error';
+                            this.error = `Failed to convert ${this.files[i].name}: ${err.message}`;
+                        }
+                    }
+
+                    this.processing = false;
+                    if (this.converted === this.files.length) {
+                        this.success = `All ${this.converted} file(s) converted successfully!`;
+                    }
+                },
+
+                fileToBase64(file) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            const arrayBuffer = e.target.result;
+                            const bytes = new Uint8Array(arrayBuffer);
+                            let binary = '';
+                            for (let i = 0; i < bytes.length; i++) {
+                                binary += String.fromCharCode(bytes[i]);
+                            }
+                            resolve(btoa(binary));
+                        };
+                        reader.onerror = reject;
+                        reader.readAsArrayBuffer(file);
+                    });
+                },
+
+                copyBase64(index) {
+                    navigator.clipboard.writeText(this.files[index].base64).then(() => {
+                        this.success = `Base64 for "${this.files[index].name}" copied to clipboard!`;
+                        setTimeout(() => this.success = '', 2000);
+                    });
+                },
+
+                downloadBase64(index) {
+                    const blob = new Blob([this.files[index].base64], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${this.files[index].name}.base64.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                downloadAllAsJson() {
+                    const results = this.files
+                        .filter(f => f.base64)
+                        .map(f => ({
+                            filename: f.name,
+                            size: f.size,
+                            base64: f.base64
+                        }));
+
+                    const json = JSON.stringify(results, null, 2);
+                    const blob = new Blob([json], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `base64-bulk-export-${Date.now()}.json`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                clearAll() {
+                    this.files = [];
+                    this.converted = 0;
+                    this.error = '';
+                    this.success = '';
+                    this.processing = false;
+                }
+            }
+        }</script>
 </BaseLayout>
+

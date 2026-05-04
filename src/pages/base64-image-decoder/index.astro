@@ -238,4 +238,69 @@ const mainHtml = `<main x-data="base64Decoder()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+  <script is:inline>
+    function base64Decoder() {
+      let _blob = null;
+      return {
+        base64Input: '', imageUrl: '', error: '', imageInfo: null,
+        decodeImage() {
+          this.error = '';
+          if (this.imageUrl) URL.revokeObjectURL(this.imageUrl);
+          this.imageUrl = ''; this.imageInfo = null; _blob = null;
+          if (!this.base64Input.trim()) return;
+          try {
+            let base64String = this.base64Input.trim();
+            const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+            let format = 'unknown';
+            if (dataUriMatch) { format = dataUriMatch[1]; base64String = dataUriMatch[2]; }
+            if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+            const binaryString = atob(base64String);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i);
+            if (format === 'unknown') format = this.detectImageFormat(bytes);
+            const mimeType = this.getMimeType(format);
+            _blob = new Blob([bytes], { type: mimeType });
+            this.imageUrl = URL.createObjectURL(_blob);
+            this.imageInfo = { format: format.toUpperCase(), size: this.formatBytes(_blob.size) };
+          } catch (err) {
+            this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+            this.imageUrl = ''; this.imageInfo = null;
+          }
+        },
+        detectImageFormat(bytes) {
+          if (bytes.length >= 2 && bytes[0] === 0xFF && bytes[1] === 0xD8) return 'jpeg';
+          if (bytes.length >= 4 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) return 'png';
+          if (bytes.length >= 3 && bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46) return 'gif';
+          if (bytes.length >= 4 && bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) return 'webp';
+          if (bytes.length >= 2 && bytes[0] === 0x42 && bytes[1] === 0x4D) return 'bmp';
+          if (bytes.length >= 5 && bytes[0] === 0x3C && bytes[1] === 0x73 && bytes[2] === 0x76 && bytes[3] === 0x67) return 'svg+xml';
+          return 'png';
+        },
+        getMimeType(format) {
+          const t = { png:'image/png', jpeg:'image/jpeg', jpg:'image/jpeg', gif:'image/gif', webp:'image/webp', bmp:'image/bmp', 'svg+xml':'image/svg+xml', svg:'image/svg+xml' };
+          return t[format.toLowerCase()] || 'image/png';
+        },
+        formatBytes(bytes) {
+          if (bytes === 0) return '0 Bytes';
+          const k = 1024, sizes = ['Bytes','KB','MB'], i = Math.floor(Math.log(bytes)/Math.log(k));
+          return Math.round((bytes/Math.pow(k,i))*100)/100 + ' ' + sizes[i];
+        },
+        downloadImage() {
+          if (!_blob || !this.imageInfo) return;
+          const format = this.imageInfo.format.toLowerCase();
+          let extension = format === 'jpeg' ? 'jpg' : format === 'svg+xml' ? 'svg' : format;
+          const downloadUrl = URL.createObjectURL(_blob);
+          const link = document.createElement('a');
+          link.href = downloadUrl; link.download = `decoded-image-${Date.now()}.${extension}`;
+          document.body.appendChild(link); link.click(); document.body.removeChild(link);
+          setTimeout(() => URL.revokeObjectURL(downloadUrl), 60000);
+        },
+        clearAll() {
+          this.base64Input = ''; this.error = ''; this.imageInfo = null;
+          if (this.imageUrl) URL.revokeObjectURL(this.imageUrl);
+          this.imageUrl = ''; _blob = null;
+        }
+      }
+    }
+  </script>
 </BaseLayout>

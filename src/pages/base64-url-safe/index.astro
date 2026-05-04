@@ -229,4 +229,88 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function urlSafeBase64() {
+            return {
+                textInput: '',
+                output: '',
+                error: '',
+                success: '',
+                copySuccess: false,
+
+                encodeToUrlSafe() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.textInput.trim()) {
+                        this.error = 'Please enter text to encode.';
+                        return;
+                    }
+
+                    try {
+                        // Encode to standard Base64
+                        const base64 = btoa(unescape(encodeURIComponent(this.textInput)));
+
+                        // Convert to URL-safe: replace + with -, / with _, remove =
+                        this.output = base64
+                            .replace(/\+/g, '-')
+                            .replace(/\//g, '_')
+                            .replace(/=+$/, '');
+
+                        this.success = 'Text encoded to URL-safe Base64 successfully!';
+                    } catch (err) {
+                        this.error = 'Failed to encode text: ' + err.message;
+                    }
+                },
+
+                decodeFromUrlSafe() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.textInput.trim()) {
+                        this.error = 'Please enter URL-safe Base64 to decode.';
+                        return;
+                    }
+
+                    try {
+                        let urlSafeBase64 = this.textInput.trim();
+
+                        // Convert from URL-safe to standard Base64
+                        let base64 = urlSafeBase64
+                            .replace(/-/g, '+')
+                            .replace(/_/g, '/');
+
+                        // Add padding if needed
+                        const padding = base64.length % 4;
+                        if (padding > 0) {
+                            base64 += '='.repeat(4 - padding);
+                        }
+
+                        // Decode from Base64
+                        this.output = decodeURIComponent(escape(atob(base64)));
+                        this.success = 'URL-safe Base64 decoded successfully!';
+                    } catch (err) {
+                        this.error = 'Failed to decode: ' + err.message;
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                clearAll() {
+                    this.textInput = '';
+                    this.output = '';
+                    this.error = '';
+                    this.success = '';
+                    this.copySuccess = false;
+                }
+            }
+        }</script>
 </BaseLayout>
+

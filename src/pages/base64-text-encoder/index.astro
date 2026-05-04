@@ -217,4 +217,58 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function textEncoder() {
+            return {
+                textInput: '',
+                base64Output: '',
+                error: '',
+                copySuccess: false,
+
+                encodeText() {
+                    this.error = '';
+                    this.copySuccess = false;
+
+                    if (!this.textInput.trim()) {
+                        this.error = 'Please enter some text to encode.';
+                        return;
+                    }
+
+                    try {
+                        // Encode text to Base64
+                        this.base64Output = btoa(unescape(encodeURIComponent(this.textInput)));
+                    } catch (err) {
+                        this.error = 'Failed to encode text. Please check your input.';
+                        this.base64Output = '';
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.base64Output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                downloadAsText() {
+                    const blob = new Blob([this.base64Output], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `base64-encoded-${Date.now()}.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                },
+
+                clearAll() {
+                    this.textInput = '';
+                    this.base64Output = '';
+                    this.error = '';
+                    this.copySuccess = false;
+                }
+            }
+        }</script>
 </BaseLayout>
+

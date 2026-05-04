@@ -277,4 +277,107 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function embedGenerator() {
+            return {
+                base64Input: '',
+                preview: '',
+                htmlCode: '',
+                cssCode: '',
+                markdownCode: '',
+                dataUri: '',
+                mimeType: '',
+                imageSize: '',
+                error: '',
+                success: '',
+
+                handleFile(event) {
+                    this.error = '';
+                    this.success = '';
+
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    if (!file.type.startsWith('image/')) {
+                        this.error = 'Please select an image file.';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.mimeType = file.type;
+                        this.imageSize = this.formatBytes(file.size);
+                        this.dataUri = e.target.result;
+                        this.generateCode();
+                        this.success = 'Image loaded successfully! Embed code generated.';
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                handleBase64Input() {
+                    this.error = '';
+                    this.success = '';
+
+                    if (!this.base64Input.trim()) {
+                        this.preview = '';
+                        return;
+                    }
+
+                    try {
+                        let dataUri = this.base64Input.trim();
+
+                        // If it's not a data URI, assume it's base64 for an image/png
+                        if (!dataUri.startsWith('data:')) {
+                            dataUri = 'data:image/png;base64,' + dataUri;
+                        }
+
+                        // Extract MIME type
+                        const match = dataUri.match(/^data:([^;]+);base64,/);
+                        this.mimeType = match ? match[1] : 'image/png';
+
+                        // Estimate size
+                        const base64 = dataUri.split(',')[1];
+                        const sizeInBytes = Math.ceil((base64.length * 3) / 4);
+                        this.imageSize = this.formatBytes(sizeInBytes);
+
+                        this.dataUri = dataUri;
+                        this.generateCode();
+                        this.success = 'Base64 string processed! Embed code generated.';
+                    } catch (err) {
+                        this.error = 'Invalid Base64 or data URI format.';
+                    }
+                },
+
+                generateCode() {
+                    this.preview = this.dataUri;
+
+                    // HTML code
+                    this.htmlCode = `<img src="${this.dataUri}" alt="Embedded image">`;
+
+                    // CSS code
+                    this.cssCode = `.element {
+  background-image: url('${this.dataUri}');
+}`;
+
+                    // Markdown code
+                    this.markdownCode = `![Embedded image](${this.dataUri})`;
+                },
+
+                copy(text) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.success = 'Copied to clipboard!';
+                        setTimeout(() => this.success = '', 2000);
+                    });
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                }
+            }
+        }</script>
 </BaseLayout>
+

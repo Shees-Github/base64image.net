@@ -242,4 +242,103 @@ const mainHtml = `<main>
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base64HexConverter() {
+            return {
+                input: '',
+                output: '',
+                outputLength: 0,
+                error: '',
+                success: '',
+                copySuccess: false,
+
+                base64ToHex() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter a Base64 string.';
+                        return;
+                    }
+
+                    try {
+                        // Remove whitespace
+                        const base64 = this.input.replace(/\s/g, '');
+
+                        // Decode Base64 to binary
+                        const binaryString = atob(base64);
+
+                        // Convert each byte to HEX
+                        let hex = '';
+                        for (let i = 0; i < binaryString.length; i++) {
+                            const byte = binaryString.charCodeAt(i);
+                            hex += byte.toString(16).toUpperCase().padStart(2, '0');
+                        }
+
+                        this.output = hex;
+                        this.outputLength = hex.length;
+                        this.success = 'Base64 converted to HEX successfully!';
+                    } catch (err) {
+                        this.error = 'Invalid Base64 string: ' + err.message;
+                    }
+                },
+
+                hexToBase64() {
+                    this.error = '';
+                    this.success = '';
+                    this.output = '';
+
+                    if (!this.input.trim()) {
+                        this.error = 'Please enter a HEX string.';
+                        return;
+                    }
+
+                    try {
+                        // Remove spaces, colons, and other separators
+                        let hex = this.input.replace(/[\s:]/g, '');
+
+                        // Validate HEX string
+                        if (!/^[0-9A-Fa-f]*$/.test(hex)) {
+                            throw new Error('Invalid HEX string. Only 0-9 and A-F are allowed.');
+                        }
+
+                        if (hex.length % 2 !== 0) {
+                            throw new Error('HEX string must have an even number of characters.');
+                        }
+
+                        // Convert HEX pairs to bytes
+                        let binaryString = '';
+                        for (let i = 0; i < hex.length; i += 2) {
+                            const byte = parseInt(hex.substr(i, 2), 16);
+                            binaryString += String.fromCharCode(byte);
+                        }
+
+                        // Encode to Base64
+                        this.output = btoa(binaryString);
+                        this.outputLength = this.output.length;
+                        this.success = 'HEX converted to Base64 successfully!';
+                    } catch (err) {
+                        this.error = err.message || 'Failed to convert HEX to Base64.';
+                    }
+                },
+
+                copyToClipboard() {
+                    navigator.clipboard.writeText(this.output).then(() => {
+                        this.copySuccess = true;
+                        setTimeout(() => this.copySuccess = false, 3000);
+                    });
+                },
+
+                clearAll() {
+                    this.input = '';
+                    this.output = '';
+                    this.outputLength = 0;
+                    this.error = '';
+                    this.success = '';
+                    this.copySuccess = false;
+                }
+            }
+        }</script>
 </BaseLayout>
+

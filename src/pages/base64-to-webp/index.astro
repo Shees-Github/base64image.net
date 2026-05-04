@@ -261,4 +261,124 @@ const mainHtml = `<main x-data="base64ToWebp()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base64ToWebp() {
+            return {
+                base64Input: '',
+                imageUrl: '',
+                error: '',
+                warning: '',
+                imageInfo: null,
+                canvas: null,
+                quality: 0.90,
+
+                decodeImage() {
+                    this.error = '';
+                    this.warning = '';
+                    this.imageUrl = '';
+                    this.imageInfo = null;
+
+                    if (!this.base64Input.trim()) {
+                        return;
+                    }
+
+                    try {
+                        // Strip data URI prefix if present
+                        let base64String = this.base64Input.trim();
+                        let originalFormat = 'unknown';
+                        const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+
+                        if (dataUriMatch) {
+                            originalFormat = dataUriMatch[1];
+                            base64String = dataUriMatch[2];
+                        }
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Create image from Base64
+                        const img = new Image();
+                        const quality = parseFloat(this.quality);
+                        img.onload = () => {
+                            // Create canvas and draw image
+                            this.canvas = document.createElement('canvas');
+                            this.canvas.width = img.width;
+                            this.canvas.height = img.height;
+                            const ctx = this.canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+
+                            // Get WebP data URL
+                            const webpDataUrl = this.canvas.toDataURL('image/webp', quality);
+
+                            // Check if browser actually supports WebP encoding
+                            if (webpDataUrl.startsWith('data:image/png')) {
+                                this.warning = 'Your browser does not support WebP encoding. The output will be PNG format instead. Try using Chrome, Firefox, or Edge for WebP support.';
+                            }
+
+                            this.imageUrl = webpDataUrl;
+
+                            // Calculate size
+                            const prefix = webpDataUrl.substring(0, webpDataUrl.indexOf(',') + 1);
+                            const sizeInBytes = Math.round((webpDataUrl.length - prefix.length) * 3 / 4);
+
+                            this.imageInfo = {
+                                originalFormat: originalFormat.toUpperCase(),
+                                quality: quality,
+                                size: this.formatBytes(sizeInBytes)
+                            };
+                        };
+                        img.onerror = () => {
+                            this.error = 'Failed to load image. Please check your Base64 string.';
+                        };
+
+                        // Try to load with original format first, fallback to generic
+                        if (originalFormat !== 'unknown') {
+                            img.src = `data:image/${originalFormat};base64,${base64String}`;
+                        } else {
+                            img.src = `data:image/png;base64,${base64String}`;
+                        }
+
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.imageUrl = '';
+                        this.imageInfo = null;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                downloadWebp() {
+                    if (!this.imageUrl) return;
+
+                    const timestamp = Date.now();
+                    const filename = `converted-image-${timestamp}.webp`;
+
+                    const link = document.createElement('a');
+                    link.href = this.imageUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.imageUrl = '';
+                    this.error = '';
+                    this.warning = '';
+                    this.imageInfo = null;
+                    this.canvas = null;
+                    this.quality = 0.90;
+                }
+            }
+        }</script>
 </BaseLayout>
+

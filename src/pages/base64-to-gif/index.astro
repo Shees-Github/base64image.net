@@ -251,4 +251,178 @@ const mainHtml = `<main x-data="base64ToGif()">
         </script>
   </Fragment>
   <Fragment set:html={mainHtml} />
+
+  <script is:inline>function base64ToGif() {
+            return {
+                base64Input: '',
+                imageUrl: '',
+                error: '',
+                warning: '',
+                imageInfo: null,
+                isGif: false,
+                blobUrl: null,
+
+                decodeGif() {
+                    this.error = '';
+                    this.warning = '';
+                    this.imageUrl = '';
+                    this.imageInfo = null;
+                    this.isGif = false;
+
+                    // Clean up previous blob URL
+                    if (this.blobUrl) {
+                        URL.revokeObjectURL(this.blobUrl);
+                        this.blobUrl = null;
+                    }
+
+                    if (!this.base64Input.trim()) {
+                        return;
+                    }
+
+                    try {
+                        // Strip data URI prefix if present
+                        let base64String = this.base64Input.trim();
+                        let declaredFormat = 'unknown';
+                        const dataUriMatch = base64String.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+
+                        if (dataUriMatch) {
+                            declaredFormat = dataUriMatch[1];
+                            base64String = dataUriMatch[2];
+                        }
+
+                        // Validate Base64
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        // Decode Base64 to binary
+                        let binaryString;
+                        try {
+                            binaryString = atob(base64String);
+                        } catch (e) {
+                            throw new Error('Failed to decode Base64 string. The input may be corrupted.');
+                        }
+
+                        // Check GIF magic bytes (GIF87a or GIF89a)
+                        const signature = binaryString.substring(0, 6);
+                        const isGifFormat = (signature === 'GIF87a' || signature === 'GIF89a');
+
+                        if (!isGifFormat) {
+                            this.warning = 'The decoded data is not in GIF format (missing GIF87a/GIF89a signature). This tool extracts existing GIF data from Base64. Converting other formats to GIF requires color quantization not available in browsers.';
+
+                            // Still try to display as image if it has a declared format
+                            if (declaredFormat !== 'unknown' && declaredFormat !== 'gif') {
+                                const img = new Image();
+                                img.onload = () => {
+                                    this.imageUrl = `data:image/${declaredFormat};base64,${base64String}`;
+                                    this.imageInfo = {
+                                        format: declaredFormat.toUpperCase() + ' (not GIF)',
+                                        type: 'Static image',
+                                        size: this.formatBytes(binaryString.length)
+                                    };
+                                };
+                                img.onerror = () => {
+                                    this.error = 'Failed to load image. Please check your Base64 string.';
+                                };
+                                img.src = `data:image/${declaredFormat};base64,${base64String}`;
+                                return;
+                            }
+
+                            // Try loading as generic image
+                            const img = new Image();
+                            img.onload = () => {
+                                this.imageUrl = `data:image/gif;base64,${base64String}`;
+                                this.imageInfo = {
+                                    format: 'Unknown (not GIF)',
+                                    type: 'Static image',
+                                    size: this.formatBytes(binaryString.length)
+                                };
+                            };
+                            img.onerror = () => {
+                                this.error = 'The decoded data is not a valid image. Please provide a Base64-encoded GIF.';
+                                this.warning = '';
+                            };
+                            img.src = `data:image/gif;base64,${base64String}`;
+                            return;
+                        }
+
+                        // Valid GIF - create Blob for download
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        const blob = new Blob([bytes], { type: 'image/gif' });
+                        this.blobUrl = URL.createObjectURL(blob);
+
+                        // Determine if animated (check for multiple image descriptors)
+                        // GIF89a with extension blocks typically indicates animation
+                        const gifVersion = signature;
+                        let isAnimated = false;
+                        let imageBlockCount = 0;
+                        for (let i = 6; i < binaryString.length - 1; i++) {
+                            // Image descriptor starts with 0x2C
+                            if (binaryString.charCodeAt(i) === 0x2C) {
+                                imageBlockCount++;
+                                if (imageBlockCount > 1) {
+                                    isAnimated = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Display preview
+                        this.imageUrl = `data:image/gif;base64,${base64String}`;
+                        this.isGif = true;
+
+                        this.imageInfo = {
+                            format: 'GIF (' + gifVersion + ')',
+                            type: isAnimated ? 'Animated GIF' : 'Static GIF',
+                            size: this.formatBytes(binaryString.length)
+                        };
+
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.imageUrl = '';
+                        this.imageInfo = null;
+                        this.isGif = false;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                downloadGif() {
+                    if (!this.blobUrl) return;
+
+                    const timestamp = Date.now();
+                    const filename = `converted-image-${timestamp}.gif`;
+
+                    const link = document.createElement('a');
+                    link.href = this.blobUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+
+                clearAll() {
+                    if (this.blobUrl) {
+                        URL.revokeObjectURL(this.blobUrl);
+                    }
+                    this.base64Input = '';
+                    this.imageUrl = '';
+                    this.error = '';
+                    this.warning = '';
+                    this.imageInfo = null;
+                    this.isGif = false;
+                    this.blobUrl = null;
+                }
+            }
+        }</script>
 </BaseLayout>
+
