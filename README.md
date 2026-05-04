@@ -1,51 +1,132 @@
 # BASE64IMAGE
 
-Free, privacy-focused Base64 image tools for developers and designers.
+**Free, privacy-first Base64 tools for developers.** All encoding and decoding runs in your browser — nothing is uploaded to any server.
 
-## 🚀 Deployment
+🔗 **Live site: [base64image.net](https://base64image.net)**
 
-This is a static website served via nginx in a Docker container.
+---
 
-### Prerequisites
-- Docker
-- Coolify or any Docker hosting platform
+## Tools
 
-### Local Development
+### Encoders
+| Tool | URL |
+|------|-----|
+| Image to Base64 | [/base64-image-encoder/](https://base64image.net/base64-image-encoder/) |
+| Text to Base64 | [/base64-text-encoder/](https://base64image.net/base64-text-encoder/) |
+| File to Base64 | [/base64-file-encoder/](https://base64image.net/base64-file-encoder/) |
 
-Open `public/index.html` in your browser to view the site locally.
+### Decoders
+| Tool | URL |
+|------|-----|
+| Base64 to Image | [/base64-image-decoder/](https://base64image.net/base64-image-decoder/) |
+| Base64 to Text | [/base64-text-decoder/](https://base64image.net/base64-text-decoder/) |
+| Base64 to File | [/base64-file-decoder/](https://base64image.net/base64-file-decoder/) |
 
-### Building
+### Converters
+| Tool | URL |
+|------|-----|
+| Base64 → PNG | [/base64-to-png/](https://base64image.net/base64-to-png/) |
+| Base64 → JPEG | [/base64-to-jpeg/](https://base64image.net/base64-to-jpeg/) |
+| Base64 → WebP | [/base64-to-webp/](https://base64image.net/base64-to-webp/) |
+| Base64 → GIF | [/base64-to-gif/](https://base64image.net/base64-to-gif/) |
+| Base64 → SVG | [/base64-to-svg/](https://base64image.net/base64-to-svg/) |
+| Base64 → PDF | [/base64-to-pdf/](https://base64image.net/base64-to-pdf/) |
+| Base64 ⇄ HEX | [/base64-hex-converter/](https://base64image.net/base64-hex-converter/) |
+| PNG → Base64 | [/png-to-base64/](https://base64image.net/png-to-base64/) |
+| JPEG → Base64 | [/jpeg-to-base64/](https://base64image.net/jpeg-to-base64/) |
+| SVG → Base64 | [/svg-to-base64/](https://base64image.net/svg-to-base64/) |
+
+### Utilities
+| Tool | URL |
+|------|-----|
+| Base64 Validator | [/base64-validator/](https://base64image.net/base64-validator/) |
+| Size Calculator | [/base64-size-calculator/](https://base64image.net/base64-size-calculator/) |
+| URL-Safe Encoder | [/base64-url-safe/](https://base64image.net/base64-url-safe/) |
+| Embed Generator | [/base64-embed-generator/](https://base64image.net/base64-embed-generator/) |
+| Bulk Converter | [/base64-bulk-converter/](https://base64image.net/base64-bulk-converter/) |
+| Base32 Encoder/Decoder | [/base32-encoder-decoder/](https://base64image.net/base32-encoder-decoder/) |
+| ASCII to Base64 | [/ascii-to-base64/](https://base64image.net/ascii-to-base64/) |
+
+---
+
+## Privacy
+
+Every tool processes data entirely client-side using native browser APIs:
+
+- **`FileReader`** — reads files locally, never uploaded
+- **`Blob` + `URL.createObjectURL()`** — generates download links in memory
+- **`atob()` / `btoa()`** — browser-native Base64 encode/decode
+- **`Canvas`** — format conversion (PNG → JPEG, etc.) without a server
+
+Zero network requests are made with your data. Open DevTools → Network while using any tool — there are no POST requests.
+
+---
+
+## Tech Stack
+
+- **[Astro](https://astro.build)** — static site generator, 44 pages built at compile time
+- **Vanilla JS** — tool interactivity for binary data pages (image decoder, converters)
+- **[Alpine.js](https://alpinejs.dev)** — lightweight reactivity for simpler tool pages
+- **[Font Awesome](https://fontawesome.com)** — icons via CDN
+- **Nginx** — static file serving with gzip, security headers, clean URL rewrites
+- **Docker** — two-stage build (Node → Nginx), deployed via Coolify
+
+---
+
+## Local Development
+
+```bash
+npm install
+npm run dev       # dev server at http://localhost:4321
+npm run build     # production build → dist/
+npm run preview   # preview production build
+```
+
+### Docker
 
 ```bash
 docker build -t base64image .
 docker run -p 8080:80 base64image
 ```
 
-Visit http://localhost:8080
+Visit `http://localhost:8080`
 
-### Project Structure
+---
+
+## Project Structure
 
 ```
 /
-├── public/              # Website files (HTML, CSS, JS)
-│   ├── index.html
-│   ├── assets/
-│   └── [tool pages]
-├── Dockerfile           # Docker build configuration
-├── nginx.conf           # Nginx server configuration
-└── .dockerignore        # Docker build exclusions
+├── src/
+│   ├── layouts/
+│   │   └── BaseLayout.astro   # Header, footer, nav — shared across all pages
+│   └── pages/
+│       ├── index.astro
+│       ├── base64-image-decoder/index.astro
+│       └── ...                # 44 pages total
+├── public/
+│   ├── assets/style.css       # All styles
+│   ├── favicon.svg
+│   └── robots.txt
+├── nginx.conf
+├── Dockerfile
+└── astro.config.mjs
 ```
 
-### Deployment Notes
+Navigation and footer are defined once in `BaseLayout.astro` and compiled into every page at build time — no JavaScript injection at runtime.
 
-- **Build Pack**: Dockerfile
-- **Port**: 80
-- **SSL**: Enabled (via Coolify/hosting platform)
+---
 
-## 📝 License
+## Adding a New Tool
 
-All website files are served locally in the browser. No data is collected or transmitted.
+1. Create `src/pages/[tool-name]/index.astro`
+2. Use `BaseLayout` — pass `title`, `description`, `canonical`
+3. Add the page to the nav in `src/layouts/BaseLayout.astro`
+4. Run `npm run build` — sitemap auto-generated by `@astrojs/sitemap`
 
-## 🔒 Privacy
+---
 
-All tools run 100% client-side. Your images and data never leave your device.
+## Contact
+
+Built and maintained by [Shees Zubair](mailto:sheeszubair@gmail.com).
+Bug reports and feedback welcome.
