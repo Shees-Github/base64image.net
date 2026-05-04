@@ -1,0 +1,44 @@
+---
+import BaseLayout from './BaseLayout.astro';
+const { title, description, canonical, h1, lede, tag = 'learn', tagLabel = 'Reference', breadcrumbs = [], toc = [], readTime, updated } = Astro.props;
+---
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <slot name="head" slot="head" />
+  <main class="page">
+    <nav class="breadcrumbs">
+      {breadcrumbs.map((b, i) => (
+        <>
+          {i < breadcrumbs.length - 1
+            ? <a href={b.href}>{b.label}</a>
+            : <span class="current">{b.label}</span>}
+          {i < breadcrumbs.length - 1 && <span class="sep">/</span>}
+        </>
+      ))}
+    </nav>
+    <header class="page-head">
+      <div>
+        <div class="tag-row"><span class={`tag ${tag}`}><span class="dot" style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>{tagLabel}</span></div>
+        <h1>{h1}</h1>
+        {lede && <p class="lede">{lede}</p>}
+      </div>
+      <div class="meta">
+        {readTime && <span class="item">📖 {readTime}</span>}
+        {updated && <span class="item">• Updated {updated}</span>}
+      </div>
+    </header>
+    <div class="article-grid">
+      {toc.length > 0 ? (
+        <nav class="toc">
+          <h4>On this page</h4>
+          <ul>
+            {toc.map((it, i) => (
+              <li><a href={`#${it.id}`} class={i === 0 ? 'active' : ''}>{it.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      ) : <div></div>}
+      <article class="prose"><slot /></article>
+      <aside><slot name="aside" /></aside>
+    </div>
+  </main>
+</BaseLayout>

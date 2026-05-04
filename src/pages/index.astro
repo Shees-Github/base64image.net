@@ -1,367 +1,274 @@
 ﻿---
 import BaseLayout from '../layouts/BaseLayout.astro';
-const mainHtml = `<main>
-        <h1><i class="fas fa-toolbox"></i> Free Online Base64 Image Tools</h1>
-
-        <p class="intro">
-            Convert images to Base64, decode Base64 to images, and transform Base64 data online — all for free.
-            BASE64IMAGE provides a complete suite of Base64 encoding and decoding tools that run entirely in your browser. No uploads, no tracking, no data collection.
-        </p>
-
-        <div class="trust-note">
-            <strong>🔒 Privacy First:</strong> All processing happens locally in your browser. Your images never leave your device.
-        </div>
-
-        <section id="tools">
-            <h2><i class="fas fa-wrench"></i> Which Base64 Tools Are Available?</h2>
-
-            <div class="tool-list">
-                <div class="tool-card">
-                    <h3><i class="fas fa-font"></i> <a href="/base64-text-encoder/">Base64 Text Encoder</a></h3>
-                    <p>Convert plain text to Base64 strings. Perfect for encoding text for APIs, data URLs, or configuration files.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-file-alt"></i> <a href="/base64-text-decoder/">Base64 Text Decoder</a></h3>
-                    <p>Decode Base64 strings back to plain text. Extract text from API responses, JWT tokens, or email headers.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-file-upload"></i> <a href="/base64-file-encoder/">Base64 File Encoder</a></h3>
-                    <p>Convert any file type to Base64 strings. Upload documents, archives, media files, or executables and get Base64-encoded output.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-file-download"></i> <a href="/base64-file-decoder/">Base64 File Decoder</a></h3>
-                    <p>Decode Base64 strings back to downloadable files. Extract files from API responses, data URIs, or database exports.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-image"></i> <a href="/base64-image-encoder/">Base64 Image Encoder</a></h3>
-                    <p>Convert images to Base64 strings online. Upload any image (PNG, JPEG, GIF, SVG, WebP) and get a clean Base64-encoded string ready to use in your HTML, CSS, or JSON.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-unlock"></i> <a href="/base64-image-decoder/">Base64 Image Decoder</a></h3>
-                    <p>Decode Base64 strings to images online. Supports PNG, JPEG, GIF, SVG, WebP, and BMP formats. Paste your Base64 string and instantly preview the decoded image.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-file-image"></i> <a href="/base64-to-png/">Base64 to PNG Converter</a></h3>
-                    <p>Convert Base64 strings directly to downloadable PNG images. Perfect for extracting PNG files from data URIs or API responses.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-file-pdf"></i> <a href="/base64-to-pdf/">Base64 to PDF Converter</a></h3>
-                    <p>Convert PDF files to Base64 strings or decode Base64 to PDF documents. Perfect for embedding PDFs in APIs or extracting PDF files from Base64 data.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-check-circle"></i> <a href="/base64-validator/">Base64 Validator</a></h3>
-                    <p>Validate Base64 strings and check if they represent valid image data. Detect format, verify encoding, and identify issues.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-link"></i> <a href="/base64-url-safe/">URL-Safe Base64 Encoder/Decoder</a></h3>
-                    <p>Convert Base64 strings to URL-safe format for query parameters, filenames, and APIs. Essential for JWT tokens and web applications.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-code"></i> <a href="/base64-hex-converter/">Base64 to HEX Converter</a></h3>
-                    <p>Convert between Base64 and hexadecimal formats. Essential for cryptography, debugging binary data, and low-level programming.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-code"></i> <a href="/base64-embed-generator/">Base64 Embed Code Generator</a></h3>
-                    <p>Generate ready-to-use HTML, CSS, and Markdown embed snippets from images. Perfect for embedding images in emails and web pages.</p>
-                </div>
-
-                <div class="tool-card">
-                    <h3><i class="fas fa-layer-group"></i> <a href="/base64-bulk-converter/">Bulk Base64 Converter</a></h3>
-                    <p>Convert multiple files to Base64 at once. Batch process images, documents, and files efficiently. Download results as JSON.</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="content-section">
-            <h2><i class="fas fa-question-circle"></i> What is Base64 Encoding?</h2>
-            <p>
-                Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format. It uses 64 characters
-                (A-Z, a-z, 0-9, +, and /) to convert any binary data — including images, documents, and files — into a plain text string
-                that can be safely included in text-based formats like HTML, CSS, JSON, and XML.
-            </p>
-            <p>
-                For example, when you <a href="/base64-image-encoder/">convert an image to Base64</a>, the encoder reads the binary image
-                data and outputs a text string like <code>data:image/png;base64,iVBORw0KGgo...</code>. This text string is called a
-                <strong>data URI</strong> and can be used directly in an HTML <code>&lt;img&gt;</code> tag or a CSS
-                <code>background-image</code> property without requiring a separate image file.
-            </p>
-
-            <h3>Base64 Encoding Quick Reference</h3>
-            <table class="reference-table">
-                <thead>
-                    <tr><th>Property</th><th>Value</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Character Set</td><td><code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code> (64 characters)</td></tr>
-                    <tr><td>Padding Character</td><td><code>=</code> (appended to make output a multiple of 4)</td></tr>
-                    <tr><td>Size Overhead</td><td>~33% larger than original binary data (3 bytes → 4 characters)</td></tr>
-                    <tr><td>RFC Standard</td><td>RFC 4648 (2006) — The Base16, Base32, and Base64 Data Encodings</td></tr>
-                    <tr><td>URL-Safe Variant</td><td>Replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code> (RFC 4648 Section 5)</td></tr>
-                    <tr><td>MIME Line Length</td><td>76 characters per line (RFC 2045)</td></tr>
-                    <tr><td>Data URI Format</td><td><code>data:[MIME];base64,[DATA]</code></td></tr>
-                </tbody>
-            </table>
-
-            <h2><i class="fas fa-lightbulb"></i> Why Use Base64 for Images?</h2>
-            <p>
-                Base64-encoded images are useful in many scenarios across web development and software engineering:
-            </p>
-            <ul>
-                <li><strong>Reduce HTTP requests:</strong> Embed small icons and logos directly in HTML or CSS instead of loading separate image files. Use our <a href="/base64-embed-generator/">embed code generator</a> to create ready-to-use snippets.</li>
-                <li><strong>API data transfer:</strong> Include image data in JSON API responses and requests without dealing with multipart form data or file uploads.</li>
-                <li><strong>Email templates:</strong> Embed images directly in HTML emails so they display without relying on external image hosting.</li>
-                <li><strong>Single-page applications:</strong> Bundle small assets with your JavaScript to eliminate network requests for icons and UI elements.</li>
-                <li><strong>Data storage:</strong> Store image data as text in databases, configuration files, or local storage.</li>
-            </ul>
-            <p>
-                Keep in mind that Base64 encoding increases file size by approximately 33%, so it's best suited for small images (under 10KB).
-                For larger images, use our <a href="/base64-validator/">Base64 validator</a> to check the encoded output before embedding.
-            </p>
-
-            <h2><i class="fas fa-lock"></i> Is BASE64IMAGE Safe and Private?</h2>
-            <p>
-                BASE64IMAGE processes all data locally in your browser using JavaScript — no files are uploaded to servers. When you encode or decode an image, the data never leaves your device. There are zero server uploads, zero data storage, and zero tracking of your files.
-            </p>
-            <p>
-                Our tools use the browser's native <code>FileReader</code> API and <code>Canvas</code> API to handle encoding and decoding.
-                You can verify this yourself — open your browser's network tab while using any tool, and you'll see zero data transmissions.
-                The tools even work offline after the page loads.
-            </p>
-
-            <h2><i class="fas fa-cog"></i> How Do You Convert an Image to Base64 Online?</h2>
-            <p>
-                Converting an image to Base64 with BASE64IMAGE takes three simple steps:
-            </p>
-            <ol>
-                <li><strong>Open the <a href="/base64-image-encoder/">Image to Base64 Encoder</a></strong> — supports PNG, JPEG, GIF, SVG, and WebP formats.</li>
-                <li><strong>Upload or drag-and-drop your image</strong> — the tool reads the file locally in your browser.</li>
-                <li><strong>Copy the Base64 output</strong> — choose between the raw Base64 string or the complete data URI with MIME type prefix.</li>
-            </ol>
-            <p>
-                To reverse the process, use the <a href="/base64-image-decoder/">Base64 to Image Decoder</a> — paste any Base64 string and instantly preview and download the decoded image. You can also convert to a specific format using the <a href="/base64-to-png/">Base64 to PNG converter</a>.
-            </p>
-
-            <h2><i class="fas fa-code"></i> How Do You Use Base64 Images in HTML and CSS?</h2>
-            <p>
-                Once you've encoded an image to Base64, you can embed it directly in your code using a data URI. Here are the most common methods:
-            </p>
-            <p><strong>HTML image tag:</strong></p>
-            <pre><code>&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUh..." alt="My image"&gt;</code></pre>
-            <p><strong>CSS background image:</strong></p>
-            <pre><code>.icon {
-  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0i...');
-}</code></pre>
-            <p><strong>JavaScript image loading:</strong></p>
-            <pre><code>const img = new Image();
-img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUh...';</code></pre>
-            <p>
-                Use our <a href="/base64-embed-generator/">Base64 Embed Code Generator</a> to automatically create these code snippets from any image — just upload the file and copy the generated HTML, CSS, or Markdown code.
-            </p>
-
-            <h2><i class="fas fa-list-ul"></i> What Are Common Use Cases for Base64 Images?</h2>
-            <p>
-                Base64 image encoding serves 6 primary use cases across frontend, backend, and DevOps workflows. Each use case leverages the ability to represent binary image data as ASCII text.
-            </p>
-            <ul>
-                <li><strong>Frontend development:</strong> Embed small assets (icons, logos, sprites) to reduce page load requests and improve performance.</li>
-                <li><strong>Backend development:</strong> Decode Base64 images from API payloads, process image uploads sent as Base64 strings, and convert between formats.</li>
-                <li><strong>Quality assurance:</strong> <a href="/base64-validator/">Validate Base64 strings</a> from API responses and verify image data integrity.</li>
-                <li><strong>DevOps and debugging:</strong> Inspect <a href="/base64-hex-converter/">Base64 and HEX representations</a> of binary data, troubleshoot image encoding issues, and verify data transfers.</li>
-                <li><strong>Security and authentication:</strong> Work with <a href="/base64-url-safe/">URL-safe Base64</a> for JWT tokens, OAuth parameters, and encrypted payloads.</li>
-                <li><strong>Batch processing:</strong> Use the <a href="/base64-bulk-converter/">Bulk Base64 Converter</a> to encode multiple files at once for migration or build pipelines.</li>
-            </ul>
-        </section>
-
-        <section class="content-section">
-            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
-
-            <div class="faq-item">
-                <h3>What is Base64 encoding?</h3>
-                <p>Base64 is a binary-to-text encoding scheme that converts binary data into ASCII text format. It uses 64 characters (A-Z, a-z, 0-9, +, /) to represent binary data as text. It's commonly used to embed image data directly into HTML, CSS, JSON, or XML files without requiring separate image files.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>How do I convert an image to Base64?</h3>
-                <p>Use our free <a href="/base64-image-encoder/">Image to Base64 Encoder</a>: upload or drag-and-drop your image (PNG, JPEG, GIF, SVG, or WebP), and the tool instantly generates the Base64 string. You can then copy the raw Base64 string or the complete data URI ready to paste into your HTML or CSS.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>Are my images safe when using BASE64IMAGE?</h3>
-                <p>Yes, absolutely. All BASE64IMAGE tools run entirely in your browser using JavaScript. Your images and Base64 data never leave your device. There are no uploads to servers, no data storage, and no tracking, ensuring complete privacy and security.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>What image formats are supported?</h3>
-                <p>BASE64IMAGE supports all common image formats including PNG, JPEG, GIF, SVG, WebP, and BMP. You can also encode and decode non-image files such as PDFs, documents, and archives using our <a href="/base64-file-encoder/">file encoder</a> and <a href="/base64-file-decoder/">file decoder</a> tools.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>Why would I use Base64 instead of a regular image file?</h3>
-                <p>Base64 encoding lets you embed images directly into HTML, CSS, or JSON without extra HTTP requests. This is useful for small icons, logos, email templates, single-page applications, and API responses where you need to transmit image data as text.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3>Do I need to install anything to use BASE64IMAGE?</h3>
-                <p>No installation required. BASE64IMAGE is a web-based tool that works directly in your browser. Just visit the website and start using the tools immediately. Works on all modern browsers including Chrome, Firefox, Safari, and Edge.</p>
-            </div>
-        </section>
-    </main>`;
 ---
 <BaseLayout
-  title="Base64 Image Encoder & Decoder Online - Free Tools | BASE64IMAGE"
-  description="Convert images to Base64 online — 100% in your browser, nothing uploaded to servers. Encode, decode, and convert Base64 images free. No signup required. Try it now."
+  title="Base64 Image Encoder & Decoder — Free Tools | base64image.net"
+  description="Free, privacy-first Base64 tools. Encode images, decode strings, convert formats. Everything runs in your browser — nothing uploaded to any server."
   canonical="https://base64image.net/"
   ogType="website"
 >
   <Fragment slot="head">
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "BASE64IMAGE",
-        "url": "https://base64image.net",
-        "foundingDate": "2024",
-        "description": "Free, privacy-focused Base64 encoding and decoding tools for developers and designers. All processing happens client-side — no uploads, no data collection.",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+92-315-3079965",
-            "email": "sheeszubair@gmail.com",
-            "contactType": "technical support",
-            "availableLanguage": "English"
-        }
-    }
-        </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "BASE64IMAGE",
-        "url": "https://base64image.net",
-        "description": "Free online Base64 image tools. Encode, decode, convert, and validate Base64 images with complete privacy.",
-        "publisher": {
-            "@type": "Organization",
-            "name": "BASE64IMAGE",
-            "url": "https://base64image.net"
-        }
-    }
-        </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "BASE64IMAGE",
-        "url": "https://base64image.net",
-        "applicationCategory": "UtilitiesApplication",
-        "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
-        },
-        "operatingSystem": "Any",
-        "description": "Free, privacy-focused Base64 image tools for encoding, decoding, converting, and validating Base64 images. All processing happens locally in your browser.",
-        "browserRequirements": "Requires JavaScript",
-        "featureList": [
-            "Base64 Image Encoder",
-            "Base64 Image Decoder",
-            "Base64 Text Encoder",
-            "Base64 Text Decoder",
-            "Base64 File Encoder",
-            "Base64 File Decoder",
-            "Base64 to PNG Converter",
-            "Base64 to JPEG Converter",
-            "Base64 to WebP Converter",
-            "Base64 to GIF Converter",
-            "Base64 to SVG Converter",
-            "Base64 to PDF Converter",
-            "PNG to Base64 Converter",
-            "JPEG to Base64 Converter",
-            "SVG to Base64 Converter",
-            "Base64 Validator",
-            "Base64 Size Calculator",
-            "URL-Safe Base64 Encoder/Decoder",
-            "Base64 to HEX Converter",
-            "Base64 Embed Code Generator",
-            "Bulk Base64 Converter",
-            "Base32 Encoder/Decoder",
-            "ASCII to Base64 Converter",
-            "Client-side Processing",
-            "No Data Upload",
-            "Privacy-First"
-        ]
-    }
-        </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [{
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": "https://base64image.net/"
-        }]
-    }
-        </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [{
-            "@type": "Question",
-            "name": "What is Base64 encoding?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Base64 is a binary-to-text encoding scheme that converts binary data into ASCII text format. It uses 64 characters (A-Z, a-z, 0-9, +, /) to represent binary data as text. It's commonly used to embed image data directly into HTML, CSS, JSON, or XML files without requiring separate image files."
-            }
-        }, {
-            "@type": "Question",
-            "name": "How do I convert an image to Base64?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Use our free Image to Base64 Encoder: upload or drag-and-drop your image (PNG, JPEG, GIF, SVG, or WebP), and the tool instantly generates the Base64 string. You can then copy the raw Base64 string or the complete data URI ready to paste into your HTML or CSS."
-            }
-        }, {
-            "@type": "Question",
-            "name": "Are my images safe when using BASE64IMAGE?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Yes, absolutely. All BASE64IMAGE tools run entirely in your browser using JavaScript. Your images and Base64 data never leave your device. There are no uploads to servers, no data storage, and no tracking, ensuring complete privacy and security."
-            }
-        }, {
-            "@type": "Question",
-            "name": "What image formats are supported?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "BASE64IMAGE supports all common image formats including PNG, JPEG, GIF, SVG, WebP, and BMP. You can also encode and decode non-image files such as PDFs, documents, and archives using our file encoder and decoder tools."
-            }
-        }, {
-            "@type": "Question",
-            "name": "Why would I use Base64 instead of a regular image file?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Base64 encoding lets you embed images directly into HTML, CSS, or JSON without extra HTTP requests. This is useful for small icons, logos, email templates, single-page applications, and API responses where you need to transmit image data as text."
-            }
-        }, {
-            "@type": "Question",
-            "name": "Do I need to install anything to use BASE64IMAGE?",
-            "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "No installation required. BASE64IMAGE is a web-based tool that works directly in your browser. Just visit the website and start using the tools immediately. Works on all modern browsers including Chrome, Firefox, Safari, and Edge."
-            }
-        }]
-    }
-        </script>
+    <script type="application/ld+json">{
+      "@context": "https://schema.org", "@type": "WebSite",
+      "name": "BASE64IMAGE", "url": "https://base64image.net",
+      "publisher": { "@type": "Organization", "name": "BASE64IMAGE" }
+    }</script>
   </Fragment>
-  <Fragment set:html={mainHtml} />
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="pill"><span class="pulse"></span>Free</span>
+          Privacy-first · Client-side · No account
+        </div>
+        <h1>Base64 tools<br><span class="grad">built for devs</span></h1>
+        <p class="lede">Encode, decode, and convert Base64 in your browser. Nothing leaves your machine — no uploads, no tracking, no friction.</p>
+        <div class="hero-meta">
+          <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Zero server round-trips</span>
+          <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>40+ tools</span>
+          <span class="item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Open source</span>
+        </div>
+      </div>
+      <!-- Quick encoder card -->
+      <div class="converter">
+        <div class="converter-head">
+          <div class="traffic"><span></span><span></span><span></span></div>
+          <span class="title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg><b>base64_encode</b></span>
+          <span class="badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--mint);display:inline-block"></span>LIVE</span>
+        </div>
+        <div class="dropzone">
+          <label class="dropzone-inner" for="heroInput" id="heroDropzone">
+            <div class="dropzone-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <p>Drop an image or <span>click to browse</span></p>
+            <small>PNG · JPEG · SVG · WebP · GIF · any format</small>
+            <input type="file" id="heroInput" accept="image/*">
+          </label>
+        </div>
+        <div class="preview-row" id="heroPreviewRow" style="display:none">
+          <div class="preview-thumb"><img id="heroThumb" alt="preview"></div>
+          <div class="preview-meta">
+            <span class="name" id="heroName">—</span>
+            <div class="row">
+              <span><span class="k">size</span> <span class="v" id="heroSize">—</span></span>
+              <span class="size-arrow">→</span>
+              <span><span class="k">b64</span> <span class="v" id="heroB64Size">—</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="code-out" id="heroCodeOut" style="display:none">
+          <div class="code-tabs">
+            <button class="active" id="tabDataUri">data URI</button>
+            <button id="tabRaw">raw Base64</button>
+          </div>
+          <div class="code-body" id="heroCode"><em>// encoded output appears here</em></div>
+          <div class="code-actions">
+            <button class="btn primary" id="heroCopy">Copy</button>
+            <button class="btn" id="heroClear">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="trust-inner">
+      <div class="trust-cell">
+        <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="lbl">100% Client-side</div><div class="sub">atob() · btoa() · FileReader</div></div>
+      </div>
+      <div class="trust-cell">
+        <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="lbl">Instant results</div><div class="sub">No round-trips, no waiting</div></div>
+      </div>
+      <div class="trust-cell">
+        <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><div class="lbl">40+ tools</div><div class="sub">Encode · decode · convert</div></div>
+      </div>
+      <div class="trust-cell">
+        <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></div>
+        <div><div class="lbl">Open source</div><div class="sub">MIT · GitHub</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS BENTO -->
+  <section class="section">
+    <div class="section-head">
+      <div class="left">
+        <div class="eyebrow"><span class="num">01</span><span class="bar"></span>ALL TOOLS</div>
+        <h2>Everything you need<br>for Base64</h2>
+        <p>Encoders, decoders, converters, validators — every workflow covered.</p>
+      </div>
+    </div>
+    <div class="bento">
+      <a href="/base64-image-encoder/" class="tile feat" style="--c:var(--cat-encode)">
+        <div class="top">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        </div>
+        <h3>Image to Base64</h3>
+        <p>Drag-and-drop any image. Get a data URI ready to paste into HTML, CSS, or JSON.</p>
+        <div class="demo"><span style="color:var(--cat-encode)">data:</span>image/png;base64,<span style="color:var(--fg-soft)">iVBORw0KGgoAAAA…</span></div>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Encoder</span></div>
+        <div class="glyph">B64</div>
+      </a>
+      <a href="/base64-image-decoder/" class="tile feat" style="--c:var(--cat-decode)">
+        <div class="top">
+          <div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+          <div class="arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div>
+        </div>
+        <h3>Base64 to Image</h3>
+        <p>Paste any Base64 string. Preview and download the decoded image instantly.</p>
+        <div class="demo"><span style="color:var(--fg-soft)">iVBORw0KGgoAAAA…</span><span style="color:var(--cat-decode);margin:0 6px">→</span><span style="color:var(--cat-decode)">image.png</span></div>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Decoder</span></div>
+        <div class="glyph">↓</div>
+      </a>
+      <a href="/base64-text-encoder/" class="tile span-3" style="--c:var(--cat-encode)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Text → Base64</h3><p>Encode any UTF-8 text. Standard or URL-safe.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Encoder</span></div>
+      </a>
+      <a href="/base64-file-encoder/" class="tile span-3" style="--c:var(--cat-encode)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>File → Base64</h3><p>Any file type — PDF, ZIP, font, binary.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Encoder</span></div>
+      </a>
+      <a href="/base64-text-decoder/" class="tile span-3" style="--c:var(--cat-decode)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Base64 → Text</h3><p>Decode JWT tokens, API headers, config values.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Decoder</span></div>
+      </a>
+      <a href="/base64-file-decoder/" class="tile span-3" style="--c:var(--cat-decode)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Base64 → File</h3><p>Recover original files from Base64 strings.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Decoder</span></div>
+      </a>
+      <a href="/base64-to-png/" class="tile span-4" style="--c:var(--cat-convert)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Base64 → PNG</h3><p>Decode and export as lossless PNG.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Converter</span></div>
+      </a>
+      <a href="/base64-to-jpeg/" class="tile span-4" style="--c:var(--cat-convert)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Base64 → JPEG</h3><p>Convert with adjustable quality.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Converter</span></div>
+      </a>
+      <a href="/base64-to-webp/" class="tile span-4" style="--c:var(--cat-convert)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Base64 → WebP</h3><p>Modern format, smaller file sizes.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Converter</span></div>
+      </a>
+      <a href="/base64-validator/" class="tile span-3" style="--c:var(--cat-tools)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Validator</h3><p>Check if a string is valid Base64.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Utility</span></div>
+      </a>
+      <a href="/base64-size-calculator/" class="tile span-3" style="--c:var(--cat-tools)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Size Calculator</h3><p>Calculate encoded output size before embedding.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Utility</span></div>
+      </a>
+      <a href="/base64-embed-generator/" class="tile span-3" style="--c:var(--cat-tools)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>Embed Generator</h3><p>Get HTML/CSS embed code in one click.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Utility</span></div>
+      </a>
+      <a href="/what-is-base64/" class="tile span-3" style="--c:var(--cat-learn)">
+        <div class="top"><div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></div></div>
+        <h3>What is Base64?</h3><p>Complete guide to Base64 encoding and RFC 4648.</p>
+        <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Reference</span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how">
+    <div class="how-inner">
+      <div class="section-head">
+        <div class="left">
+          <div class="eyebrow"><span class="num">02</span><span class="bar"></span>HOW IT WORKS</div>
+          <h2>Zero server contact.<br>By design.</h2>
+          <p>Every operation runs on native browser APIs. Your data never leaves the tab.</p>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow-step">
+          <span class="num">01</span>
+          <h4>You provide input</h4>
+          <p>Drop a file, paste a string, or upload an image. It stays local.</p>
+          <pre><code><span class="punct">const</span> file = input.files[0];</code></pre>
+        </div>
+        <div class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        <div class="flow-step">
+          <span class="num">02</span>
+          <h4>Browser API encodes</h4>
+          <p>FileReader, atob/btoa, and Canvas handle encoding — built into every browser.</p>
+          <pre><code><span class="punct">const</span> b64 = btoa(binary);</code></pre>
+        </div>
+        <div class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        <div class="flow-step">
+          <span class="num">03</span>
+          <h4>Output is yours</h4>
+          <p>Copy the string, download the file. Zero network requests made.</p>
+          <pre><code><span class="key">// no uploads. ever.</span></code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" style="padding-top:48px">
+    <div class="section-head">
+      <div class="left">
+        <div class="eyebrow"><span class="num">03</span><span class="bar"></span>FAQ</div>
+        <h2>Common questions</h2>
+      </div>
+    </div>
+    <div class="faq-grid">
+      <details class="faq-item">
+        <summary>Is my data really private?<span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="a">Yes. Open DevTools → Network while using any tool — you will see zero POST requests. All operations use <code>FileReader</code>, <code>atob()</code>/<code>btoa()</code>, and <code>Canvas</code> — browser APIs that never hit a network.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What is Base64 encoding?<span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="a">Base64 converts binary data into ASCII text using 64 printable characters. It is used to embed images in HTML/CSS, transmit files in JSON APIs, and encode email attachments. The encoding adds ~33% size overhead. <a href="/what-is-base64/">Full guide</a></div>
+      </details>
+      <details class="faq-item">
+        <summary>How do I embed an image in CSS?<span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="a">Encode your image with the <a href="/base64-image-encoder/">Image Encoder</a>, then use: <code>background-image: url('data:image/png;base64,…')</code>. The <a href="/base64-embed-generator/">Embed Generator</a> produces ready-to-paste CSS rules automatically.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Standard vs URL-safe Base64?<span class="ic"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></summary>
+        <div class="a">Standard Base64 uses <code>+</code> and <code>/</code> which break in URLs. URL-safe Base64 (RFC 4648 §5) replaces them with <code>-</code> and <code>_</code>, making it safe for query strings and JWT tokens. Use the <a href="/base64-url-safe/">URL-Safe Encoder</a>.</div>
+      </details>
+    </div>
+  </section>
+
+  <script is:inline>
+  (function(){
+    var inp=document.getElementById('heroInput'),dz=document.getElementById('heroDropzone'),
+        pr=document.getElementById('heroPreviewRow'),co=document.getElementById('heroCodeOut'),
+        th=document.getElementById('heroThumb'),nm=document.getElementById('heroName'),
+        sz=document.getElementById('heroSize'),b6=document.getElementById('heroB64Size'),
+        cd=document.getElementById('heroCode'),cp=document.getElementById('heroCopy'),
+        cl=document.getElementById('heroClear'),tu=document.getElementById('tabDataUri'),
+        tr=document.getElementById('tabRaw'),_uri='',_raw='',_mode='uri';
+    function fmt(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB';}
+    function process(f){var r=new FileReader();r.onload=function(e){_uri=e.target.result;var c=_uri.indexOf(',');_raw=_uri.slice(c+1);th.src=_uri;nm.textContent=f.name;sz.textContent=fmt(f.size);b6.textContent=fmt(_uri.length);upd();pr.style.display='grid';co.style.display='block';};r.readAsDataURL(f);}
+    function upd(){cd.textContent=_mode==='uri'?_uri:_raw;}
+    inp.addEventListener('change',function(){if(this.files[0])process(this.files[0]);});
+    dz.addEventListener('dragover',function(e){e.preventDefault();this.classList.add('is-drag');});
+    dz.addEventListener('dragleave',function(){this.classList.remove('is-drag');});
+    dz.addEventListener('drop',function(e){e.preventDefault();this.classList.remove('is-drag');var f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))process(f);});
+    tu.addEventListener('click',function(){_mode='uri';tu.classList.add('active');tr.classList.remove('active');upd();});
+    tr.addEventListener('click',function(){_mode='raw';tr.classList.add('active');tu.classList.remove('active');upd();});
+    cp.addEventListener('click',function(){navigator.clipboard.writeText(_mode==='uri'?_uri:_raw).then(function(){cp.textContent='Copied!';setTimeout(function(){cp.textContent='Copy';},1500);});});
+    cl.addEventListener('click',function(){_uri='';_raw='';inp.value='';pr.style.display='none';co.style.display='none';th.src='';});
+  })();
+  </script>
 </BaseLayout>

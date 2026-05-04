@@ -1,0 +1,31 @@
+---
+import BaseLayout from './BaseLayout.astro';
+const { title, description, canonical, h1, mono, lede, tag = 'encode', tagLabel, breadcrumbs = [] } = Astro.props;
+---
+<BaseLayout title={title} description={description} canonical={canonical}>
+  <slot name="head" slot="head" />
+  <main class="page">
+    <nav class="breadcrumbs">
+      {breadcrumbs.map((b, i) => (
+        <>
+          {i < breadcrumbs.length - 1
+            ? <a href={b.href}>{b.label}</a>
+            : <span class="current">{b.label}</span>}
+          {i < breadcrumbs.length - 1 && <span class="sep">/</span>}
+        </>
+      ))}
+    </nav>
+    <header class="page-head">
+      <div>
+        <div class="tag-row"><span class={`tag ${tag}`}><span class="dot" style="width:6px;height:6px;border-radius:50%;background:currentColor"></span>{tagLabel || tag}</span></div>
+        <h1>{h1}{mono && <span class="mono">{' '}{mono}</span>}</h1>
+        {lede && <p class="lede">{lede}</p>}
+      </div>
+      <div class="meta">
+        <span class="item">🛡 100% client-side</span>
+        <span class="item">⚡ Instant</span>
+      </div>
+    </header>
+    <slot />
+  </main>
+</BaseLayout>

@@ -17,68 +17,74 @@ const year = new Date().getFullYear();
   <meta property="og:description" content={description}>
   <meta property="og:url" content={canonical}>
   <meta property="og:site_name" content="BASE64IMAGE">
-
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content={title}>
   <meta name="twitter:description" content={description}>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome kept for legacy page icons during transition -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <link rel="stylesheet" href="/assets/style.css">
 
-  <!-- Google Analytics -->
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/style-pages.css">
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
-  <script>
+  <script is:inline>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-R2ZZ9P0P25');
   </script>
 
-  <!-- Page-specific head content (structured data, Alpine.js, etc.) -->
   <slot name="head" />
 </head>
 <body>
 
   <header class="site-header">
     <div class="header-container">
-      <a href="/" class="logo"><i class="fas fa-image"></i> BASE64IMAGE</a>
+      <a href="/" class="logo">
+        <span class="logo-mark">B64</span>
+        <span class="logo-text">base64image<span class="dot">.net</span></span>
+      </a>
       <button class="mobile-menu-toggle" aria-label="Toggle menu">
-        <i class="fas fa-bars"></i>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       <nav class="main-nav">
         <ul>
-          <li><a href="/">Home</a></li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Encoders <i class="fas fa-chevron-down"></i></a>
+            <a href="#" class="nav-link dropdown-toggle">Encoders <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-text-encoder/">Text to Base64</a></li>
-              <li><a href="/base64-file-encoder/">File to Base64</a></li>
-              <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+              <li><a href="/base64-text-encoder/"><span class="dot" style="color:var(--cat-encode)"></span>Text → Base64</a></li>
+              <li><a href="/base64-file-encoder/"><span class="dot" style="color:var(--cat-encode)"></span>File → Base64</a></li>
+              <li><a href="/base64-image-encoder/"><span class="dot" style="color:var(--cat-encode)"></span>Image → Base64</a></li>
             </ul>
           </li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Decoders <i class="fas fa-chevron-down"></i></a>
+            <a href="#" class="nav-link dropdown-toggle">Decoders <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
-              <li><a href="/base64-file-decoder/">Base64 to File</a></li>
-              <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
+              <li><a href="/base64-text-decoder/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 → Text</a></li>
+              <li><a href="/base64-file-decoder/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 → File</a></li>
+              <li><a href="/base64-image-decoder/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 → Image</a></li>
             </ul>
           </li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Converters <i class="fas fa-chevron-down"></i></a>
+            <a href="#" class="nav-link dropdown-toggle">Convert <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-to-png/">Base64 to PNG</a></li>
-              <li><a href="/base64-to-jpeg/">Base64 to JPEG</a></li>
-              <li><a href="/base64-to-svg/">Base64 to SVG</a></li>
-              <li><a href="/base64-to-webp/">Base64 to WebP</a></li>
-              <li><a href="/base64-to-gif/">Base64 to GIF</a></li>
-              <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+              <li><a href="/base64-to-png/">Base64 → PNG</a></li>
+              <li><a href="/base64-to-jpeg/">Base64 → JPEG</a></li>
+              <li><a href="/base64-to-svg/">Base64 → SVG</a></li>
+              <li><a href="/base64-to-webp/">Base64 → WebP</a></li>
+              <li><a href="/base64-to-gif/">Base64 → GIF</a></li>
+              <li><a href="/base64-to-pdf/">Base64 → PDF</a></li>
               <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
             </ul>
           </li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Tools <i class="fas fa-chevron-down"></i></a>
+            <a href="#" class="nav-link dropdown-toggle">Tools <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
               <li><a href="/base64-validator/">Validator</a></li>
               <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
@@ -89,7 +95,7 @@ const year = new Date().getFullYear();
             </ul>
           </li>
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Learn <i class="fas fa-chevron-down"></i></a>
+            <a href="#" class="nav-link dropdown-toggle">Learn <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
               <li><a href="/what-is-base64/">What is Base64?</a></li>
               <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
@@ -101,158 +107,101 @@ const year = new Date().getFullYear();
         </ul>
       </nav>
     </div>
-    <div class="mobile-menu-overlay"></div>
   </header>
 
-  <!-- Page content -->
   <slot />
 
   <footer class="site-footer">
     <div class="footer-container">
-      <div class="footer-grid">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="/" class="logo">
+            <span class="logo-mark">B64</span>
+            <span class="logo-text">base64image<span class="dot">.net</span></span>
+          </a>
+          <p>Free, open, privacy-first Base64 toolkit for developers and designers. Everything runs in your browser — nothing touches a server.</p>
+          <div class="status"><span class="dot"></span> All systems operational · {year}</div>
+        </div>
         <div class="footer-section">
-          <h3>Encoders</h3>
+          <h3>Encode</h3>
           <ul>
-            <li><a href="/base64-text-encoder/">Text to Base64</a></li>
-            <li><a href="/base64-file-encoder/">File to Base64</a></li>
-            <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+            <li><a href="/base64-text-encoder/">Text → Base64</a></li>
+            <li><a href="/base64-file-encoder/">File → Base64</a></li>
+            <li><a href="/base64-image-encoder/">Image → Base64</a></li>
+            <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
           </ul>
         </div>
         <div class="footer-section">
-          <h3>Decoders</h3>
+          <h3>Decode &amp; Convert</h3>
           <ul>
-            <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
-            <li><a href="/base64-file-decoder/">Base64 to File</a></li>
-            <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Converters</h3>
-          <ul>
-            <li><a href="/base64-to-png/">Base64 to PNG</a></li>
-            <li><a href="/base64-to-jpeg/">Base64 to JPEG</a></li>
-            <li><a href="/base64-to-svg/">Base64 to SVG</a></li>
-            <li><a href="/base64-to-webp/">Base64 to WebP</a></li>
-            <li><a href="/base64-to-gif/">Base64 to GIF</a></li>
-            <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+            <li><a href="/base64-image-decoder/">Base64 → Image</a></li>
+            <li><a href="/base64-text-decoder/">Base64 → Text</a></li>
+            <li><a href="/base64-to-png/">Base64 → PNG</a></li>
             <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
           </ul>
         </div>
         <div class="footer-section">
-          <h3>Tools & Utilities</h3>
-          <ul>
-            <li><a href="/base64-validator/">Validator</a></li>
-            <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
-            <li><a href="/base64-embed-generator/">Embed Generator</a></li>
-            <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
-            <li><a href="/base64-size-calculator/">Size Calculator</a></li>
-            <li><a href="/base32-encoder-decoder/">Base32 Encoder</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Learn</h3>
+          <h3>Reference</h3>
           <ul>
             <li><a href="/what-is-base64/">What is Base64?</a></li>
-            <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
+            <li><a href="/base64-algorithm/">Algorithm</a></li>
             <li><a href="/base64-character-table/">Character Table</a></li>
             <li><a href="/data-uri-guide/">Data URI Guide</a></li>
-            <li><a href="/base64-vs-binary/">Base64 vs Binary</a></li>
-            <li><a href="/base64-mime-types/">MIME Types</a></li>
           </ul>
         </div>
         <div class="footer-section">
-          <h3>Developer Guides</h3>
+          <h3>Company</h3>
           <ul>
-            <li><a href="/base64-javascript/">Base64 in JavaScript</a></li>
-            <li><a href="/base64-python/">Base64 in Python</a></li>
-            <li><a href="/base64-java/">Base64 in Java</a></li>
-            <li><a href="/base64-php/">Base64 in PHP</a></li>
-            <li><a href="/base64-csharp/">Base64 in C#</a></li>
-            <li><a href="/base64-go/">Base64 in Go</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Information</h3>
-          <ul>
-            <li><a href="/about/">About Us</a></li>
+            <li><a href="/about/">About</a></li>
             <li><a href="/contact/">Contact</a></li>
-            <li><a href="/privacy-policy/">Privacy Policy</a></li>
-            <li><a href="/terms-of-service/">Terms of Service</a></li>
+            <li><a href="/privacy-policy/">Privacy</a></li>
+            <li><a href="/terms-of-service/">Terms</a></li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="footer-copyright">&copy; {year} BASE64IMAGE. All tools run locally in your browser.</p>
+        <span>© {year} base64image.net — runs locally in your browser</span>
+        <span class="links">
+          <a href="/privacy-policy/">Privacy</a>
+          <a href="/terms-of-service/">Terms</a>
+          <a href="/contact/">Contact</a>
+        </span>
       </div>
     </div>
   </footer>
 
-  <script>
-    // Mobile menu
-    const menuToggle = document.querySelector('.mobile-menu-toggle');
-    const mainNav = document.querySelector('.main-nav');
-    const menuOverlay = document.querySelector('.mobile-menu-overlay');
-
-    if (menuToggle && mainNav && menuOverlay) {
-      menuToggle.addEventListener('click', e => {
-        e.stopPropagation();
-        mainNav.classList.toggle('active');
-        menuOverlay.classList.toggle('active');
-        const icon = menuToggle.querySelector('i');
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-      });
-      menuOverlay.addEventListener('click', () => {
-        mainNav.classList.remove('active');
-        menuOverlay.classList.remove('active');
-        const icon = menuToggle.querySelector('i');
-        icon.classList.replace('fa-times', 'fa-bars');
-      });
-      document.querySelectorAll('.main-nav a').forEach(link => {
-        link.addEventListener('click', () => {
-          if (window.innerWidth <= 768) {
-            mainNav.classList.remove('active');
-            menuOverlay.classList.remove('active');
-            const icon = menuToggle.querySelector('i');
-            icon.classList.replace('fa-times', 'fa-bars');
-          }
-        });
-      });
-    }
-
-    // Dropdowns
+  <script is:inline>
     const dropdowns = document.querySelectorAll('.dropdown');
-    dropdowns.forEach(dropdown => {
-      const toggle = dropdown.querySelector('.dropdown-toggle');
-      dropdown.addEventListener('mouseenter', () => {
-        if (window.innerWidth > 768) dropdown.classList.add('active');
-      });
-      dropdown.addEventListener('mouseleave', () => {
-        if (window.innerWidth > 768) dropdown.classList.remove('active');
-      });
-      toggle.addEventListener('click', e => {
+    dropdowns.forEach(d => {
+      const toggle = d.querySelector('.dropdown-toggle');
+      d.addEventListener('mouseenter', () => { if (innerWidth > 768) d.classList.add('active'); });
+      d.addEventListener('mouseleave', () => { if (innerWidth > 768) d.classList.remove('active'); });
+      toggle?.addEventListener('click', e => {
         e.preventDefault();
-        e.stopPropagation();
-        if (window.innerWidth <= 768) {
-          dropdowns.forEach(d => { if (d !== dropdown) d.classList.remove('active'); });
-          dropdown.classList.toggle('active');
+        if (innerWidth <= 768) {
+          dropdowns.forEach(o => { if (o !== d) o.classList.remove('active'); });
+          d.classList.toggle('active');
         }
       });
     });
     document.addEventListener('click', e => {
-      if (!e.target.closest('.dropdown')) {
-        dropdowns.forEach(d => d.classList.remove('active'));
-      }
+      if (!e.target.closest('.dropdown')) dropdowns.forEach(d => d.classList.remove('active'));
     });
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) {
-        mainNav?.classList.remove('active');
-        menuOverlay?.classList.remove('active');
-        const icon = menuToggle?.querySelector('i');
-        icon?.classList.replace('fa-times', 'fa-bars');
-      }
-    });
-  </script>
+    const mt = document.querySelector('.mobile-menu-toggle');
+    const nav = document.querySelector('.main-nav');
+    mt?.addEventListener('click', () => nav.classList.toggle('open'));
 
+    const tocLinks = document.querySelectorAll('.toc a');
+    if (tocLinks.length) {
+      const targets = [...tocLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting)
+            tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id));
+        });
+      }, { rootMargin: '-20% 0px -70% 0px' });
+      targets.forEach(t => io.observe(t));
+    }
+  </script>
 </body>
 </html>
