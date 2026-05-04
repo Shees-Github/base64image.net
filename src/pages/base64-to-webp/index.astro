@@ -1,0 +1,264 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="base64ToWebp()">
+        <h1><i class="fas fa-file-image"></i> Base64 to WebP Converter</h1>
+        <p class="intro">Convert Base64 strings to optimized WebP images</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="decodeImage"
+                    placeholder="Paste your Base64 string here..."
+                    rows="6"
+                ></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+                <div class="error" x-show="warning" x-text="warning" style="color: #f59e0b;"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="qualitySlider">WebP Quality: <strong x-text="quality"></strong></label>
+                <input
+                    type="range"
+                    id="qualitySlider"
+                    x-model="quality"
+                    @input="decodeImage"
+                    min="0.1"
+                    max="1.0"
+                    step="0.01"
+                    style="width: 100%;"
+                >
+                <small>0.1 = smallest file size &nbsp;|&nbsp; 0.90 = recommended &nbsp;|&nbsp; 1.0 = lossless quality</small>
+            </div>
+
+            <div class="actions">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+
+            <div class="preview-container" x-show="imageUrl">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imageUrl" alt="Converted WebP preview" x-show="imageUrl">
+                </div>
+                <div class="image-info" x-show="imageInfo">
+                    <p><strong>Original Format:</strong> <span x-text="imageInfo.originalFormat"></span></p>
+                    <p><strong>Output Format:</strong> WebP</p>
+                    <p><strong>Quality:</strong> <span x-text="imageInfo.quality"></span></p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                </div>
+                <button @click="downloadWebp" class="btn-primary">Download WebP</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What Is Base64 to WebP Conversion?</h2>
+            <p>
+                Base64 to WebP conversion decodes a Base64-encoded string and re-encodes the pixel data as a WebP image file using the browser Canvas API. WebP is a modern image format developed by Google that provides superior compression for both lossy and lossless images. At equivalent visual quality, WebP files are 25-35% smaller than JPEG and up to 26% smaller than PNG. This tool handles the entire conversion client-side with no server uploads.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Why Convert to WebP Format?</h2>
+            <p>
+                WebP reduces image file sizes by 25-35% compared to JPEG at equivalent visual quality. Google developed WebP specifically for the web, and it supports both lossy compression (like JPEG) and lossless compression (like PNG) in a single format. WebP also supports alpha channel transparency, which JPEG lacks, making it a universal replacement for both JPEG and PNG in most web contexts. Smaller file sizes translate directly to faster page loads and lower bandwidth costs. For lossless output, use the <a href="/base64-to-png/">Base64 to PNG converter</a>.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does the WebP Converter Work?</h2>
+            <p>
+                The converter follows 4 steps. First, it strips any data URI prefix and validates the Base64 characters. Second, it decodes the Base64 string and loads the image data into an HTML Image element. Third, it draws the image onto an invisible Canvas element preserving transparency. Fourth, it calls <code>canvas.toDataURL('image/webp', quality)</code> to produce WebP output at the selected quality level. The tool verifies that your browser supports WebP encoding and displays a warning if it does not.
+            </p>
+
+            <h2><i class="fas fa-table"></i> How Does WebP Compare to JPEG and PNG?</h2>
+            <p>
+                WebP combines the strengths of JPEG and PNG into a single format. The following table compares WebP against JPEG and PNG across 5 criteria to help you choose the right format for your use case.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>WebP</th>
+                        <th>JPEG</th>
+                        <th>PNG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Compression</td>
+                        <td>Lossy and lossless</td>
+                        <td>Lossy only</td>
+                        <td>Lossless only</td>
+                    </tr>
+                    <tr>
+                        <td>Transparency</td>
+                        <td>Full alpha channel</td>
+                        <td>Not supported</td>
+                        <td>Full alpha channel</td>
+                    </tr>
+                    <tr>
+                        <td>Animation</td>
+                        <td>Supported</td>
+                        <td>Not supported</td>
+                        <td>APNG (limited)</td>
+                    </tr>
+                    <tr>
+                        <td>Browser Support</td>
+                        <td>97%+ global</td>
+                        <td>100% global</td>
+                        <td>100% global</td>
+                    </tr>
+                    <tr>
+                        <td>File Size (photo)</td>
+                        <td>25-35% smaller than JPEG</td>
+                        <td>Baseline</td>
+                        <td>2-5x larger than JPEG</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><i class="fas fa-globe"></i> What Browsers Support WebP?</h2>
+            <p>
+                WebP has broad browser support across all major platforms. Chrome added WebP support in version 17 (2012). Firefox added support in version 65 (2019). Edge supports WebP from version 18. Safari added WebP support in version 14 with macOS Big Sur and iOS 14 (2020). Opera has supported WebP since version 11.10. Combined, these browsers represent over 97% of global web traffic. If your browser does not support WebP encoding via the Canvas API, this tool will display a compatibility warning. For universal compatibility, consider using <a href="/base64-to-jpeg/">JPEG</a> or <a href="/base64-to-png/">PNG</a> format instead.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>Which browsers support WebP format?</h3>
+                <p>
+                    WebP is supported by Chrome 17+, Firefox 65+, Edge 18+, Safari 14+ (macOS Big Sur), and Opera 11.10+. As of 2024, WebP has over 97% global browser support. If your browser does not support WebP encoding, this tool will display a warning.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>What quality setting is best for WebP?</h3>
+                <p>
+                    A quality of 0.80 to 0.90 is optimal for most web use cases. WebP achieves better compression than JPEG at equivalent visual quality, so a WebP at 0.80 quality often looks as good as a JPEG at 0.92. Use 1.0 for lossless WebP output.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does WebP support animation?</h3>
+                <p>
+                    Yes. WebP supports animation similar to GIF but with much better compression and full 24-bit color depth. However, this converter produces single-frame WebP images. For animated WebP, the source Base64 data must already contain an animated WebP sequence.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does WebP support transparency?</h3>
+                <p>
+                    Yes. WebP supports full alpha channel transparency in both lossy and lossless modes. This makes WebP a versatile replacement for both JPEG and PNG, often at smaller file sizes than either format.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is this tool safe for sensitive images?</h3>
+                <p>
+                    Yes. All conversion happens locally in your browser using the Canvas API. Your Base64 data and images never leave your device. No data is uploaded to any server. Learn more about <a href="/what-is-base64/">what Base64 encoding is</a> and how it works.
+                </p>
+            </div>
+
+            <p>
+                Related tools: <a href="/base64-to-png/">Base64 to PNG</a> | <a href="/base64-to-jpeg/">Base64 to JPEG</a> | <a href="/base64-image-decoder/">Base64 Image Decoder</a> | <a href="/base64-image-encoder/">Base64 Image Encoder</a> | <a href="/what-is-base64/">What Is Base64?</a>
+            </p>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 to WebP Converter - Convert Base64 to WebP Image Online"
+  description="Free online Base64 to WebP converter. Paste your Base64 string and convert it to WebP format with adjustable quality. Download optimized WebP images for the web."
+  canonical="https://base64image.net/base64-to-webp/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert Base64 to WebP",
+        "description": "Step-by-step guide to convert Base64 strings to WebP images online with adjustable quality",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Copy your Base64 string and paste it into the text area. The data:image prefix is optional."
+        }, {
+            "@type": "HowToStep",
+            "name": "Adjust WebP Quality",
+            "text": "Use the quality slider to set compression level from 0.1 (smallest file) to 1.0 (highest quality). Default is 0.90."
+        }, {
+            "@type": "HowToStep",
+            "name": "Preview WebP Image",
+            "text": "View the converted WebP image in the preview section along with file size and quality information."
+        }, {
+            "@type": "HowToStep",
+            "name": "Download WebP",
+            "text": "Click the 'Download WebP' button to save the image as a .webp file to your device."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to WebP Converter",
+            "item": "https://base64image.net/base64-to-webp/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Which browsers support WebP format?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "WebP is supported by Chrome 17+, Firefox 65+, Edge 18+, Safari 14+ (macOS Big Sur), and Opera 11.10+. As of 2024, WebP has over 97% global browser support. If your browser does not support WebP encoding, this tool will display a warning."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What quality setting is best for WebP?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A quality of 0.80 to 0.90 is optimal for most web use cases. WebP achieves better compression than JPEG at equivalent visual quality, so a WebP at 0.80 quality often looks as good as a JPEG at 0.92. Use 1.0 for lossless WebP output."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does WebP support animation?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. WebP supports animation similar to GIF but with much better compression and color depth. However, this converter produces single-frame WebP images. For animated WebP, the source Base64 data must already contain an animated WebP sequence."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does WebP support transparency?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. WebP supports full alpha channel transparency in both lossy and lossless modes. This makes WebP a versatile replacement for both JPEG (lossy, no transparency) and PNG (lossless, with transparency), often at smaller file sizes than either."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is this tool safe for sensitive images?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All conversion happens locally in your browser using the Canvas API. Your Base64 data and images never leave your device. No data is uploaded to any server."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

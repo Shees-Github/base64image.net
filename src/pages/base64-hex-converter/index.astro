@@ -1,0 +1,245 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main>
+        <h1><i class="fas fa-code"></i> Base64 to HEX Converter</h1>
+
+        <p class="intro">
+            Convert between Base64 and hexadecimal (HEX) formats. Essential for developers working with binary data, cryptography, and low-level programming.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div class="tool-section" x-data="base64HexConverter()">
+            <div class="input-group">
+                <label for="input"><i class="fas fa-keyboard"></i> Input</label>
+                <textarea
+                    id="input"
+                    x-model="input"
+                    rows="8"
+                    placeholder="Enter Base64 or HEX string..."
+                ></textarea>
+            </div>
+
+            <div class="actions">
+                <button @click="base64ToHex" class="btn-primary">
+                    <i class="fas fa-arrow-right"></i> Base64 to HEX
+                </button>
+                <button @click="hexToBase64" class="btn-primary">
+                    <i class="fas fa-arrow-left"></i> HEX to Base64
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+            <div x-show="success" class="success" x-text="success"></div>
+
+            <div x-show="output" class="input-group">
+                <label for="output"><i class="fas fa-file-code"></i> Output</label>
+                <textarea
+                    id="output"
+                    x-model="output"
+                    rows="8"
+                    readonly
+                ></textarea>
+                <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                    <strong>Length:</strong> <span x-text="outputLength"></span> characters
+                </div>
+                <div class="actions">
+                    <button @click="copyToClipboard" class="btn-secondary">
+                        <i class="fas fa-copy"></i> <span x-text="copySuccess ? 'Copied!' : 'Copy to Clipboard'"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is HEX (Hexadecimal)?</h2>
+            <p>
+                Hexadecimal (HEX) is a base-16 numbering system that represents binary data using 16 symbols: <code>0-9</code> and <code>A-F</code>. Each HEX digit encodes exactly 4 bits. Two HEX digits represent one byte, producing values from <code>00</code> to <code>FF</code> (0 to 255 in decimal).
+            </p>
+            <p>
+                HEX is the standard representation for memory addresses, MAC addresses, cryptographic hashes, and CSS color codes. Developers use HEX because it maps directly to binary in fixed-width groups. For example, the byte <code>11111111</code> in binary equals <code>FF</code> in HEX. This 4-bit alignment makes HEX far more readable than decimal for byte-level work.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> What Are the Common Use Cases for Base64 to HEX Conversion?</h2>
+            <p>
+                Base64 to HEX conversion is used when binary data encoded for transport needs to be inspected or compared at the byte level. This applies to cryptographic hashes, binary protocol debugging, and low-level data analysis.
+            </p>
+            <p>
+                <strong>Hash verification:</strong> SHA-256 and MD5 hashes are often delivered in Base64 (e.g., in HTTP headers and JWTs) but displayed as HEX in checksum files. Converting a Base64-encoded SHA-256 hash produces a 64-character HEX string. You can <a href="/base64-validator/">validate Base64 strings</a> before converting.
+            </p>
+            <p>
+                <strong>Binary protocol debugging:</strong> Network packet captures and binary file headers are easier to analyze in HEX. Each byte maps to exactly 2 HEX characters, making byte boundaries visible. Use the <a href="/base64-file-encoder/">file encoder</a> to first <a href="/base64-file-encoder/">encode files to Base64</a>, then convert to HEX for inspection.
+            </p>
+            <p>
+                <strong>Cryptographic key inspection:</strong> TLS certificates, AES keys, and HMAC secrets are stored as Base64 in PEM files and APIs. Converting to HEX reveals the exact byte values for comparison or debugging.
+            </p>
+            <p>
+                <strong>Embedded systems:</strong> Firmware images and memory dumps use HEX (Intel HEX, Motorola S-record). Converting Base64-encoded payloads to HEX enables direct comparison with device memory.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does Base64 to HEX Conversion Work?</h2>
+            <p>
+                Base64 to HEX conversion is a two-step process: decode the Base64 string to raw bytes, then represent each byte as 2 hexadecimal characters. The reverse converts HEX pairs to bytes and encodes them as Base64 per RFC 4648.
+            </p>
+            <p>
+                <strong>Base64 to HEX:</strong> The tool decodes the Base64 input using the standard alphabet defined in RFC 4648 (<code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code>). Each resulting byte is converted to its 2-digit hexadecimal value (<code>00</code> through <code>FF</code>). For example, <code>AQID</code> decodes to 3 bytes and produces <code>010203</code>.
+            </p>
+            <p>
+                <strong>HEX to Base64:</strong> The tool reads pairs of HEX digits, converts each pair to a single byte (0-255), then encodes all bytes using Base64. The input <code>48656C6C6F</code> (5 bytes) produces the Base64 string <code>SGVsbG8=</code>. You can then <a href="/base64-text-encoder/">encode text to Base64</a> directly if you need text-based encoding instead.
+            </p>
+
+            <h2><i class="fas fa-info-circle"></i> What HEX Input Formats Are Supported?</h2>
+            <p>
+                This tool accepts HEX strings in multiple formats: continuous (<code>48656C6C6F</code>), colon-separated (<code>48:65:6C:6C:6F</code>), and space-separated (<code>48 65 6C 6C 6F</code>). Separators are stripped automatically before conversion.
+            </p>
+            <p>
+                Both uppercase (<code>A-F</code>) and lowercase (<code>a-f</code>) HEX digits are accepted. The input must contain an even number of HEX characters after separators are removed. Output is always uppercase without separators. For Base64 input, standard and <a href="/base64-url-safe/">URL-safe Base64</a> variants are both supported via the <a href="/base64-url-safe/">URL-safe Base64 encoder</a>.
+            </p>
+
+            <h2><i class="fas fa-exchange-alt"></i> How Do Base64 and HEX Compare?</h2>
+            <p>
+                Base64 and HEX are both text-based encodings for binary data, but they differ in character set size, output length, and typical use cases. Base64 is more compact; HEX is more readable at the byte level.
+            </p>
+            <table class="reference-table">
+                <thead><tr><th>Property</th><th>Base64</th><th>Hexadecimal (HEX)</th></tr></thead>
+                <tbody>
+                    <tr><td>Base</td><td>64 (6 bits per character)</td><td>16 (4 bits per character)</td></tr>
+                    <tr><td>Character Set</td><td><code>A-Z a-z 0-9 + /</code></td><td><code>0-9 A-F</code></td></tr>
+                    <tr><td>Size Ratio</td><td>33% larger than binary</td><td>100% larger than binary</td></tr>
+                    <tr><td>Common Use</td><td>Data URIs, APIs, email</td><td>Debugging, crypto hashes, memory</td></tr>
+                    <tr><td>Example (3 bytes)</td><td><code>AQID</code> (4 chars)</td><td><code>010203</code> (6 chars)</td></tr>
+                </tbody>
+            </table>
+            <p>
+                A 32-byte SHA-256 hash produces 44 Base64 characters (with padding) but 64 HEX characters. For bandwidth-sensitive contexts like JSON APIs and email attachments, Base64 is preferred. For human-readable debugging and checksum display, HEX is standard. Explore <a href="/">all Base64 tools</a> for additional encoding and decoding options.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This Base64 HEX Converter Private?</h2>
+            <p>
+                Yes. All conversions execute entirely in your browser using JavaScript. No data is transmitted to any server. Your Base64 strings, HEX values, cryptographic keys, and hashes never leave your device.
+            </p>
+            <p>
+                The tool uses the browser's native <code>atob()</code> and <code>btoa()</code> functions for Base64 decoding and encoding. No third-party libraries process your data. This makes the tool safe for converting sensitive material such as private keys, authentication tokens, and encrypted payloads.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is the difference between Base64 and hexadecimal?</h3>
+                <p>
+                    Base64 uses a 64-character alphabet and encodes 6 bits per character, producing output that is 33% larger than the original binary. Hexadecimal uses a 16-character alphabet (<code>0-9</code>, <code>A-F</code>) and encodes 4 bits per character, producing output that is 100% larger than binary. For a 32-byte input, Base64 outputs 44 characters while HEX outputs 64 characters. Base64 is defined in RFC 4648.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I convert an SHA-256 hash from Base64 to HEX?</h3>
+                <p>
+                    Paste the Base64-encoded SHA-256 hash into the input field and click "Base64 to HEX." The tool decodes the 32-byte hash and outputs 64 hexadecimal characters. SHA-256 hashes in HTTP <code>Digest</code> headers and Subresource Integrity (<code>integrity</code>) attributes use Base64, while checksum files and blockchain explorers display them in HEX.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why is HEX output longer than Base64?</h3>
+                <p>
+                    HEX encodes 4 bits per character. Base64 encodes 6 bits per character. For the same binary data, HEX needs 2 characters per byte while Base64 needs approximately 1.33 characters per byte. Specifically, <code>n</code> bytes produce <code>2n</code> HEX characters and <code>ceil(4n/3)</code> Base64 characters. The 50% size difference makes Base64 more efficient for data transport.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I convert HEX color codes with this tool?</h3>
+                <p>
+                    Yes. Enter a HEX color code without the <code>#</code> prefix. For example, entering <code>FF5733</code> and clicking "HEX to Base64" converts the 3-byte color value to its Base64 equivalent (<code>/1cz</code>). The tool handles 3-byte RGB codes (6 HEX characters) and 4-byte RGBA codes (8 HEX characters). Both uppercase and lowercase HEX digits are accepted.
+                </p>
+            </div>
+        </section>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 to HEX Converter Online Free"
+  description="Free online Base64 to HEX converter. Convert between Base64 and hexadecimal for debugging and cryptography. Works in your browser."
+  canonical="https://base64image.net/base64-hex-converter/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to HEX Converter",
+            "item": "https://base64image.net/base64-hex-converter/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert Between Base64 and HEX",
+        "description": "Step-by-step guide to convert Base64 strings to hexadecimal and HEX strings to Base64 online for free.",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Enter Your String",
+            "text": "Paste a Base64-encoded string or a hexadecimal string into the input field."
+        }, {
+            "@type": "HowToStep",
+            "name": "Click the Convert Button",
+            "text": "Click 'Base64 to HEX' to convert Base64 input to hexadecimal, or click 'HEX to Base64' to convert hexadecimal input to Base64."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy the Result",
+            "text": "Click 'Copy to Clipboard' to copy the converted output for use in your project."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What is the difference between Base64 and hexadecimal?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 uses 64 characters (A-Z, a-z, 0-9, +, /) and encodes 6 bits per character. Hexadecimal uses 16 characters (0-9, A-F) and encodes 4 bits per character. Base64 produces shorter output (33% overhead) while HEX produces longer output (100% overhead) compared to raw binary."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I convert an SHA-256 hash from Base64 to HEX?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Paste the Base64-encoded SHA-256 hash into the input field and click 'Base64 to HEX'. The tool decodes the 32-byte hash from Base64 and outputs 64 hexadecimal characters. SHA-256 hashes are commonly displayed in HEX format for checksum verification."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why is HEX output longer than Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Each HEX character encodes 4 bits, while each Base64 character encodes 6 bits. For the same binary data, HEX requires 2 characters per byte (100% overhead) whereas Base64 requires approximately 1.33 characters per byte (33% overhead). A 32-byte value produces 64 HEX characters but only 44 Base64 characters."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I convert HEX color codes with this tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Enter a HEX color code without the # prefix (e.g., FF5733) and click 'HEX to Base64' to get its Base64 representation. The tool accepts any valid hexadecimal string, including 3-byte (6-character) and 4-byte (8-character) color values used in CSS."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

@@ -1,0 +1,245 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="base64ToSvg()">
+        <h1><i class="fas fa-file-image"></i> Base64 to SVG Converter</h1>
+        <p class="intro">Convert Base64 strings back to scalable vector graphics</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="decodeSvg"
+                    placeholder="Paste your Base64-encoded SVG string here..."
+                    rows="6"
+                ></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="actions">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+
+            <div class="preview-container" x-show="svgContent">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper" x-html="sanitizedSvg" style="max-width: 100%; overflow: auto;"></div>
+                <div class="image-info" x-show="svgInfo">
+                    <p><strong>Format:</strong> SVG (Scalable Vector Graphics)</p>
+                    <p><strong>Size:</strong> <span x-text="svgInfo.size"></span></p>
+                    <p><strong>Contains:</strong> <span x-text="svgInfo.elementCount"></span> SVG elements</p>
+                </div>
+                <button @click="downloadSvg" class="btn-primary">Download SVG</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What Is Base64 to SVG Conversion?</h2>
+            <p>
+                Base64 to SVG conversion decodes a Base64-encoded string back into its original SVG XML markup. SVG (Scalable Vector Graphics) is a text-based image format that uses XML to describe shapes, paths, and text as mathematical definitions rather than pixel grids. This tool reverses the Base64 encoding process, restoring the full editable SVG source code from a compact encoded string. The decoded SVG can be opened in any vector editor or embedded directly into HTML.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Why Use SVG Format?</h2>
+            <p>
+                SVG provides 5 advantages over raster formats. Vector graphics scale to any resolution without quality loss, producing sharp results on 4K displays and print media alike. SVG files are typically smaller than equivalent PNG files for icons and illustrations. SVG markup is editable in any text editor, allowing direct manipulation of colors, shapes, and dimensions. CSS can style SVG elements, and JavaScript can animate them interactively. Search engines can index text content within SVG files. For raster image decoding, use the <a href="/base64-image-decoder/">Base64 image decoder</a> instead.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does the SVG Converter Work?</h2>
+            <p>
+                The converter follows 4 steps. First, it strips any <code>data:image/svg+xml;base64,</code> prefix from the input. Second, it decodes the Base64 string using the browser's native <code>atob()</code> function to recover the original text. Third, it validates that the decoded text contains valid SVG markup by checking for <code>&lt;svg</code> or <code>&lt;?xml</code> opening tags. Fourth, it sanitizes the SVG by removing script elements and event handlers, then renders a safe preview and prepares the file for download.
+            </p>
+
+            <h2><i class="fas fa-table"></i> What Is the Difference Between SVG and Raster Formats?</h2>
+            <p>
+                SVG and raster formats represent images using fundamentally different approaches. SVG stores mathematical descriptions of shapes, while raster formats store color values for each pixel. The following table compares SVG against the two most common raster formats.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>SVG</th>
+                        <th>PNG</th>
+                        <th>JPEG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Scalability</td>
+                        <td>Infinite (vector)</td>
+                        <td>Fixed resolution</td>
+                        <td>Fixed resolution</td>
+                    </tr>
+                    <tr>
+                        <td>File Size (icon)</td>
+                        <td>1-10 KB</td>
+                        <td>5-50 KB</td>
+                        <td>3-30 KB</td>
+                    </tr>
+                    <tr>
+                        <td>Editing</td>
+                        <td>Text editor / vector app</td>
+                        <td>Raster editor only</td>
+                        <td>Raster editor only</td>
+                    </tr>
+                    <tr>
+                        <td>Animation</td>
+                        <td>SMIL, CSS, JavaScript</td>
+                        <td>APNG (limited)</td>
+                        <td>Not supported</td>
+                    </tr>
+                    <tr>
+                        <td>Browser Support</td>
+                        <td>97%+ global</td>
+                        <td>100% global</td>
+                        <td>100% global</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2><i class="fas fa-star"></i> When Should You Use SVG Instead of PNG?</h2>
+            <p>
+                SVG is the preferred format for 4 categories of graphics. Icons and logo marks benefit from SVG because they must render crisply at sizes from 16px favicons to billboard prints. Illustrations and diagrams with flat colors and clean lines produce smaller SVG files than equivalent PNGs. Responsive web graphics that must adapt to different screen sizes stay sharp as SVGs without requiring multiple resolution variants. Interactive graphics that respond to hover, click, or scroll events require SVG's DOM-accessible structure. For photographic content, raster formats like <a href="/base64-to-png/">PNG</a> or JPEG remain more appropriate. Use the <a href="/base64-embed-generator/">embed generator</a> to create inline SVG data URIs for CSS backgrounds.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>Can I edit the SVG file after downloading?</h3>
+                <p>
+                    Yes. SVG files are XML-based text files that can be edited in any text editor, code editor, or vector graphics application like Adobe Illustrator, Inkscape, or Figma. You can modify shapes, colors, paths, and text directly in the markup.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does SVG support animation?</h3>
+                <p>
+                    Yes. SVG supports three types of animation: SMIL animation using the <code>&lt;animate&gt;</code> element, CSS animations applied to SVG elements, and JavaScript-driven animation via the DOM API. Animated SVGs decoded from Base64 will retain their animation instructions.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Which browsers support SVG?</h3>
+                <p>
+                    All modern browsers fully support SVG: Chrome, Firefox, Safari, Edge, and Opera. Internet Explorer 9+ provides partial support. SVG has over 97% global browser support, making it safe for production use on the web.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can a raster image be converted to SVG?</h3>
+                <p>
+                    Not through simple decoding. Converting a raster image (JPEG, PNG) to true SVG requires vectorization software that traces pixel edges into mathematical paths. This tool decodes Base64 strings that already contain SVG data. It does not vectorize raster images.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is this tool safe for sensitive SVG data?</h3>
+                <p>
+                    Yes. All decoding happens locally in your browser. Your Base64 data and SVG markup never leave your device. The tool sanitizes SVG content by removing script tags and event handlers before preview to prevent XSS attacks. Learn more about <a href="/what-is-base64/">what Base64 encoding is</a> and how it works.
+                </p>
+            </div>
+
+            <p>
+                Related tools: <a href="/svg-to-base64/">SVG to Base64</a> | <a href="/base64-image-decoder/">Base64 Image Decoder</a> | <a href="/base64-to-png/">Base64 to PNG</a> | <a href="/base64-embed-generator/">Embed Generator</a> | <a href="/what-is-base64/">What Is Base64?</a>
+            </p>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 to SVG Converter - Convert Base64 to SVG Image Online"
+  description="Free online Base64 to SVG converter. Paste your Base64-encoded SVG string and convert it back to scalable vector graphics. Download editable SVG files instantly."
+  canonical="https://base64image.net/base64-to-svg/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert Base64 to SVG",
+        "description": "Step-by-step guide to convert Base64 strings to SVG vector images online",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Copy your Base64-encoded SVG string and paste it into the text area. The data:image/svg+xml prefix is optional."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Decoding",
+            "text": "The tool automatically decodes the Base64 string and validates that it contains valid SVG XML markup."
+        }, {
+            "@type": "HowToStep",
+            "name": "Preview SVG Image",
+            "text": "View the decoded SVG image in the preview section. The vector graphic renders at full quality at any size."
+        }, {
+            "@type": "HowToStep",
+            "name": "Download SVG",
+            "text": "Click the 'Download SVG' button to save the vector image as a .svg file to your device."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to SVG Converter",
+            "item": "https://base64image.net/base64-to-svg/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Can I edit the SVG file after downloading?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. SVG files are XML-based text files that can be edited in any text editor, code editor, or vector graphics application like Adobe Illustrator, Inkscape, or Figma. You can modify shapes, colors, paths, and text directly in the markup."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does SVG support animation?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. SVG supports three types of animation: SMIL animation using the animate element, CSS animations applied to SVG elements, and JavaScript-driven animation via the DOM API. Animated SVGs decoded from Base64 will retain their animation instructions."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Which browsers support SVG?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "All modern browsers fully support SVG: Chrome, Firefox, Safari, Edge, and Opera. Internet Explorer 9+ provides partial support. SVG has over 97% global browser support, making it safe for production use on the web."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can a raster image be converted to SVG?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Not through simple decoding. Converting a raster image (JPEG, PNG) to true SVG requires vectorization software that traces pixel edges into mathematical paths. This tool decodes Base64 strings that already contain SVG data. It does not vectorize raster images."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is this tool safe for sensitive SVG data?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. All decoding happens locally in your browser. Your Base64 data and SVG markup never leave your device. The tool sanitizes SVG content by removing script tags and event handlers before preview to prevent XSS attacks."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

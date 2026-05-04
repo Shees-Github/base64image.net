@@ -1,0 +1,421 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main>
+        <h1><i class="fas fa-book"></i> What is Base64 Encoding?</h1>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
+        <p class="intro">A comprehensive guide to the Base64 encoding format, algorithm, and practical applications</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <!-- Section 1: What Is Base64 Encoding? -->
+            <h2><i class="fas fa-info-circle"></i> What Is Base64 Encoding?</h2>
+            <p>
+                Base64 is a binary-to-text encoding scheme defined in RFC 4648 that represents binary data using 64 printable ASCII characters. The algorithm converts every 3 input bytes (24 bits) into 4 output characters, producing a 33.3% size overhead compared to the original binary data.
+            </p>
+            <p>
+                The name "Base64" refers to the 64-character alphabet used for encoding. Each character represents exactly 6 bits of data (2<sup>6</sup> = 64). This encoding exists because many transport protocols and storage systems only support text data. Email (SMTP), JSON, XML, HTML, and URL query strings all require text-safe representations of binary content. Base64 bridges this gap by transforming arbitrary bytes into a string that passes through text-only channels without corruption.
+            </p>
+            <p>
+                The encoding process is stateless and deterministic: the same input always produces the same output. Base64 does not compress data, does not encrypt data, and does not add error-checking capabilities. Its sole purpose is format conversion from binary to text.
+            </p>
+            <p>
+                Use the <a href="/base64-text-encoder/">Base64 text encoder</a> to convert any string to Base64, or the <a href="/base64-image-encoder/">Base64 image encoder</a> to encode image files directly in your browser.
+            </p>
+
+            <!-- Section 2: How Does the Base64 Algorithm Work? -->
+            <h2><i class="fas fa-cogs"></i> How Does the Base64 Algorithm Work?</h2>
+            <p>
+                The Base64 algorithm processes input data in groups of 3 bytes (24 bits), splitting each group into 4 segments of 6 bits. Each 6-bit segment maps to one of 64 characters in the Base64 alphabet. When the input length is not a multiple of 3, padding characters (<code>=</code>) fill the remaining positions.
+            </p>
+
+            <h3><i class="fas fa-list-ol"></i> Step-by-Step Encoding Process</h3>
+            <p>The algorithm follows 5 steps for each 3-byte group:</p>
+            <ol>
+                <li><strong>Read 3 bytes</strong> from the input stream (24 bits total).</li>
+                <li><strong>Concatenate</strong> the 3 bytes into a single 24-bit binary number.</li>
+                <li><strong>Split</strong> the 24-bit number into 4 groups of 6 bits each.</li>
+                <li><strong>Map</strong> each 6-bit value (0-63) to the corresponding character in the Base64 alphabet.</li>
+                <li><strong>Append padding</strong> (<code>=</code>) if the input had fewer than 3 bytes remaining.</li>
+            </ol>
+
+            <h3><i class="fas fa-flask"></i> Encoding Example: "Man"</h3>
+            <p>
+                The word "Man" consists of 3 ASCII bytes: M (77), a (97), n (110). The table below traces each step of the encoding process.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Step</th><th>Data</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Input characters</td><td>M, a, n</td><td>3 ASCII characters</td></tr>
+                    <tr><td>Decimal values</td><td>77, 97, 110</td><td>3 bytes</td></tr>
+                    <tr><td>Binary (8-bit each)</td><td><code>01001101 01100001 01101110</code></td><td>24 bits</td></tr>
+                    <tr><td>Split into 6-bit groups</td><td><code>010011 010110 000101 101110</code></td><td>4 groups</td></tr>
+                    <tr><td>Decimal index values</td><td>19, 22, 5, 46</td><td>4 indices (0-63)</td></tr>
+                    <tr><td>Base64 characters</td><td>T, W, F, u</td><td>4 output characters</td></tr>
+                    <tr><td>Result</td><td colspan="2"><code>TWFu</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                The 3-byte input "Man" becomes the 4-character output "TWFu". This 3:4 ratio applies to every group, producing the characteristic 33.3% size increase. For a detailed walkthrough of the algorithm with additional examples, see the <a href="/base64-algorithm/">Base64 algorithm reference</a>.
+            </p>
+
+            <!-- Section 3: What Characters Does Base64 Use? -->
+            <h2><i class="fas fa-font"></i> What Characters Does Base64 Use?</h2>
+            <p>
+                The standard Base64 alphabet defined in RFC 4648 Section 4 contains 64 characters: 26 uppercase letters (A-Z), 26 lowercase letters (a-z), 10 digits (0-9), plus sign (+), and forward slash (/). The equals sign (=) serves as the padding character. Each character maps to a specific 6-bit index value from 0 to 63.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Index Range</th><th>Characters</th><th>Count</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>0 - 25</td><td><code>A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</code></td><td>26</td></tr>
+                    <tr><td>26 - 51</td><td><code>a b c d e f g h i j k l m n o p q r s t u v w x y z</code></td><td>26</td></tr>
+                    <tr><td>52 - 61</td><td><code>0 1 2 3 4 5 6 7 8 9</code></td><td>10</td></tr>
+                    <tr><td>62</td><td><code>+</code></td><td>1</td></tr>
+                    <tr><td>63</td><td><code>/</code></td><td>1</td></tr>
+                    <tr><td>Padding</td><td><code>=</code></td><td>1</td></tr>
+                </tbody>
+            </table>
+            <p>
+                For the complete index-to-character mapping with binary values, see the <a href="/base64-character-table/">Base64 character table</a>.
+            </p>
+
+            <h3><i class="fas fa-link"></i> URL-Safe Base64 Variant</h3>
+            <p>
+                RFC 4648 Section 5 defines a URL-safe variant that replaces 2 characters from the standard alphabet. The plus sign (<code>+</code>) becomes a hyphen (<code>-</code>), and the forward slash (<code>/</code>) becomes an underscore (<code>_</code>). These substitutions prevent conflicts with URL encoding, where <code>+</code> represents a space and <code>/</code> is a path separator. The URL-safe variant is used in JWT tokens, filename encoding, and URL query parameters.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Index</th><th>Standard (RFC 4648 &sect;4)</th><th>URL-Safe (RFC 4648 &sect;5)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>62</td><td><code>+</code></td><td><code>-</code></td></tr>
+                    <tr><td>63</td><td><code>/</code></td><td><code>_</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                Use the <a href="/base64-url-safe/">URL-safe Base64 encoder</a> to generate URL-compatible Base64 strings.
+            </p>
+
+            <!-- Section 4: How Does Base64 Padding Work? -->
+            <h2><i class="fas fa-equals"></i> How Does Base64 Padding Work?</h2>
+            <p>
+                Base64 padding uses the <code>=</code> character to ensure the encoded output length is always a multiple of 4 characters. Padding is required when the input byte count is not evenly divisible by 3. The number of padding characters depends on the remainder of the input length divided by 3.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Input Bytes mod 3</th><th>Remaining Bytes</th><th>Padding Added</th><th>Output Characters</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>0</td><td>0 (exact multiple of 3)</td><td>None</td><td>4n characters</td></tr>
+                    <tr><td>1</td><td>1 byte (8 bits)</td><td><code>==</code></td><td>4n + 4 characters</td></tr>
+                    <tr><td>2</td><td>2 bytes (16 bits)</td><td><code>=</code></td><td>4n + 4 characters</td></tr>
+                </tbody>
+            </table>
+
+            <h3><i class="fas fa-flask"></i> Padding Examples</h3>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Input</th><th>Byte Count</th><th>mod 3</th><th>Base64 Output</th><th>Padding</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>Man</code></td><td>3</td><td>0</td><td><code>TWFu</code></td><td>None</td></tr>
+                    <tr><td><code>Ma</code></td><td>2</td><td>2</td><td><code>TWE=</code></td><td>1 pad</td></tr>
+                    <tr><td><code>M</code></td><td>1</td><td>1</td><td><code>TQ==</code></td><td>2 pads</td></tr>
+                    <tr><td><code>Base64</code></td><td>6</td><td>0</td><td><code>QmFzZTY0</code></td><td>None</td></tr>
+                    <tr><td><code>Hello</code></td><td>5</td><td>2</td><td><code>SGVsbG8=</code></td><td>1 pad</td></tr>
+                    <tr><td><code>A</code></td><td>1</td><td>1</td><td><code>QQ==</code></td><td>2 pads</td></tr>
+                </tbody>
+            </table>
+            <p>
+                When 1 input byte remains, the algorithm produces 2 Base64 characters plus <code>==</code>. When 2 input bytes remain, it produces 3 Base64 characters plus <code>=</code>. Padding allows the decoder to determine the exact number of original bytes without external metadata. Use the <a href="/base64-validator/">Base64 validator</a> to check whether a string has correct padding.
+            </p>
+
+            <!-- Section 5: What Are the Common Use Cases for Base64? -->
+            <h2><i class="fas fa-tasks"></i> What Are the Common Use Cases for Base64?</h2>
+            <p>
+                Base64 encoding is used in 6 primary contexts where binary data must travel through text-based systems. Each use case exploits the same property: Base64 output consists entirely of printable ASCII characters that survive text processing without corruption.
+            </p>
+
+            <h3><i class="fas fa-image"></i> Data URIs for Web Images</h3>
+            <p>
+                Data URIs embed Base64-encoded images directly in HTML and CSS, eliminating separate HTTP requests. The format is <code>data:image/png;base64,[encoded data]</code>. This technique reduces latency for small images (under 10KB) by avoiding network round-trips. Larger images should remain as external files because Base64 adds 33% overhead and prevents browser caching.
+            </p>
+            <p>
+                Convert images to data URIs using the <a href="/base64-image-encoder/">Base64 image encoder</a> or generate ready-to-use HTML and CSS embed code with the <a href="/base64-embed-generator/">Base64 embed code generator</a>.
+            </p>
+
+            <h3><i class="fas fa-envelope"></i> Email Attachments (MIME)</h3>
+            <p>
+                MIME (Multipurpose Internet Mail Extensions), defined in RFC 2045, uses Base64 to encode email attachments. SMTP (Simple Mail Transfer Protocol) was designed for 7-bit ASCII text and cannot transport raw binary data. MIME Base64 wraps encoded output at 76 characters per line with CRLF line endings. This format allows binary files (images, PDFs, archives) to travel through email infrastructure without corruption.
+            </p>
+
+            <h3><i class="fas fa-key"></i> JWT Tokens</h3>
+            <p>
+                JSON Web Tokens (JWT), defined in RFC 7519, use URL-safe Base64 (base64url) to encode the header and payload segments. A JWT consists of 3 base64url-encoded parts separated by periods: <code>header.payload.signature</code>. The URL-safe variant avoids conflicts with URL special characters. Convert between standard and URL-safe formats using the <a href="/base64-url-safe/">URL-safe Base64 tool</a>.
+            </p>
+
+            <h3><i class="fas fa-code"></i> API Payloads</h3>
+            <p>
+                REST APIs frequently transmit binary data (images, documents, certificates) as Base64-encoded strings within JSON payloads. JSON does not support raw binary data, so Base64 provides the text representation. The <code>Content-Transfer-Encoding: base64</code> header signals that a payload contains Base64 data. API schemas (OpenAPI/Swagger) use the <code>format: byte</code> type for Base64-encoded fields.
+            </p>
+
+            <h3><i class="fas fa-css3-alt"></i> CSS Embedding</h3>
+            <p>
+                CSS files embed small images (icons, backgrounds, patterns) as Base64 data URIs in <code>background-image</code> properties. This bundles image data with the stylesheet, reducing the total number of HTTP requests. The <a href="/base64-embed-generator/">embed code generator</a> produces ready-to-use CSS snippets with data URIs.
+            </p>
+
+            <h3><i class="fas fa-database"></i> Database and File Storage</h3>
+            <p>
+                Databases that lack binary column types store encoded data as text strings. Configuration files (JSON, YAML, XML) embed binary content as Base64 values. Source code embeds small binary resources (certificates, keys, icons) as Base64 string literals to avoid external file dependencies.
+            </p>
+
+            <!-- Section 6: What Is the Difference Between Base64, Base32, and Base16? -->
+            <h2><i class="fas fa-balance-scale"></i> What Is the Difference Between Base64, Base32, and Base16?</h2>
+            <p>
+                Base64, Base32, and Base16 are all binary-to-text encoding schemes defined in RFC 4648. They differ in alphabet size, bits per character, size overhead, and intended use cases. Base64 provides the most compact output, Base16 provides the most human-readable output, and Base32 balances readability with compactness.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Property</th><th>Base64</th><th>Base32</th><th>Base16 (Hex)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Alphabet size</td><td>64 characters</td><td>32 characters</td><td>16 characters</td></tr>
+                    <tr><td>Bits per character</td><td>6 bits</td><td>5 bits</td><td>4 bits</td></tr>
+                    <tr><td>Size overhead</td><td>33% (4:3 ratio)</td><td>60% (8:5 ratio)</td><td>100% (2:1 ratio)</td></tr>
+                    <tr><td>RFC</td><td>RFC 4648 &sect;4</td><td>RFC 4648 &sect;6</td><td>RFC 4648 &sect;8</td></tr>
+                    <tr><td>Padding character</td><td><code>=</code></td><td><code>=</code></td><td>None</td></tr>
+                    <tr><td>Case sensitive</td><td>Yes</td><td>No (A-Z, 2-7)</td><td>No (0-9, A-F)</td></tr>
+                    <tr><td>Common use</td><td>Email, data URIs, APIs</td><td>TOTP codes, Crockford IDs</td><td>Hex dumps, checksums, colors</td></tr>
+                </tbody>
+            </table>
+            <p>
+                For converting between Base64 and hexadecimal (Base16), use the <a href="/base64-hex-converter/">Base64 to HEX converter</a>.
+            </p>
+
+            <!-- Section 7: What Are Data URIs and How Do They Use Base64? -->
+            <h2><i class="fas fa-globe"></i> What Are Data URIs and How Do They Use Base64?</h2>
+            <p>
+                A data URI is an inline data scheme defined in RFC 2397 that embeds file content directly in HTML, CSS, or JavaScript using the format <code>data:[mediatype][;base64],&lt;data&gt;</code>. When the <code>;base64</code> token is present, the data portion contains Base64-encoded binary content.
+            </p>
+
+            <h3><i class="fas fa-code"></i> Data URI Structure</h3>
+            <pre><code>data:[&lt;MIME type&gt;][;base64],&lt;encoded data&gt;
+
+Examples:
+data:image/png;base64,iVBORw0KGgo...
+data:image/svg+xml;base64,PHN2ZyB4...
+data:text/plain;base64,SGVsbG8gV29ybGQ=
+data:application/pdf;base64,JVBERi0x...</code></pre>
+
+            <h3><i class="fas fa-list"></i> Data URI Components</h3>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Component</th><th>Description</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>data:</code></td><td>URI scheme identifier</td><td><code>data:</code></td></tr>
+                    <tr><td>MIME type</td><td>Media type of the encoded data</td><td><code>image/png</code></td></tr>
+                    <tr><td><code>;base64</code></td><td>Encoding declaration</td><td><code>;base64</code></td></tr>
+                    <tr><td><code>,</code></td><td>Separator between metadata and data</td><td><code>,</code></td></tr>
+                    <tr><td>Encoded data</td><td>Base64-encoded binary content</td><td><code>iVBORw0KGgo...</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                Data URIs eliminate HTTP requests for small resources but increase the HTML/CSS file size by the encoded data length plus 33% Base64 overhead. Images under 10KB typically benefit from data URI embedding. Images above 10KB should remain as external files for browser caching and CDN delivery. For a complete guide, see <a href="/data-uri-guide/">the data URI reference</a>. Generate data URIs using the <a href="/base64-image-encoder/">image encoder</a> or the <a href="/base64-embed-generator/">embed code generator</a>.
+            </p>
+
+            <!-- Section 8: What Are the Limitations of Base64 Encoding? -->
+            <h2><i class="fas fa-exclamation-triangle"></i> What Are the Limitations of Base64 Encoding?</h2>
+            <p>
+                Base64 encoding has 4 primary limitations: size overhead, lack of security, absence of compression, and increased memory consumption. Understanding these constraints prevents misuse in production systems.
+            </p>
+            <ul>
+                <li><strong>33% size increase:</strong> Every 3 bytes of input produce 4 bytes of output. A 1MB file becomes approximately 1.33MB after encoding. MIME encoding adds further overhead from line breaks every 76 characters. For a detailed comparison, see <a href="/base64-vs-binary/">Base64 vs binary</a>.</li>
+                <li><strong>Not encryption:</strong> Base64 provides zero confidentiality. Any program can decode a Base64 string instantly. Sensitive data requires AES, RSA, or other cryptographic algorithms.</li>
+                <li><strong>Not compression:</strong> Base64 always increases data size. It does not analyze or reduce redundancy in the input. Compress data (gzip, brotli, zstd) before encoding to minimize the final size.</li>
+                <li><strong>Increased memory usage:</strong> Encoding and decoding require buffering the full input and output in memory. Processing a 100MB file requires approximately 233MB of memory (100MB input + 133MB encoded output). Streaming encoders reduce peak memory usage by processing fixed-size chunks.</li>
+                <li><strong>No error detection:</strong> Base64 does not include checksums or parity bits. Corruption during transmission produces silently incorrect output rather than an error. Use the <a href="/base64-validator/">Base64 validator</a> to verify string integrity.</li>
+                <li><strong>Cache inefficiency:</strong> Base64-embedded images in HTML or CSS cannot be cached independently by browsers. A change to any part of the page invalidates the entire cached resource, including all embedded images.</li>
+            </ul>
+
+            <!-- Section 9: Is Base64 Encoding Secure? -->
+            <h2><i class="fas fa-shield-alt"></i> Is Base64 Encoding Secure?</h2>
+            <p>
+                Base64 is not encryption and provides zero security. It is a reversible encoding scheme that anyone can decode without a key, password, or secret. Treating Base64 as a security measure is a common and dangerous mistake.
+            </p>
+            <p>
+                The Base64 algorithm is deterministic and public. Every programming language includes built-in Base64 decoding functions (<code>atob()</code> in JavaScript, <code>base64.b64decode()</code> in Python, <code>Base64.getDecoder()</code> in Java). An attacker who intercepts a Base64-encoded string can decode it in under 1 millisecond.
+            </p>
+
+            <h3><i class="fas fa-times-circle"></i> What Base64 Does Not Provide</h3>
+            <ul>
+                <li><strong>Confidentiality:</strong> Encoded data is readable by anyone who has the string.</li>
+                <li><strong>Integrity:</strong> No mechanism detects whether the encoded data has been tampered with.</li>
+                <li><strong>Authentication:</strong> No verification that the data came from a trusted source.</li>
+                <li><strong>Non-repudiation:</strong> No proof that a specific sender produced the encoded data.</li>
+            </ul>
+            <p>
+                To demonstrate how easily Base64 decodes, paste any encoded string into the <a href="/base64-text-decoder/">Base64 text decoder</a>. The original content appears instantly.
+            </p>
+
+            <h3><i class="fas fa-check-circle"></i> When Base64 Appears in Security Contexts</h3>
+            <p>
+                Base64 appears in JWT tokens, TLS certificates (PEM format), and SSH keys. In these cases, Base64 is the transport encoding, not the security layer. The actual security comes from cryptographic signatures (HMAC, RSA, ECDSA) applied to the data before Base64 encoding. Removing the Base64 layer exposes the signed or encrypted binary payload, not the original plaintext.
+            </p>
+
+            <!-- Section 10: What RFC Standards Define Base64? -->
+            <h2><i class="fas fa-file-alt"></i> What RFC Standards Define Base64?</h2>
+            <p>
+                Four RFC documents define Base64 encoding and its applications. RFC 4648 is the primary specification. The other 3 RFCs define Base64 usage within specific protocols: email (MIME), JSON Web Signatures, and OpenPGP.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>RFC</th><th>Title</th><th>Year</th><th>Scope</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>RFC 4648</td><td>The Base16, Base32, and Base64 Data Encodings</td><td>2006</td><td>Primary specification. Defines standard Base64 (Section 4), URL-safe Base64 (Section 5), Base32 (Section 6), and Base16 (Section 8).</td></tr>
+                    <tr><td>RFC 2045</td><td>MIME Part One: Format of Internet Message Bodies</td><td>1996</td><td>Defines Base64 as a Content-Transfer-Encoding for email. Specifies 76-character line wrapping with CRLF line endings.</td></tr>
+                    <tr><td>RFC 7515</td><td>JSON Web Signature (JWS)</td><td>2015</td><td>Uses base64url encoding (RFC 4648 Section 5) for JWT header and payload segments. Omits padding by default.</td></tr>
+                    <tr><td>RFC 4880</td><td>OpenPGP Message Format</td><td>2007</td><td>Uses Radix-64 encoding (a Base64 variant) with a 24-bit CRC checksum appended after the encoded data.</td></tr>
+                </tbody>
+            </table>
+            <p>
+                RFC 4648 superseded earlier specifications including RFC 3548 (2003) and RFC 2045 (1996) as the authoritative reference for Base64 encoding. The URL-safe variant (Section 5) was first standardized in RFC 4648, addressing the incompatibility of <code>+</code> and <code>/</code> with URL encoding.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Is Base64 encoding the same as encryption?</h3>
+                <p>
+                    No. Base64 is a reversible encoding scheme, not encryption. Any person or program can decode a Base64 string back to the original binary data without a key. Base64 provides zero confidentiality. For data protection, use encryption algorithms such as AES-256 or RSA.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why does Base64 increase file size by 33%?</h3>
+                <p>
+                    Base64 represents every 3 input bytes (24 bits) as 4 output characters (6 bits each). The ratio 4/3 equals approximately 1.333, producing a 33.3% size increase. Additional overhead comes from padding characters and, in MIME encoding (RFC 2045), line breaks every 76 characters.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can Base64 encode any type of file?</h3>
+                <p>
+                    Yes. Base64 operates on raw bytes, so it encodes any binary data: images (PNG, JPEG, GIF, WebP), PDFs, audio files, video files, executables, ZIP archives, and plain text. The encoded output is always a printable ASCII string regardless of the input format. Encode files using the <a href="/base64-image-encoder/">image encoder</a> or <a href="/base64-text-encoder/">text encoder</a>.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the maximum size for Base64 encoding?</h3>
+                <p>
+                    No theoretical maximum exists in the Base64 specification (RFC 4648). Practical limits depend on the application: browser JavaScript engines typically handle strings up to 512MB, data URIs in CSS have browser-specific limits (Chrome allows approximately 2MB), and email systems using MIME often cap attachments at 25MB before encoding.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Base64 encoding reversible?</h3>
+                <p>
+                    Yes. Base64 encoding is fully reversible and lossless. Decoding a Base64 string always produces the exact original binary data, byte for byte. The process is deterministic: the same input always produces the same output, and decoding always recovers the same input. Test this using the <a href="/base64-text-decoder/">Base64 text decoder</a>.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="What is Base64 Encoding? Complete Guide to Base64 Format"
+  description="Learn what Base64 encoding is, how the algorithm works, and why developers use it. Comprehensive guide covering RFC 4648, character sets, padding, data URIs, and practical use cases."
+  canonical="https://base64image.net/what-is-base64/"
+  ogType="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "What is Base64 Encoding?",
+            "item": "https://base64image.net/what-is-base64/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "What is Base64 Encoding? Complete Guide to Base64 Format",
+        "datePublished": "2026-02-13",
+        "dateModified": "2026-02-25",
+        "description": "Learn what Base64 encoding is, how the algorithm works, and why developers use it. Comprehensive guide covering RFC 4648, character sets, padding, data URIs, and practical use cases.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/what-is-base64/"
+        }
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Is Base64 encoding the same as encryption?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Base64 is a reversible encoding scheme, not encryption. Any person or program can decode a Base64 string back to the original binary data without a key. Base64 provides zero confidentiality. For data protection, use encryption algorithms such as AES-256 or RSA."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why does Base64 increase file size by 33%?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 represents every 3 input bytes (24 bits) as 4 output characters (6 bits each). The ratio 4/3 equals approximately 1.333, producing a 33.3% size increase. Additional overhead comes from padding characters and, in MIME encoding, line breaks every 76 characters."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can Base64 encode any type of file?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Base64 operates on raw bytes, so it encodes any binary data: images (PNG, JPEG, GIF, WebP), PDFs, audio files, video files, executables, ZIP archives, and plain text. The encoded output is always a printable ASCII string regardless of the input format."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the maximum size for Base64 encoding?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No theoretical maximum exists in the Base64 specification (RFC 4648). Practical limits depend on the application: browser JavaScript engines typically handle strings up to 512MB, data URIs in CSS have browser-specific limits (Chrome allows approximately 2MB), and email systems using MIME often cap attachments at 25MB before encoding."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base64 encoding reversible?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Base64 encoding is fully reversible and lossless. Decoding a Base64 string always produces the exact original binary data, byte for byte. The process is deterministic: the same input always produces the same output, and decoding always recovers the same input."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

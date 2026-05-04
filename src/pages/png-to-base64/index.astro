@@ -1,0 +1,266 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="pngToBase64()">
+        <div x-show="isProcessing" x-cloak class="processing-overlay">
+            <div class="processing-spinner">
+                <div class="spinner"></div>
+                <p>Encoding PNG...</p>
+            </div>
+        </div>
+
+        <h1><i class="fas fa-file-upload"></i> PNG to Base64 Converter</h1>
+        <p class="intro">Upload a PNG image and get its Base64-encoded data URI instantly</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All encoding happens locally in your browser. Your images never leave your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="fileInput">Select a PNG image:</label>
+                <input
+                    type="file"
+                    id="fileInput"
+                    @change="handleFileUpload"
+                    accept="image/png,.png"
+                >
+                <div class="error" x-show="error" x-text="error"></div>
+                <div class="success" x-show="success" x-text="success"></div>
+            </div>
+
+            <div class="preview-container" x-show="imagePreview">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imagePreview" alt="PNG image preview" x-show="imagePreview">
+                </div>
+                <div class="image-info" x-show="fileInfo">
+                    <p><strong>Filename:</strong> <span x-text="fileInfo.name"></span></p>
+                    <p><strong>Format:</strong> <span x-text="fileInfo.type"></span></p>
+                    <p><strong>Original Size:</strong> <span x-text="fileInfo.size"></span></p>
+                    <p><strong>Dimensions:</strong> <span x-text="fileInfo.dimensions"></span></p>
+                    <p><strong>Base64 Size:</strong> <span x-text="fileInfo.base64Size"></span></p>
+                </div>
+            </div>
+
+            <div class="input-group" x-show="base64Output">
+                <label for="base64Output">Base64 String:</label>
+                <textarea
+                    id="base64Output"
+                    x-model="base64Output"
+                    readonly
+                    rows="8"
+                    @click="$el.select()"
+                ></textarea>
+            </div>
+
+            <div class="actions" x-show="base64Output">
+                <button @click="copyToClipboard" class="btn-primary">Copy to Clipboard</button>
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2>What Is PNG to Base64 Conversion?</h2>
+            <p>
+                PNG to Base64 conversion encodes the binary data of a PNG file into a text string prefixed with <code>data:image/png;base64,</code>. The output is a complete data URI that browsers interpret as an inline image. You can embed this string directly in HTML <code>&lt;img&gt;</code> tags, CSS <code>background-image</code> declarations, JSON API payloads, or JavaScript source code without referencing an external file.
+            </p>
+
+            <h2>Why Convert PNG Images to Base64?</h2>
+            <p>
+                Converting small PNG images to Base64 eliminates HTTP requests, which reduces page load latency for icons, logos, and UI elements. Base64 PNGs can be embedded in CSS sprites, included in JSON API responses, and placed in HTML email templates where external image hosting is unreliable. The technique is most effective for PNGs under 10 KB, where the 33% size overhead is offset by removing a network round trip. For general image encoding, see the <a href="/base64-image-encoder/">Base64 image encoder</a>.
+            </p>
+
+            <h2>How Does the PNG to Base64 Converter Work?</h2>
+            <p>
+                This tool uses the browser FileReader API to read the uploaded PNG file as a data URL. The <code>readAsDataURL()</code> method produces the complete Base64 data URI including the <code>data:image/png;base64,</code> MIME type prefix. An Image element loads the data URL to extract pixel dimensions. All processing runs locally in your browser memory with zero server communication. Learn more about the underlying encoding at <a href="/what-is-base64/">What Is Base64</a>.
+            </p>
+
+            <h2>What Are the Best Practices for PNG Base64 Encoding?</h2>
+            <p>
+                Encode only small PNG files to avoid bloating HTML and CSS documents. The following table lists size thresholds and recommendations for PNG Base64 usage in web projects.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>PNG File Size</th>
+                        <th>Base64 Output</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Under 2 KB</td>
+                        <td>Under 2.7 KB</td>
+                        <td>Ideal for inline embedding in CSS and HTML</td>
+                    </tr>
+                    <tr>
+                        <td>2 KB - 10 KB</td>
+                        <td>2.7 KB - 13.3 KB</td>
+                        <td>Acceptable for critical above-the-fold assets</td>
+                    </tr>
+                    <tr>
+                        <td>10 KB - 50 KB</td>
+                        <td>13.3 KB - 66.7 KB</td>
+                        <td>Use external file with browser caching instead</td>
+                    </tr>
+                    <tr>
+                        <td>Over 50 KB</td>
+                        <td>Over 66.7 KB</td>
+                        <td>Always serve as a separate cached file</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Use Base64 for icons, favicons, and small UI graphics. Larger PNGs benefit from CDN delivery and browser cache. Check the output size with the <a href="/base64-size-calculator/">Base64 size calculator</a>. Compare trade-offs at <a href="/base64-vs-binary/">Base64 vs binary</a>.
+            </p>
+
+            <h2>How Do You Use PNG Base64 in HTML and CSS?</h2>
+            <p>
+                In HTML, set the Base64 string as the <code>src</code> attribute of an <code>&lt;img&gt;</code> tag. In CSS, use the string inside <code>url()</code> for <code>background-image</code>. Both methods render the PNG without an external HTTP request.
+            </p>
+<pre><code>&lt;!-- HTML inline image --&gt;
+&lt;img src="data:image/png;base64,iVBORw0KGgo..." alt="Icon"&gt;
+
+/* CSS background image */
+.icon {
+  background-image: url('data:image/png;base64,iVBORw0KGgo...');
+  background-size: contain;
+}</code></pre>
+            <p>
+                Generate ready-to-use HTML and CSS snippets with the <a href="/base64-embed-generator/">Base64 embed generator</a>. To reverse the process, use the <a href="/base64-to-png/">Base64 to PNG converter</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>Does PNG to Base64 preserve transparency?</h3>
+                <p>
+                    Yes, the alpha channel is fully preserved. Base64 encoding is a lossless representation of the PNG binary data. All transparency information, including semi-transparent pixels, remains intact in the output string.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>How much larger is a Base64 PNG string?</h3>
+                <p>
+                    Approximately 33% larger than the original file. Base64 encoding uses 4 characters to represent every 3 bytes of binary data. A 9 KB PNG produces a roughly 12 KB Base64 string.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can I use PNG Base64 in CSS?</h3>
+                <p>
+                    Yes, use <code>url('data:image/png;base64,...')</code> in the <code>background-image</code> property. This embeds the PNG directly in the stylesheet, eliminating a separate HTTP request for the image file.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is there a size limit for PNG to Base64?</h3>
+                <p>
+                    No technical limit exists in this tool. However, for web performance, keep Base64-encoded PNGs under 10 KB. Larger images should be served as separate files to benefit from browser caching and CDN distribution.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does this tool upload my PNG to a server?</h3>
+                <p>
+                    No, all processing runs locally in your browser. The PNG file is read using the JavaScript FileReader API and never leaves your device. No data is transmitted over the network.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="PNG to Base64 Converter - Encode PNG Images to Base64 Online"
+  description="Convert PNG images to Base64 strings online. Upload any PNG file and get a Base64-encoded data URI for embedding in HTML, CSS, or JavaScript."
+  canonical="https://base64image.net/png-to-base64/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "PNG to Base64 Converter",
+            "item": "https://base64image.net/png-to-base64/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert PNG to Base64",
+        "description": "Step-by-step guide to encode a PNG image into a Base64 string online",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Upload PNG File",
+            "text": "Click the file input and select a PNG image from your device."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Encoding",
+            "text": "The tool reads the PNG file using the FileReader API and converts it to a Base64 data URI automatically."
+        }, {
+            "@type": "HowToStep",
+            "name": "Review Output",
+            "text": "View the image preview, file information, and the full Base64 string in the output textarea."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy Base64 String",
+            "text": "Click the Copy to Clipboard button to copy the Base64 data URI for use in HTML, CSS, or JavaScript."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Does PNG to Base64 preserve transparency?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, the alpha channel is fully preserved. The Base64 encoding is a lossless representation of the PNG binary data, so all transparency information remains intact in the output string."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How much larger is a Base64 PNG string?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Approximately 33% larger than the original PNG file. Base64 encoding uses 4 characters to represent every 3 bytes of binary data, which increases size by about one third."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use PNG Base64 in CSS?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, use url('data:image/png;base64,...') in the background-image property. This embeds the PNG directly in the stylesheet, eliminating a separate HTTP request for the image file."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is there a size limit for PNG to Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No technical limit exists in this tool. However, for web performance, keep Base64-encoded PNGs under 10 KB. Larger images should be served as separate files to benefit from browser caching."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does this tool upload my PNG to a server?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, all processing runs locally in your browser. The PNG file is read using the JavaScript FileReader API and never leaves your device."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

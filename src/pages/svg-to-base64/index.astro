@@ -1,0 +1,279 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="svgToBase64()">
+        <div x-show="isProcessing" x-cloak class="processing-overlay">
+            <div class="processing-spinner">
+                <div class="spinner"></div>
+                <p>Encoding SVG...</p>
+            </div>
+        </div>
+
+        <h1><i class="fas fa-file-upload"></i> SVG to Base64 Converter</h1>
+        <p class="intro">Upload an SVG file or paste SVG markup to get a Base64-encoded data URI</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All encoding happens locally in your browser. Your SVG data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="fileInput">Upload an SVG file:</label>
+                <input
+                    type="file"
+                    id="fileInput"
+                    @change="handleFileUpload"
+                    accept="image/svg+xml,.svg"
+                >
+                <div class="error" x-show="error" x-text="error"></div>
+                <div class="success" x-show="success" x-text="success"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="svgInput">Or paste SVG markup:</label>
+                <textarea
+                    id="svgInput"
+                    x-model="svgInput"
+                    placeholder='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">...</svg>'
+                    rows="6"
+                ></textarea>
+                <div style="margin-top: 8px;">
+                    <button @click="encodePastedSvg" class="btn-primary">Encode SVG Markup</button>
+                </div>
+            </div>
+
+            <div class="preview-container" x-show="svgPreview">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="svgPreview" alt="SVG preview" x-show="svgPreview">
+                </div>
+                <div class="image-info" x-show="fileInfo">
+                    <p><strong>Source:</strong> <span x-text="fileInfo.source"></span></p>
+                    <p x-show="fileInfo.name"><strong>Filename:</strong> <span x-text="fileInfo.name"></span></p>
+                    <p><strong>Format:</strong> <span x-text="fileInfo.type"></span></p>
+                    <p><strong>Original Size:</strong> <span x-text="fileInfo.size"></span></p>
+                    <p><strong>Base64 Size:</strong> <span x-text="fileInfo.base64Size"></span></p>
+                </div>
+            </div>
+
+            <div class="input-group" x-show="base64Output">
+                <label for="base64Output">Base64 String:</label>
+                <textarea
+                    id="base64Output"
+                    x-model="base64Output"
+                    readonly
+                    rows="8"
+                    @click="$el.select()"
+                ></textarea>
+            </div>
+
+            <div class="actions" x-show="base64Output">
+                <button @click="copyToClipboard" class="btn-primary">Copy to Clipboard</button>
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2>What Is SVG to Base64 Conversion?</h2>
+            <p>
+                SVG to Base64 conversion transforms SVG XML markup into a Base64-encoded data URI prefixed with <code>data:image/svg+xml;base64,</code>. The converter UTF-8 encodes the SVG string, then applies Base64 encoding to produce a text-safe output. This data URI can be used in CSS <code>background-image</code> properties, HTML <code>&lt;img&gt;</code> tags, and JSON payloads where direct SVG embedding is not possible.
+            </p>
+
+            <h2>Why Convert SVG to Base64?</h2>
+            <p>
+                Base64-encoded SVG can be embedded in CSS <code>background-image</code> declarations where inline SVG markup is not supported. It eliminates HTTP requests for small vector icons, allows SVG inclusion in JSON data structures, and enables single-file HTML documents with embedded vector graphics. Base64 also avoids URL-encoding complexities that arise when placing raw SVG in CSS <code>url()</code> values. For encoding raster images, use the <a href="/base64-image-encoder/">Base64 image encoder</a>.
+            </p>
+
+            <h2>How Does SVG to Base64 Encoding Work?</h2>
+            <p>
+                SVG is an XML-based text format. For file uploads, the FileReader API reads the SVG as a data URL. For pasted markup, the converter applies UTF-8 encoding via <code>encodeURIComponent()</code> and <code>unescape()</code>, then Base64 encodes the result with <code>btoa()</code>. The output includes the <code>data:image/svg+xml;base64,</code> prefix. All processing runs in your browser memory with no server communication. Learn the encoding fundamentals at <a href="/what-is-base64/">What Is Base64</a>.
+            </p>
+
+            <h2>Should You Use Base64 or Inline SVG?</h2>
+            <p>
+                The choice depends on where and how you use the SVG. The following table compares Base64 SVG, inline SVG, and external SVG files across key criteria.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>Criteria</th>
+                        <th>Base64 SVG</th>
+                        <th>Inline SVG</th>
+                        <th>SVG File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CSS background-image</td>
+                        <td>Yes</td>
+                        <td>No</td>
+                        <td>Yes (external URL)</td>
+                    </tr>
+                    <tr>
+                        <td>DOM access / scripting</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td>No (unless &lt;object&gt;)</td>
+                    </tr>
+                    <tr>
+                        <td>Browser caching</td>
+                        <td>No (inline)</td>
+                        <td>No (inline)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td>File size overhead</td>
+                        <td>+33% from Base64</td>
+                        <td>None</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td>Editable after embedding</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td>Yes (source file)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Use Base64 SVG for CSS backgrounds and JSON embedding. Use inline SVG in HTML when you need DOM interaction or animation control. Use external SVG files for large graphics that benefit from browser caching. Compare binary vs text encoding at <a href="/base64-vs-binary/">Base64 vs binary</a>. Generate embed code at the <a href="/base64-embed-generator/">Base64 embed generator</a>.
+            </p>
+
+            <h2>What Are the Best Practices for SVG Base64 Encoding?</h2>
+            <p>
+                Remove unnecessary metadata, comments, and editor-specific attributes from SVG markup before encoding. Optimize with SVGO or a similar tool to reduce file size. Use Base64 SVG primarily for CSS <code>background-image</code> where inline SVG is not supported. For HTML embedding, prefer inline SVG for smaller output and DOM access. Consider URL-encoding (<code>data:image/svg+xml,</code> without Base64) as an alternative that produces smaller strings for simple SVGs. Embed CSS-ready code with the <a href="/base64-css/">Base64 CSS tool</a>. To decode SVG back from Base64, use the <a href="/base64-to-svg/">Base64 to SVG converter</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>Can I paste SVG code directly?</h3>
+                <p>
+                    Yes, paste raw SVG markup into the text area and click "Encode SVG Markup." You can also upload an <code>.svg</code> file using the file input. Both methods produce the same Base64 data URI output.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is Base64 the best way to embed SVG in CSS?</h3>
+                <p>
+                    For <code>background-image</code>, yes. Inline SVG cannot be used in CSS <code>background-image</code> properties. Base64 encoding is the most reliable method for embedding SVG in stylesheets. For HTML, inline SVG is more flexible because it allows DOM access and CSS styling.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does Base64 increase SVG file size?</h3>
+                <p>
+                    Yes, approximately 33% larger. Since SVG is already a text-based format, the Base64 overhead is less justified than for binary formats like PNG or JPEG. URL-encoding (<code>data:image/svg+xml,</code>) is a smaller alternative for simple SVGs in CSS.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can I edit Base64-encoded SVG?</h3>
+                <p>
+                    Not directly. You must first decode the Base64 string back to SVG markup, make your edits, then re-encode the modified SVG. Use the <a href="/base64-to-svg/">Base64 to SVG converter</a> to decode.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is my SVG data kept private?</h3>
+                <p>
+                    Yes, all processing is local in your browser. SVG data is encoded using JavaScript and never leaves your device. No data is transmitted to any server.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="SVG to Base64 Converter - Encode SVG Files to Base64 Online"
+  description="Convert SVG files and code to Base64 strings online. Upload SVG files or paste SVG markup and get a Base64-encoded data URI for CSS and HTML."
+  canonical="https://base64image.net/svg-to-base64/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "SVG to Base64 Converter",
+            "item": "https://base64image.net/svg-to-base64/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert SVG to Base64",
+        "description": "Step-by-step guide to encode SVG files or markup into a Base64 string online",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Provide SVG Input",
+            "text": "Upload an SVG file using the file input, or paste raw SVG markup into the text area."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Encoding",
+            "text": "The tool reads the SVG data and converts it to a Base64 data URI with the image/svg+xml MIME type."
+        }, {
+            "@type": "HowToStep",
+            "name": "Review Output",
+            "text": "View the rendered SVG preview, file information, and the full Base64 string in the output textarea."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy Base64 String",
+            "text": "Click the Copy to Clipboard button to copy the Base64 data URI for use in CSS background-image or HTML."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Can I paste SVG code directly?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, paste raw SVG markup into the text area or upload an .svg file using the file input. Both methods produce the same Base64 output."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base64 the best way to embed SVG in CSS?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For CSS background-image, yes. Inline SVG cannot be used in CSS background-image properties. Base64 encoding allows you to embed SVG directly in stylesheets without external file references."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does Base64 increase SVG file size?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, approximately 33% larger. Since SVG is already a text format, the Base64 overhead is less justified than for binary formats like PNG or JPEG. Consider URL-encoding as a smaller alternative for CSS."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I edit Base64-encoded SVG?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Not directly. You must first decode the Base64 string back to SVG markup, make your edits, then re-encode the modified SVG to Base64."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is my SVG data kept private?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, all processing is local in your browser. SVG data is encoded using JavaScript and never leaves your device or is transmitted to any server."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

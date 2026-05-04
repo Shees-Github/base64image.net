@@ -1,0 +1,260 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main>
+        <h1><i class="fas fa-list-alt"></i> Base64 MIME Types Reference</h1>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
+
+        <p class="intro">
+            Complete reference of MIME types used with Base64 encoding and data URIs
+        </p>
+
+        <article class="content-section" style="margin-top:0;padding-top:0;border-top:none;">
+            <h2><i class="fas fa-question-circle"></i> What Are MIME Types in Base64 Encoding?</h2>
+            <p>
+                MIME types identify the file format of Base64-encoded data in data URIs. The data URI format is <code>data:[MIME type];base64,[data]</code>. The MIME type tells the browser how to interpret the decoded bytes. Without a correct MIME type, the browser cannot determine whether the decoded content is an image, font, document, or other format.
+            </p>
+            <p>
+                MIME types follow the <code>type/subtype</code> pattern defined by IANA (Internet Assigned Numbers Authority). The type describes the general category (image, application, text, font, audio, video) and the subtype identifies the specific format (png, pdf, plain, woff2, mpeg). Every data URI used in HTML, CSS, or JavaScript should include the correct MIME type for the encoded content.
+            </p>
+            <p>
+                For a broader explanation of data URI syntax and usage, see the <a href="/data-uri-guide/">Data URI Guide</a>. For details on how Base64 encoding works at the byte level, read <a href="/what-is-base64/">What is Base64</a>.
+            </p>
+
+            <h2><i class="fas fa-image"></i> What Image MIME Types Are Used with Base64?</h2>
+            <p>
+                Image MIME types are the most commonly used types with Base64 data URIs in web development. They cover all standard web image formats supported by modern browsers. The table below lists each image format with its MIME type, the complete data URI prefix, and associated file extensions.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Format</th><th>MIME Type</th><th>Data URI Prefix</th><th>File Extension</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>PNG</td><td><code>image/png</code></td><td><code>data:image/png;base64,</code></td><td>.png</td></tr>
+                    <tr><td>JPEG</td><td><code>image/jpeg</code></td><td><code>data:image/jpeg;base64,</code></td><td>.jpg, .jpeg</td></tr>
+                    <tr><td>GIF</td><td><code>image/gif</code></td><td><code>data:image/gif;base64,</code></td><td>.gif</td></tr>
+                    <tr><td>WebP</td><td><code>image/webp</code></td><td><code>data:image/webp;base64,</code></td><td>.webp</td></tr>
+                    <tr><td>SVG</td><td><code>image/svg+xml</code></td><td><code>data:image/svg+xml;base64,</code></td><td>.svg</td></tr>
+                    <tr><td>BMP</td><td><code>image/bmp</code></td><td><code>data:image/bmp;base64,</code></td><td>.bmp</td></tr>
+                    <tr><td>ICO</td><td><code>image/x-icon</code></td><td><code>data:image/x-icon;base64,</code></td><td>.ico</td></tr>
+                    <tr><td>TIFF</td><td><code>image/tiff</code></td><td><code>data:image/tiff;base64,</code></td><td>.tiff</td></tr>
+                    <tr><td>AVIF</td><td><code>image/avif</code></td><td><code>data:image/avif;base64,</code></td><td>.avif</td></tr>
+                </tbody>
+            </table>
+            <p>
+                PNG and JPEG are the most frequently used formats with Base64 data URIs. SVG uses the <code>image/svg+xml</code> MIME type because SVG is an XML-based format. WebP and AVIF are newer formats with smaller file sizes. To encode images to Base64 with the correct MIME type prefix, use the <a href="/base64-image-encoder/">Base64 Image Encoder</a>. To decode Base64 image data back to viewable images, use the <a href="/base64-to-png/">Base64 to PNG Converter</a> or <a href="/base64-to-jpeg/">Base64 to JPEG Converter</a>.
+            </p>
+
+            <h2><i class="fas fa-file-alt"></i> What Document MIME Types Are Used with Base64?</h2>
+            <p>
+                Document MIME types cover non-image files commonly transmitted as Base64 in APIs, data URIs, and email attachments. These include structured data formats, compressed archives, and plain text.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Format</th><th>MIME Type</th><th>Data URI Prefix</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>PDF</td><td><code>application/pdf</code></td><td><code>data:application/pdf;base64,</code></td></tr>
+                    <tr><td>JSON</td><td><code>application/json</code></td><td><code>data:application/json;base64,</code></td></tr>
+                    <tr><td>XML</td><td><code>application/xml</code></td><td><code>data:application/xml;base64,</code></td></tr>
+                    <tr><td>ZIP</td><td><code>application/zip</code></td><td><code>data:application/zip;base64,</code></td></tr>
+                    <tr><td>Plain Text</td><td><code>text/plain</code></td><td><code>data:text/plain;base64,</code></td></tr>
+                    <tr><td>HTML</td><td><code>text/html</code></td><td><code>data:text/html;base64,</code></td></tr>
+                    <tr><td>CSV</td><td><code>text/csv</code></td><td><code>data:text/csv;base64,</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                PDF files embedded as Base64 data URIs can be displayed in <code>&lt;iframe&gt;</code> elements or <code>&lt;embed&gt;</code> tags in browsers with built-in PDF viewers. JSON and XML are text formats that can use either Base64 or percent-encoding in data URIs. ZIP files encoded as Base64 can be offered as download links using <code>&lt;a href="data:application/zip;base64,..." download="file.zip"&gt;</code>. For encoding documents to Base64, use the <a href="/base64-file-encoder/">Base64 File Encoder</a>. To convert Base64 back to PDF, use the <a href="/base64-to-pdf/">Base64 to PDF Converter</a>.
+            </p>
+
+            <h2><i class="fas fa-font"></i> What Font MIME Types Are Used with Base64?</h2>
+            <p>
+                Font MIME types identify web font formats used in CSS <code>@font-face</code> declarations. Embedding fonts as Base64 in CSS eliminates separate font file requests. The <code>font/</code> MIME type category was standardized by IANA for web font formats.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Format</th><th>MIME Type</th><th>Data URI Prefix</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>WOFF2</td><td><code>font/woff2</code></td><td><code>data:font/woff2;base64,</code></td></tr>
+                    <tr><td>WOFF</td><td><code>font/woff</code></td><td><code>data:font/woff;base64,</code></td></tr>
+                    <tr><td>TTF</td><td><code>font/ttf</code></td><td><code>data:font/ttf;base64,</code></td></tr>
+                    <tr><td>OTF</td><td><code>font/otf</code></td><td><code>data:font/otf;base64,</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                WOFF2 is the recommended format for web fonts. It uses Brotli compression and produces the smallest file sizes among web font formats. When embedding fonts as Base64 in CSS, use WOFF2 to minimize the CSS file size increase. Older MIME types like <code>application/font-woff</code> and <code>application/x-font-ttf</code> are deprecated in favor of the <code>font/</code> prefix. For details on embedding fonts in CSS, see <a href="/base64-css/">Base64 in CSS</a>.
+            </p>
+
+            <h2><i class="fas fa-music"></i> What Audio and Video MIME Types Are Used with Base64?</h2>
+            <p>
+                Audio and video files can be Base64-encoded, but this is rarely done in practice. Media files are typically large (megabytes to gigabytes), and the 33% Base64 overhead makes inline embedding impractical. Streaming protocols handle media delivery more efficiently than data URIs.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Format</th><th>MIME Type</th><th>Typical File Size</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>MP3</td><td><code>audio/mpeg</code></td><td>1-10 MB per song</td></tr>
+                    <tr><td>WAV</td><td><code>audio/wav</code></td><td>10-50 MB per song</td></tr>
+                    <tr><td>OGG</td><td><code>audio/ogg</code></td><td>1-8 MB per song</td></tr>
+                    <tr><td>MP4</td><td><code>video/mp4</code></td><td>10 MB - 1 GB+</td></tr>
+                    <tr><td>WebM</td><td><code>video/webm</code></td><td>5 MB - 500 MB+</td></tr>
+                </tbody>
+            </table>
+            <p>
+                The only practical use for Base64-encoded audio is embedding very short notification sounds (under 50 KB) in web applications to avoid an HTTP request. Base64-encoded video is generally not used in web contexts. APIs that transmit audio or video data as Base64 in JSON payloads face the same 33% overhead, making presigned URLs or streaming endpoints the preferred approach for media delivery.
+            </p>
+
+            <h2><i class="fas fa-search"></i> How Do You Determine the MIME Type of Base64 Data?</h2>
+            <p>
+                Two methods identify the MIME type of Base64-encoded data. First, check the data URI prefix: the MIME type appears between <code>data:</code> and <code>;base64,</code> in the string. Second, decode the Base64 data and read the magic bytes (file signature) of the decoded output.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Format</th><th>Magic Bytes (Hex)</th><th>Magic Bytes (ASCII)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>PNG</td><td><code>89 50 4E 47</code></td><td><code>.PNG</code></td></tr>
+                    <tr><td>JPEG</td><td><code>FF D8 FF</code></td><td>N/A (non-printable)</td></tr>
+                    <tr><td>GIF</td><td><code>47 49 46 38</code></td><td><code>GIF8</code></td></tr>
+                    <tr><td>PDF</td><td><code>25 50 44 46</code></td><td><code>%PDF</code></td></tr>
+                    <tr><td>ZIP</td><td><code>50 4B 03 04</code></td><td><code>PK..</code></td></tr>
+                    <tr><td>WebP</td><td><code>52 49 46 46</code></td><td><code>RIFF</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                If a Base64 string lacks a data URI prefix, decode it and check the first 4-8 bytes against known magic byte signatures. The <a href="/base64-validator/">Base64 Validator</a> tool decodes Base64 input, detects the content type from magic bytes, and reports the corresponding MIME type. This is useful when receiving Base64 data from APIs or external sources where the MIME type is not provided.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What happens if I use the wrong MIME type?</h3>
+                <p>
+                    The browser may fail to render the data or display it incorrectly. Specifying <code>image/png</code> for JPEG data causes the PNG decoder to reject the bytes because the file signature does not match. Some browsers attempt format detection despite the declared MIME type, but this fallback behavior is not reliable across all browsers and rendering contexts.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is the MIME type required in a Base64 data URI?</h3>
+                <p>
+                    Yes for correct rendering. When the MIME type is omitted, the browser defaults to <code>text/plain;charset=US-ASCII</code>, which is incorrect for binary data like images, fonts, and documents. Always include the MIME type in the data URI to ensure the browser uses the correct format handler for the decoded bytes.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use any MIME type with Base64?</h3>
+                <p>
+                    Yes. Any valid IANA-registered MIME type works with Base64 encoding in a data URI. The browser attempts to render the decoded content using its handler for that MIME type. Whether the content actually displays depends on the browser having a built-in renderer for that format. Common web formats (images, fonts, PDF) render in all modern browsers without additional plugins.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I find the MIME type of a file?</h3>
+                <p>
+                    Check the file extension and look it up in the reference tables above. Programmatically, read the file's magic bytes (the first few bytes that identify the format). PNG files start with <code>0x89504E47</code>, JPEG with <code>0xFFD8FF</code>, GIF with <code>0x474946</code>. The <a href="/base64-validator/">Base64 Validator</a> detects the MIME type of Base64-encoded data by examining the decoded content's magic bytes.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between MIME type and file extension?</h3>
+                <p>
+                    A MIME type is a standardized format identifier registered with IANA that follows the <code>type/subtype</code> pattern (e.g., <code>image/png</code>, <code>application/pdf</code>). A file extension is a suffix appended to a filename (e.g., <code>.png</code>, <code>.pdf</code>). MIME types are used in HTTP headers, data URIs, and email to identify content format. File extensions are filesystem conventions. A file can have a mismatched extension, but the MIME type in a data URI must match the actual content for correct rendering.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 MIME Types Reference - Complete Data URI MIME Type List"
+  description="Complete reference of MIME types used with Base64 data URIs. Includes image, document, font, audio, and video MIME types with data URI prefix examples."
+  canonical="https://base64image.net/base64-mime-types/"
+  ogType="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Base64 MIME Types Reference - Complete Data URI MIME Type List",
+        "datePublished": "2026-02-13",
+        "dateModified": "2026-02-25",
+        "description": "Complete reference of MIME types used with Base64 data URIs. Includes image, document, font, audio, and video MIME types with data URI prefix examples.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/base64-mime-types/"
+        }
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 MIME Types Reference",
+            "item": "https://base64image.net/base64-mime-types/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What happens if I use the wrong MIME type?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The browser may fail to render the data or display it incorrectly. For example, specifying image/png for JPEG data causes the PNG decoder to reject the bytes because the file signature does not match. Some browsers attempt format detection despite the MIME type, but this behavior is not reliable across all browsers and contexts."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is the MIME type required in a Base64 data URI?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes for correct rendering. When the MIME type is omitted from a data URI, the browser defaults to text/plain;charset=US-ASCII, which is incorrect for binary data like images, fonts, and documents. Always include the MIME type to ensure the browser interprets the decoded bytes with the correct format handler."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use any MIME type with Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Any valid IANA-registered MIME type can be used with Base64 encoding in a data URI. The browser attempts to render the decoded content using the handler registered for that MIME type. Whether the content actually displays depends on the browser having a built-in renderer or plugin for that format. Common web formats (images, fonts, PDF) render in all modern browsers."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I find the MIME type of a file?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Check the file extension and look it up in a MIME type reference table. Programmatically, read the file's magic bytes (first few bytes that identify the format). PNG files start with 0x89504E47, JPEG with 0xFFD8FF, GIF with 0x474946. The Base64 validator tool detects the MIME type of Base64-encoded data by examining the decoded content's magic bytes."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the difference between MIME type and file extension?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A MIME type is a standardized format identifier registered with IANA that follows the type/subtype pattern (e.g., image/png, application/pdf). A file extension is a suffix appended to a filename (e.g., .png, .pdf). MIME types are used in HTTP headers, data URIs, and email to identify content format. File extensions are filesystem conventions. A file can have a mismatched extension, but the MIME type in a data URI must match the actual content."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

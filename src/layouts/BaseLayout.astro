@@ -1,0 +1,258 @@
+---
+const { title, description, canonical, ogType = 'website' } = Astro.props;
+const year = new Date().getFullYear();
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonical}>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <meta property="og:type" content={ogType}>
+  <meta property="og:title" content={title}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:site_name" content="BASE64IMAGE">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content={title}>
+  <meta name="twitter:description" content={description}>
+
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/assets/style.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R2ZZ9P0P25"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R2ZZ9P0P25');
+  </script>
+
+  <!-- Page-specific head content (structured data, Alpine.js, etc.) -->
+  <slot name="head" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="logo"><i class="fas fa-image"></i> BASE64IMAGE</a>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Encoders <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="/base64-text-encoder/">Text to Base64</a></li>
+              <li><a href="/base64-file-encoder/">File to Base64</a></li>
+              <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Decoders <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
+              <li><a href="/base64-file-decoder/">Base64 to File</a></li>
+              <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Converters <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+              <li><a href="/base64-to-jpeg/">Base64 to JPEG</a></li>
+              <li><a href="/base64-to-svg/">Base64 to SVG</a></li>
+              <li><a href="/base64-to-webp/">Base64 to WebP</a></li>
+              <li><a href="/base64-to-gif/">Base64 to GIF</a></li>
+              <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+              <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Tools <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="/base64-validator/">Validator</a></li>
+              <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
+              <li><a href="/base64-embed-generator/">Embed Generator</a></li>
+              <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
+              <li><a href="/base64-size-calculator/">Size Calculator</a></li>
+              <li><a href="/base32-encoder-decoder/">Base32 Encoder</a></li>
+            </ul>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">Learn <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="/what-is-base64/">What is Base64?</a></li>
+              <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
+              <li><a href="/base64-character-table/">Character Table</a></li>
+              <li><a href="/data-uri-guide/">Data URI Guide</a></li>
+              <li><a href="/base64-mime-types/">MIME Types</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="mobile-menu-overlay"></div>
+  </header>
+
+  <!-- Page content -->
+  <slot />
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h3>Encoders</h3>
+          <ul>
+            <li><a href="/base64-text-encoder/">Text to Base64</a></li>
+            <li><a href="/base64-file-encoder/">File to Base64</a></li>
+            <li><a href="/base64-image-encoder/">Image to Base64</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Decoders</h3>
+          <ul>
+            <li><a href="/base64-text-decoder/">Base64 to Text</a></li>
+            <li><a href="/base64-file-decoder/">Base64 to File</a></li>
+            <li><a href="/base64-image-decoder/">Base64 to Image</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Converters</h3>
+          <ul>
+            <li><a href="/base64-to-png/">Base64 to PNG</a></li>
+            <li><a href="/base64-to-jpeg/">Base64 to JPEG</a></li>
+            <li><a href="/base64-to-svg/">Base64 to SVG</a></li>
+            <li><a href="/base64-to-webp/">Base64 to WebP</a></li>
+            <li><a href="/base64-to-gif/">Base64 to GIF</a></li>
+            <li><a href="/base64-to-pdf/">Base64 to PDF</a></li>
+            <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Tools & Utilities</h3>
+          <ul>
+            <li><a href="/base64-validator/">Validator</a></li>
+            <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
+            <li><a href="/base64-embed-generator/">Embed Generator</a></li>
+            <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
+            <li><a href="/base64-size-calculator/">Size Calculator</a></li>
+            <li><a href="/base32-encoder-decoder/">Base32 Encoder</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Learn</h3>
+          <ul>
+            <li><a href="/what-is-base64/">What is Base64?</a></li>
+            <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
+            <li><a href="/base64-character-table/">Character Table</a></li>
+            <li><a href="/data-uri-guide/">Data URI Guide</a></li>
+            <li><a href="/base64-vs-binary/">Base64 vs Binary</a></li>
+            <li><a href="/base64-mime-types/">MIME Types</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Developer Guides</h3>
+          <ul>
+            <li><a href="/base64-javascript/">Base64 in JavaScript</a></li>
+            <li><a href="/base64-python/">Base64 in Python</a></li>
+            <li><a href="/base64-java/">Base64 in Java</a></li>
+            <li><a href="/base64-php/">Base64 in PHP</a></li>
+            <li><a href="/base64-csharp/">Base64 in C#</a></li>
+            <li><a href="/base64-go/">Base64 in Go</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3>Information</h3>
+          <ul>
+            <li><a href="/about/">About Us</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li><a href="/privacy-policy/">Privacy Policy</a></li>
+            <li><a href="/terms-of-service/">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="footer-copyright">&copy; {year} BASE64IMAGE. All tools run locally in your browser.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const mainNav = document.querySelector('.main-nav');
+    const menuOverlay = document.querySelector('.mobile-menu-overlay');
+
+    if (menuToggle && mainNav && menuOverlay) {
+      menuToggle.addEventListener('click', e => {
+        e.stopPropagation();
+        mainNav.classList.toggle('active');
+        menuOverlay.classList.toggle('active');
+        const icon = menuToggle.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+      });
+      menuOverlay.addEventListener('click', () => {
+        mainNav.classList.remove('active');
+        menuOverlay.classList.remove('active');
+        const icon = menuToggle.querySelector('i');
+        icon.classList.replace('fa-times', 'fa-bars');
+      });
+      document.querySelectorAll('.main-nav a').forEach(link => {
+        link.addEventListener('click', () => {
+          if (window.innerWidth <= 768) {
+            mainNav.classList.remove('active');
+            menuOverlay.classList.remove('active');
+            const icon = menuToggle.querySelector('i');
+            icon.classList.replace('fa-times', 'fa-bars');
+          }
+        });
+      });
+    }
+
+    // Dropdowns
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+      const toggle = dropdown.querySelector('.dropdown-toggle');
+      dropdown.addEventListener('mouseenter', () => {
+        if (window.innerWidth > 768) dropdown.classList.add('active');
+      });
+      dropdown.addEventListener('mouseleave', () => {
+        if (window.innerWidth > 768) dropdown.classList.remove('active');
+      });
+      toggle.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (window.innerWidth <= 768) {
+          dropdowns.forEach(d => { if (d !== dropdown) d.classList.remove('active'); });
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.dropdown')) {
+        dropdowns.forEach(d => d.classList.remove('active'));
+      }
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        mainNav?.classList.remove('active');
+        menuOverlay?.classList.remove('active');
+        const icon = menuToggle?.querySelector('i');
+        icon?.classList.replace('fa-times', 'fa-bars');
+      }
+    });
+  </script>
+
+</body>
+</html>

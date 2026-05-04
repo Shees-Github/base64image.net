@@ -1,0 +1,275 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main>
+        <h1><i class="fab fa-php"></i> Base64 in PHP</h1>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
+        <p class="intro">How to encode and decode Base64 in PHP using built-in functions</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <!-- Section 1: Encoding -->
+            <h2><i class="fas fa-lock"></i> How Do You Encode a String to Base64 in PHP?</h2>
+            <p>
+                Use <code>base64_encode()</code> to convert a string to Base64. This built-in function accepts a raw string and returns the Base64-encoded representation using the standard alphabet (A-Z, a-z, 0-9, +, /) with <code>=</code> padding. It has been available since PHP 4 and requires no extensions or packages.
+            </p>
+            <pre><code>&lt;?php
+$original = "Hello, World!";
+$encoded = base64_encode($original);
+echo $encoded; // SGVsbG8sIFdvcmxkIQ==</code></pre>
+            <p>
+                PHP strings are byte sequences, so <code>base64_encode()</code> works directly on any string content, including binary data and UTF-8 text. No character encoding conversion is needed before encoding. For background on the Base64 format, see <a href="/what-is-base64/">What is Base64?</a>. To encode text without writing code, use the <a href="/base64-text-encoder/">Base64 text encoder</a>.
+            </p>
+
+            <!-- Section 2: Decoding -->
+            <h2><i class="fas fa-unlock"></i> How Do You Decode Base64 in PHP?</h2>
+            <p>
+                Use <code>base64_decode()</code> to convert a Base64 string back to its original data. The function returns the decoded string on success or <code>false</code> on failure. Pass <code>true</code> as the second argument to enable strict mode, which rejects input containing characters outside the Base64 alphabet.
+            </p>
+            <pre><code>&lt;?php
+// Basic decoding
+$decoded = base64_decode("SGVsbG8sIFdvcmxkIQ==");
+echo $decoded; // Hello, World!
+
+// Strict mode: returns false for invalid input
+$result = base64_decode("not valid!@#", true);
+if ($result === false) {
+    echo "Invalid Base64 input";
+}</code></pre>
+            <p>
+                Without strict mode, <code>base64_decode()</code> silently ignores characters outside the Base64 alphabet. Strict mode is recommended for user-supplied input to detect corrupted or malicious data. Always check the return value against <code>false</code> using the identical operator (<code>===</code>) because a valid decoded string could be falsy. To decode Base64 interactively, use the <a href="/base64-text-decoder/">Base64 text decoder</a>.
+            </p>
+
+            <!-- Section 3: File Encoding -->
+            <h2><i class="fas fa-file"></i> How Do You Encode a File to Base64 in PHP?</h2>
+            <p>
+                Read the file contents with <code>file_get_contents()</code> and pass the result to <code>base64_encode()</code>. This loads the entire file into memory as a string. For images, prepend the MIME type to create a data URI suitable for embedding in HTML <code>&lt;img&gt;</code> tags or CSS.
+            </p>
+            <pre><code>&lt;?php
+// Encode a file to Base64
+$fileData = file_get_contents("image.png");
+$encoded = base64_encode($fileData);
+
+// Create a data URI for HTML embedding
+$mimeType = mime_content_type("image.png");
+$dataUri = "data:{$mimeType};base64,{$encoded}";
+echo '&lt;img src="' . $dataUri . '" alt="Embedded image"&gt;';</code></pre>
+            <p>
+                The <code>mime_content_type()</code> function detects the MIME type automatically. For large files, be aware that <code>file_get_contents()</code> loads the entire file into memory and <code>base64_encode()</code> creates a string approximately 33% larger. Adjust <code>memory_limit</code> accordingly. The <a href="/base64-file-encoder/">Base64 file encoder</a> performs file encoding directly in your browser without uploading to a server.
+            </p>
+
+            <!-- Section 4: File Uploads -->
+            <h2><i class="fas fa-upload"></i> How Do You Handle Base64 File Uploads in PHP?</h2>
+            <p>
+                Extract the Base64 data from the data URI string, decode it, and save to disk. Data URIs follow the format <code>data:[mime];base64,[data]</code>. Split on the comma to isolate the Base64 payload, decode with <code>base64_decode()</code>, then write the binary data with <code>file_put_contents()</code>.
+            </p>
+            <pre><code>&lt;?php
+// Receive a data URI from a form or API request
+$dataUri = $_POST['image']; // "data:image/png;base64,iVBORw0KGgo..."
+
+// Extract MIME type and Base64 data
+list($header, $base64Data) = explode(',', $dataUri, 2);
+
+// Extract MIME type from header
+preg_match('/data:([^;]+);base64/', $header, $matches);
+$mimeType = $matches[1]; // "image/png"
+
+// Decode and save the file
+$fileData = base64_decode($base64Data, true);
+if ($fileData === false) {
+    die("Invalid Base64 data");
+}
+file_put_contents("uploads/image.png", $fileData);</code></pre>
+            <p>
+                Always validate the MIME type against an allowlist before saving. Never trust the MIME type from the data URI header alone; use <code>finfo_buffer()</code> on the decoded bytes to verify the actual file type. For a complete reference on data URI structure and usage, see the <a href="/data-uri-guide/">data URI guide</a>.
+            </p>
+
+            <!-- Section 5: Reference Table -->
+            <h2><i class="fas fa-table"></i> What PHP Base64 Functions Are Available?</h2>
+            <p>
+                PHP provides 2 core Base64 functions and a helper function for formatting MIME-encoded output. The table below lists each function with its parameters, return type, and use case.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Function</th><th>Parameters</th><th>Returns</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>base64_encode($data)</code></td><td><code>string $data</code></td><td><code>string</code></td><td>Encodes data to Base64 (RFC 4648 &sect;4)</td></tr>
+                    <tr><td><code>base64_decode($data, $strict)</code></td><td><code>string $data</code>, <code>bool $strict = false</code></td><td><code>string|false</code></td><td>Decodes Base64 data; returns false on failure in strict mode</td></tr>
+                    <tr><td><code>chunk_split($string, $length, $separator)</code></td><td><code>string $string</code>, <code>int $length = 76</code>, <code>string $separator = "\\\\r\\\\n"</code></td><td><code>string</code></td><td>Splits a string into chunks; used for MIME formatting</td></tr>
+                </tbody>
+            </table>
+            <p>
+                Use <code>chunk_split(base64_encode($data))</code> to produce MIME-formatted Base64 output with line breaks every 76 characters, as required by RFC 2045 for email attachments. PHP also supports Base64 stream filters via <code>stream_filter_append($stream, 'convert.base64-encode')</code> for processing large data without loading it entirely into memory.
+            </p>
+
+            <!-- Section 6: Validation -->
+            <h2><i class="fas fa-check-circle"></i> How Do You Validate Base64 in PHP?</h2>
+            <p>
+                Combine strict mode decoding with a regex check for reliable validation. The <code>base64_decode($data, true)</code> strict mode rejects non-alphabet characters but does not verify structural correctness. Add a regex pattern to confirm the string matches the expected Base64 format before decoding.
+            </p>
+            <pre><code>&lt;?php
+function isValidBase64(string $data): bool {
+    // Check for valid Base64 characters and correct padding
+    if (!preg_match('/^[A-Za-z0-9+\\\\/]*={0,2}$/', $data)) {
+        return false;
+    }
+    // Length must be a multiple of 4
+    if (strlen($data) % 4 !== 0) {
+        return false;
+    }
+    // Attempt strict decode
+    return base64_decode($data, true) !== false;
+}
+
+echo isValidBase64("SGVsbG8=") ? "valid" : "invalid"; // valid
+echo isValidBase64("not!valid") ? "valid" : "invalid"; // invalid</code></pre>
+            <p>
+                The regex <code>/^[A-Za-z0-9+\\\\/]*={0,2}$/</code> ensures only valid Base64 characters are present and that padding uses at most 2 <code>=</code> characters. The length check confirms proper 4-character grouping. For browser-based validation without writing PHP, use the <a href="/base64-validator/">Base64 validator</a>. For URL-safe Base64 validation, adjust the regex to accept <code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code>; see the <a href="/base64-url-safe/">URL-safe Base64 tool</a>.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Does PHP have built-in Base64 support?</h3>
+                <p>
+                    Yes. PHP includes <code>base64_encode()</code> and <code>base64_decode()</code> as built-in functions available since PHP 4. No extension, composer package, or additional configuration is required. These functions are part of PHP's core and are always available in every PHP installation.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do you validate Base64 input in PHP?</h3>
+                <p>
+                    Pass <code>true</code> as the second argument to <code>base64_decode($data, true)</code> to enable strict mode. In strict mode, the function returns <code>false</code> if the input contains characters outside the Base64 alphabet (A-Z, a-z, 0-9, +, /, =). Without strict mode, invalid characters are silently discarded. Combine with a regex check for complete validation.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How does PHP handle large files with Base64?</h3>
+                <p>
+                    <code>base64_encode()</code> loads the entire file into memory as a string. For large files, this may exceed PHP's <code>memory_limit</code>. Increase the limit with <code>ini_set('memory_limit', '256M')</code> or use stream filters with <code>stream_filter_append($handle, 'convert.base64-encode')</code> to process files in chunks without loading everything into memory.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do you create URL-safe Base64 in PHP?</h3>
+                <p>
+                    PHP does not have a dedicated URL-safe Base64 function. Encode with <code>base64_encode()</code>, then replace <code>+</code> with <code>-</code>, <code>/</code> with <code>_</code>, and optionally remove <code>=</code> padding using <code>strtr()</code> and <code>rtrim()</code>. To decode, reverse the character replacement with <code>strtr()</code> and pass the result to <code>base64_decode()</code>. See the <a href="/base64-url-safe/">URL-safe Base64 tool</a> for browser-based encoding.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do you decode a Base64 image in PHP?</h3>
+                <p>
+                    Extract the Base64 data from the data URI by splitting on the comma with <code>explode(',', $dataUri, 2)</code>, then pass the second element to <code>base64_decode()</code>. Write the decoded bytes to a file with <code>file_put_contents()</code> or process them with GD (<code>imagecreatefromstring()</code>) or Imagick. Always validate the decoded data with <code>finfo_buffer()</code> before saving. For browser-based image encoding, use the <a href="/base64-image-encoder/">Base64 image encoder</a>.
+                </p>
+            </div>
+
+            <!-- Related Links -->
+            <h2><i class="fas fa-sitemap"></i> Related Base64 Tools and Guides</h2>
+            <ul>
+                <li><a href="/what-is-base64/">What is Base64?</a> - Comprehensive guide to the Base64 encoding format</li>
+                <li><a href="/base64-text-encoder/">Base64 Text Encoder</a> - Encode text to Base64 in your browser</li>
+                <li><a href="/base64-file-encoder/">Base64 File Encoder</a> - Encode files to Base64 client-side</li>
+                <li><a href="/base64-image-encoder/">Base64 Image Encoder</a> - Convert images to Base64 data URIs</li>
+                <li><a href="/base64-url-safe/">URL-Safe Base64 Encoder</a> - Encode with the URL-safe alphabet</li>
+                <li><a href="/base64-validator/">Base64 Validator</a> - Check if a string is valid Base64</li>
+                <li><a href="/data-uri-guide/">Data URI Guide</a> - How to use data URIs in HTML and CSS</li>
+                <li><a href="/">All Base64 Tools</a> - Browse the complete toolset</li>
+            </ul>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 Encoding in PHP - base64_encode and base64_decode Guide"
+  description="Learn how to encode and decode Base64 in PHP using base64_encode() and base64_decode(). Code examples for strings, files, images, and email attachments."
+  canonical="https://base64image.net/base64-php/"
+  ogType="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in PHP",
+            "item": "https://base64image.net/base64-php/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Base64 Encoding in PHP - base64_encode and base64_decode Guide",
+        "datePublished": "2026-02-13",
+        "dateModified": "2026-02-25",
+        "description": "Learn how to encode and decode Base64 in PHP using base64_encode() and base64_decode(). Code examples for strings, files, images, and email attachments.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/base64-php/"
+        }
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Does PHP have built-in Base64 support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. PHP includes base64_encode() and base64_decode() as built-in functions available since PHP 4. No extension, composer package, or additional configuration is required. These functions are part of PHP's core and are always available in every PHP installation."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do you validate Base64 input in PHP?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Pass true as the second argument to base64_decode($data, true) to enable strict mode. In strict mode, the function returns false if the input contains characters outside the Base64 alphabet (A-Z, a-z, 0-9, +, /, =). Without strict mode, invalid characters are silently discarded."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How does PHP handle large files with Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "base64_encode() loads the entire file into memory as a string. For large files, this may exceed PHP's memory_limit. Increase the limit with ini_set('memory_limit', '256M') or use stream filters with stream_filter_append($handle, 'convert.base64-encode') to process files in chunks without loading everything into memory."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do you create URL-safe Base64 in PHP?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "PHP does not have a dedicated URL-safe Base64 function. Encode with base64_encode(), then replace + with -, / with _, and optionally remove = padding using strtr() and rtrim(). To decode, reverse the character replacement with strtr() and pass the result to base64_decode()."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do you decode a Base64 image in PHP?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Extract the Base64 data from the data URI by splitting on the comma, then pass it to base64_decode(). For example: list($header, $data) = explode(',', $dataUri, 2); $imageBytes = base64_decode($data); Then write the bytes to a file with file_put_contents() or process them with GD or Imagick."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

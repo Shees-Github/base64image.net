@@ -12,7 +12,12 @@
       "Bash(fi)",
       "Bash(docker build:*)",
       "Bash(find:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(dir /B \"d:\\\\Upwork\\\\Shees Devs\\\\base64image.net\\\\base64image.net\")",
+      "WebFetch(domain:zaraaltairwrites.com)",
+      "WebFetch(domain:genghisdigital.com.au)",
+      "Bash(git status:*)",
+      "Bash(npm install *)"
     ]
   }
 }

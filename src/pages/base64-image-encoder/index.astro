@@ -1,0 +1,236 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="base64Encoder()">
+        <div x-show="isProcessing" x-cloak class="processing-overlay">
+            <div class="processing-spinner">
+                <div class="spinner"></div>
+                <p>Processing image...</p>
+            </div>
+        </div>
+
+        <h1><i class="fas fa-file-upload"></i> Base64 Image Encoder</h1>
+        <p class="intro">Convert images to Base64 strings instantly in your browser</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All encoding happens locally in your browser. Your images never leave your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="fileInput">Select an image:</label>
+                <input
+                    type="file"
+                    id="fileInput"
+                    @change="handleFileUpload"
+                    accept="image/*"
+                >
+                <div class="error" x-show="error" x-text="error"></div>
+                <div class="success" x-show="success" x-text="success"></div>
+            </div>
+
+            <div class="preview-container" x-show="imagePreview">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imagePreview" alt="Image preview" x-show="imagePreview">
+                </div>
+                <div class="image-info" x-show="fileInfo">
+                    <p><strong>Filename:</strong> <span x-text="fileInfo.name"></span></p>
+                    <p><strong>Format:</strong> <span x-text="fileInfo.type"></span></p>
+                    <p><strong>Size:</strong> <span x-text="fileInfo.size"></span></p>
+                </div>
+            </div>
+
+            <div class="input-group" x-show="base64Output">
+                <label for="base64Output">Base64 String:</label>
+                <textarea
+                    id="base64Output"
+                    x-model="base64Output"
+                    readonly
+                    rows="8"
+                    @click="$el.select()"
+                ></textarea>
+            </div>
+
+            <div class="actions" x-show="base64Output">
+                <button @click="copyToClipboard" class="btn-primary">Copy to Clipboard</button>
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 Image Encoding?</h2>
+            <p>
+                Base64 image encoding converts binary image data into a text string that can be safely embedded in HTML, CSS, JSON, or other text-based formats.
+                This encoding scheme uses 64 ASCII characters to represent binary data, making it possible to include images directly in your code without
+                requiring separate image files or external URLs.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Why Encode Images to Base64?</h2>
+            <p>
+                Base64-encoded images are useful in many web development scenarios. They eliminate additional HTTP requests by embedding small assets directly
+                in CSS or HTML. They're essential for data URIs in stylesheets, allowing you to include icons and logos without external files. Email developers
+                use Base64 to embed images in HTML emails. API developers include image data in JSON responses. The technique is particularly effective for
+                small images like icons, buttons, and logos where the convenience outweighs the 33% size increase from encoding.
+                Use our <a href="/base64-embed-generator/">embed code generator</a> to create ready-to-use HTML and CSS snippets.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does the Base64 Image Encoder Work?</h2>
+            <p>
+                Our Base64 image encoder uses the FileReader API to read your uploaded image file directly in the browser. The image data is then converted
+                to a Base64 string using the btoa() function. The result includes the complete data URI with MIME type, making it ready to use in HTML img
+                tags, CSS backgrounds, or anywhere data URIs are supported. All processing happens instantly in your browser's memory—no server uploads required.
+            </p>
+
+            <h2><i class="fas fa-list-ul"></i> What Are the Common Use Cases for Base64 Image Encoding?</h2>
+            <p>
+                Base64 image encoding serves 6 primary use cases. Frontend developers embed small UI elements to reduce HTTP requests and improve page load performance. CSS developers include background images and icons directly in stylesheets. Email template designers embed images to ensure they display in all email clients. API developers transmit image data through JSON. Mobile app developers send images to backends as Base64 strings. DevOps teams bundle image assets in configuration files. Need to reverse the process? Use the <a href="/base64-image-decoder/">Base64 image decoder</a>. You can also <a href="/base64-validator/">validate your Base64 output</a> before embedding.
+            </p>
+
+            <h2><i class="fas fa-star"></i> What Are the Best Practices for Base64 Image Encoding?</h2>
+            <p>
+                While Base64 encoding is convenient, use it wisely. Encode only small images (typically under 10KB) to avoid bloating your HTML or CSS files.
+                Larger images should be served as separate files to benefit from browser caching and CDN distribution. Base64 is ideal for frequently-used
+                UI elements that appear on every page, small icons and logos, placeholder images, or images that must be included in JSON API responses.
+                Avoid encoding large photos or background images, as the 33% size increase can significantly impact page load times.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>How do I convert an image to Base64?</h3>
+                <p>
+                    Simply upload your image using the file selector above. The tool will automatically convert it to a Base64 string that you can copy
+                    and use in your code. All processing happens locally in your browser.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>What image formats can I encode?</h3>
+                <p>
+                    This encoder supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, and BMP. Any image format your browser
+                    can display can be encoded to Base64.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is my image uploaded to a server?</h3>
+                <p>
+                    No. This tool processes everything locally in your browser using JavaScript. Your images never leave your device, ensuring complete
+                    privacy and security.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Why does Base64 increase file size?</h3>
+                <p>
+                    Base64 encoding represents binary data using only 64 text characters, which requires more space than raw binary. The encoded string
+                    is approximately 33% larger than the original file. This trade-off is acceptable for small images where the convenience of inline
+                    embedding outweighs the size increase.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>How do I use the Base64 string in HTML?</h3>
+                <p>
+                    Copy the complete Base64 string (including the data:image prefix) and use it as the src attribute of an img tag:
+                    &lt;img src="data:image/png;base64,iVBORw0KG..." alt="Description"&gt;
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 Image Encoder - Convert Images to Base64 Online Free"
+  description="Free online Base64 image encoder. Upload any image and convert it to a Base64 string. Perfect for embedding images in HTML, CSS, or JSON. Works locally in your browser."
+  canonical="https://base64image.net/base64-image-encoder/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert Images to Base64",
+        "description": "Step-by-step guide to encode images to Base64 format online for free",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Upload Image",
+            "text": "Click the file upload button and select an image from your device (PNG, JPEG, GIF, WebP, SVG, or BMP)."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Encoding",
+            "text": "The tool automatically converts your image to Base64 format. Processing happens instantly in your browser."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy Base64 String",
+            "text": "Click the 'Copy Base64' button to copy the encoded string to your clipboard."
+        }, {
+            "@type": "HowToStep",
+            "name": "Use in Your Code",
+            "text": "Paste the Base64 string into your HTML, CSS, JSON, or JavaScript code where needed."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I convert an image to Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Simply upload your image using the file selector above. The tool will automatically convert it to a Base64 string that you can copy and use in your code. All processing happens locally in your browser."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What image formats can I encode?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This encoder supports all standard web image formats including PNG, JPEG, GIF, WebP, SVG, and BMP. Any image format your browser can display can be encoded to Base64."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is my image uploaded to a server?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. This tool processes everything locally in your browser using JavaScript. Your images never leave your device, ensuring complete privacy and security."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why does Base64 increase file size?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 encoding represents binary data using only 64 text characters, which requires more space than raw binary. The encoded string is approximately 33% larger than the original file. This trade-off is acceptable for small images where the convenience of inline embedding outweighs the size increase."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I use the Base64 string in HTML?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Copy the complete Base64 string (including the data:image prefix) and use it as the src attribute of an img tag: <img src=\"data:image/png;base64,iVBORw0KG...\" alt=\"Description\">."
+            }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 Image Encoder",
+            "item": "https://base64image.net/base64-image-encoder/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

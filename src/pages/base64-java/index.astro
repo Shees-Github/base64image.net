@@ -1,0 +1,314 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main>
+        <h1><i class="fab fa-java"></i> Base64 in Java</h1>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
+        <p class="intro">How to encode and decode Base64 in Java using the java.util.Base64 class</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <!-- Section 1: Encoding -->
+            <h2><i class="fas fa-code"></i> How Do You Encode a String to Base64 in Java?</h2>
+            <p>
+                Use <code>java.util.Base64.getEncoder()</code> to obtain a <code>Base64.Encoder</code> instance. This class has been available since Java 8. Call <code>encodeToString()</code> to produce a <code>String</code> output, or call <code>encode()</code> to receive a <code>byte[]</code> array. The encoder uses the standard Base64 alphabet defined in RFC 4648 Section 4.
+            </p>
+            <pre><code>import java.util.Base64;
+
+String original = "Hello, World!";
+String encoded = Base64.getEncoder().encodeToString(original.getBytes("UTF-8"));
+System.out.println(encoded); // SGVsbG8sIFdvcmxkIQ==</code></pre>
+            <p>
+                The <code>getBytes("UTF-8")</code> call converts the string to a UTF-8 byte array before encoding. Always specify the character encoding explicitly to avoid platform-dependent behavior. The encoder instance returned by <code>getEncoder()</code> is thread-safe and reusable. For a browser-based alternative, use the <a href="/base64-text-encoder/">Base64 text encoder</a>.
+            </p>
+
+            <!-- Section 2: Decoding -->
+            <h2><i class="fas fa-unlock"></i> How Do You Decode Base64 in Java?</h2>
+            <p>
+                Use <code>Base64.getDecoder().decode()</code> to convert a Base64 string back to its original bytes. The <code>decode()</code> method accepts either a <code>String</code> or a <code>byte[]</code> and returns a <code>byte[]</code>. Construct a new <code>String</code> from the byte array with the correct character encoding.
+            </p>
+            <pre><code>import java.util.Base64;
+
+byte[] decoded = Base64.getDecoder().decode("SGVsbG8sIFdvcmxkIQ==");
+String result = new String(decoded, "UTF-8");
+System.out.println(result); // Hello, World!</code></pre>
+            <p>
+                The decoder throws <code>IllegalArgumentException</code> if the input contains characters outside the Base64 alphabet. Validate input strings before decoding in production code. To decode Base64 directly in your browser, use the <a href="/base64-text-decoder/">Base64 text decoder</a>.
+            </p>
+
+            <!-- Section 3: Encoder Types -->
+            <h2><i class="fas fa-list"></i> What Base64 Encoder Types Does Java Provide?</h2>
+            <p>
+                Java provides 3 encoder/decoder pairs through static factory methods on the <code>Base64</code> class. Each pair implements a different Base64 variant defined in RFC 4648 or RFC 2045. The basic encoder handles general-purpose encoding, the URL encoder produces URL-safe output, and the MIME encoder formats output for email transport.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Method</th><th>Encoder Type</th><th>Line Length</th><th>Padding</th><th>Use Case</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>getEncoder()</code></td><td>Basic (RFC 4648 &sect;4)</td><td>No line breaks</td><td>Yes</td><td>General purpose</td></tr>
+                    <tr><td><code>getUrlEncoder()</code></td><td>URL-safe (RFC 4648 &sect;5)</td><td>No line breaks</td><td>Yes</td><td>URLs, JWT tokens</td></tr>
+                    <tr><td><code>getMimeEncoder()</code></td><td>MIME (RFC 2045)</td><td>76 chars + CRLF</td><td>Yes</td><td>Email attachments</td></tr>
+                </tbody>
+            </table>
+            <p>
+                Each encoder has a corresponding decoder: <code>getDecoder()</code>, <code>getUrlDecoder()</code>, and <code>getMimeDecoder()</code>. The MIME decoder is lenient and ignores characters outside the Base64 alphabet, including line breaks. The basic and URL decoders reject non-Base64 characters with an exception. For a deeper understanding of these encoding variants, see the <a href="/what-is-base64/">What is Base64</a> guide.
+            </p>
+
+            <!-- Section 4: URL-Safe -->
+            <h2><i class="fas fa-link"></i> How Do You Use URL-Safe Base64 in Java?</h2>
+            <p>
+                Use <code>Base64.getUrlEncoder()</code> to produce URL-safe Base64 output. This encoder replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code> as defined in RFC 4648 Section 5. For JWT tokens and URL parameters, chain <code>withoutPadding()</code> to omit trailing <code>=</code> characters.
+            </p>
+            <pre><code>import java.util.Base64;
+
+byte[] data = "subjects?abcd".getBytes("UTF-8");
+
+// URL-safe with padding
+String withPad = Base64.getUrlEncoder().encodeToString(data);
+System.out.println(withPad); // c3ViamVjdHM_YWJjZA==
+
+// URL-safe without padding (common for JWT)
+String noPad = Base64.getUrlEncoder().withoutPadding().encodeToString(data);
+System.out.println(noPad); // c3ViamVjdHM_YWJjZA</code></pre>
+            <p>
+                The URL-safe encoder prevents conflicts when Base64 strings appear in query parameters, fragment identifiers, or file names. Decode URL-safe strings with <code>Base64.getUrlDecoder().decode()</code>. The <a href="/base64-url-safe/">URL-safe Base64 tool</a> provides browser-based encoding with the same alphabet.
+            </p>
+
+            <!-- Section 5: File Encoding -->
+            <h2><i class="fas fa-file"></i> How Do You Encode a File to Base64 in Java?</h2>
+            <p>
+                Read the file into a byte array using <code>Files.readAllBytes()</code>, then pass the bytes to <code>Base64.getEncoder().encodeToString()</code>. This approach loads the entire file into memory, so it works for files that fit within the JVM heap.
+            </p>
+            <pre><code>import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
+
+byte[] fileBytes = Files.readAllBytes(Path.of("image.png"));
+String encoded = Base64.getEncoder().encodeToString(fileBytes);
+
+// Create a data URI for HTML embedding
+String dataUri = "data:image/png;base64," + encoded;
+System.out.println(dataUri);</code></pre>
+            <p>
+                For images, prepend the appropriate MIME type to create a data URI string. The <a href="/base64-file-encoder/">Base64 file encoder</a> performs the same operation in your browser without uploading the file to a server. To decode a Base64 file back to binary, reverse the process with <code>Files.write()</code> and <code>Base64.getDecoder().decode()</code>.
+            </p>
+
+            <!-- Section 6: Streams -->
+            <h2><i class="fas fa-stream"></i> How Do You Use Base64 with Streams in Java?</h2>
+            <p>
+                <code>Base64.getEncoder().wrap(OutputStream)</code> returns a Base64-encoding output stream, and <code>Base64.getDecoder().wrap(InputStream)</code> returns a Base64-decoding input stream. These wrappers process data incrementally, avoiding the need to load entire files into memory. Use streams for large files that exceed available heap space.
+            </p>
+            <pre><code>import java.io.*;
+import java.util.Base64;
+
+// Encode a file using streams (low memory usage)
+try (OutputStream out = Base64.getEncoder().wrap(
+        new FileOutputStream("image.b64"))) {
+    Files.copy(Path.of("image.png"), out);
+}
+
+// Decode a Base64 file using streams
+try (InputStream in = Base64.getDecoder().wrap(
+        new FileInputStream("image.b64"))) {
+    Files.copy(in, Path.of("decoded.png"));
+}</code></pre>
+            <p>
+                The stream wrappers buffer data internally and process it in chunks. This approach handles files of any size because only a small buffer resides in memory at any time. The <code>wrap()</code> method is available on basic, URL-safe, and MIME encoders and decoders. Use the <a href="/base64-size-calculator/">Base64 size calculator</a> to estimate encoded output size before processing.
+            </p>
+
+            <!-- Section 7: Methods Reference -->
+            <h2><i class="fas fa-book"></i> What Java Base64 Methods Are Available?</h2>
+            <p>
+                The <code>java.util.Base64</code> class contains 6 static factory methods and 2 inner classes (<code>Encoder</code> and <code>Decoder</code>). The Encoder class provides 3 encoding methods plus a padding modifier and a stream wrapper. The Decoder class provides 2 decoding methods and a stream wrapper.
+            </p>
+
+            <h3>Base64 Static Factory Methods</h3>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>getEncoder()</code></td><td><code>Base64.Encoder</code></td><td>Basic encoder (RFC 4648 &sect;4)</td></tr>
+                    <tr><td><code>getDecoder()</code></td><td><code>Base64.Decoder</code></td><td>Basic decoder</td></tr>
+                    <tr><td><code>getUrlEncoder()</code></td><td><code>Base64.Encoder</code></td><td>URL-safe encoder (RFC 4648 &sect;5)</td></tr>
+                    <tr><td><code>getUrlDecoder()</code></td><td><code>Base64.Decoder</code></td><td>URL-safe decoder</td></tr>
+                    <tr><td><code>getMimeEncoder()</code></td><td><code>Base64.Encoder</code></td><td>MIME encoder (RFC 2045, 76-char lines)</td></tr>
+                    <tr><td><code>getMimeDecoder()</code></td><td><code>Base64.Decoder</code></td><td>MIME decoder (ignores non-Base64 chars)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Encoder Instance Methods</h3>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>encode(byte[])</code></td><td><code>byte[]</code></td><td>Encode to byte array</td></tr>
+                    <tr><td><code>encodeToString(byte[])</code></td><td><code>String</code></td><td>Encode to String</td></tr>
+                    <tr><td><code>encode(byte[], byte[])</code></td><td><code>int</code></td><td>Encode into provided buffer, returns length</td></tr>
+                    <tr><td><code>wrap(OutputStream)</code></td><td><code>OutputStream</code></td><td>Wrap stream for encoding on write</td></tr>
+                    <tr><td><code>withoutPadding()</code></td><td><code>Base64.Encoder</code></td><td>Return encoder that omits <code>=</code> padding</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Decoder Instance Methods</h3>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Method</th><th>Returns</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>decode(String)</code></td><td><code>byte[]</code></td><td>Decode String to byte array</td></tr>
+                    <tr><td><code>decode(byte[])</code></td><td><code>byte[]</code></td><td>Decode byte array to byte array</td></tr>
+                    <tr><td><code>decode(byte[], byte[])</code></td><td><code>int</code></td><td>Decode into provided buffer, returns length</td></tr>
+                    <tr><td><code>wrap(InputStream)</code></td><td><code>InputStream</code></td><td>Wrap stream for decoding on read</td></tr>
+                </tbody>
+            </table>
+            <p>
+                All Encoder and Decoder instances are immutable and thread-safe. Store them as <code>static final</code> fields for reuse across your application. For a complete reference on the Base64 alphabet used by these methods, see the <a href="/base64-character-table/">Base64 character table</a>.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Which Java version added Base64 support?</h3>
+                <p>
+                    Java 8 (released March 2014) added the <code>java.util.Base64</code> class. This class provides static factory methods <code>getEncoder()</code>, <code>getDecoder()</code>, <code>getUrlEncoder()</code>, <code>getUrlDecoder()</code>, <code>getMimeEncoder()</code>, and <code>getMimeDecoder()</code> for all standard Base64 encoding variants defined in RFC 4648 and RFC 2045.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Apache Commons Codec still needed for Base64 in Java?</h3>
+                <p>
+                    No. Since Java 8, the <code>java.util.Base64</code> class provides built-in Base64 encoding and decoding. The Apache Commons Codec library (<code>org.apache.commons.codec.binary.Base64</code>) is no longer required for Base64 operations. The standard library implementation covers basic, URL-safe, and MIME encoding variants. Remove the dependency to reduce your application's footprint.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do you encode Base64 without padding in Java?</h3>
+                <p>
+                    Call the <code>withoutPadding()</code> method on any <code>Encoder</code> instance. For example: <code>Base64.getEncoder().withoutPadding().encodeToString(data)</code>. This returns a Base64 string without trailing <code>=</code> characters. The <code>withoutPadding()</code> method works with basic, URL-safe, and MIME encoders. The decoder handles both padded and unpadded input automatically.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is java.util.Base64 thread-safe?</h3>
+                <p>
+                    Yes. Both <code>Base64.Encoder</code> and <code>Base64.Decoder</code> instances returned by the static factory methods are thread-safe and stateless. A single instance can be shared across multiple threads without synchronization. Store encoder and decoder instances as <code>static final</code> fields for reuse throughout your application.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between getEncoder and getMimeEncoder?</h3>
+                <p>
+                    <code>getEncoder()</code> returns a basic encoder that produces a single continuous Base64 string with no line breaks, following RFC 4648 Section 4. <code>getMimeEncoder()</code> returns an encoder that inserts CRLF (<code>\\\\r\\\\n</code>) line separators every 76 characters, following RFC 2045. Use the MIME encoder for email attachments and multipart messages. Use the basic encoder for data URIs, JSON payloads, and API responses.
+                </p>
+            </div>
+
+            <!-- Related Links -->
+            <h2><i class="fas fa-sitemap"></i> Related Base64 Tools and Guides</h2>
+            <ul>
+                <li><a href="/what-is-base64/">What is Base64?</a> - Comprehensive guide to the Base64 encoding format</li>
+                <li><a href="/base64-text-encoder/">Base64 Text Encoder</a> - Encode text to Base64 in your browser</li>
+                <li><a href="/base64-url-safe/">URL-Safe Base64 Encoder</a> - Encode with the URL-safe alphabet</li>
+                <li><a href="/base64-file-encoder/">Base64 File Encoder</a> - Encode files to Base64 client-side</li>
+                <li><a href="/base64-character-table/">Base64 Character Table</a> - Complete alphabet reference</li>
+                <li><a href="/base64-size-calculator/">Base64 Size Calculator</a> - Calculate encoded output size</li>
+                <li><a href="/">All Base64 Tools</a> - Browse the complete toolset</li>
+            </ul>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 Encoding in Java - java.util.Base64 Guide with Examples"
+  description="Learn how to encode and decode Base64 in Java using java.util.Base64. Code examples for basic, URL-safe, and MIME encoding with the Encoder and Decoder classes."
+  canonical="https://base64image.net/base64-java/"
+  ogType="article"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in Java",
+            "item": "https://base64image.net/base64-java/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Base64 Encoding in Java - java.util.Base64 Guide with Examples",
+        "datePublished": "2026-02-13",
+        "dateModified": "2026-02-25",
+        "description": "Learn how to encode and decode Base64 in Java using java.util.Base64. Code examples for basic, URL-safe, and MIME encoding with the Encoder and Decoder classes.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/base64-java/"
+        }
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Which Java version added Base64 support?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Java 8 (released March 2014) added the java.util.Base64 class. This class provides static factory methods getEncoder(), getDecoder(), getUrlEncoder(), getUrlDecoder(), getMimeEncoder(), and getMimeDecoder() for all standard Base64 encoding variants defined in RFC 4648 and RFC 2045."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Apache Commons Codec still needed for Base64 in Java?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Since Java 8, the java.util.Base64 class provides built-in Base64 encoding and decoding. The Apache Commons Codec library (org.apache.commons.codec.binary.Base64) is no longer required for Base64 operations. The standard library implementation covers basic, URL-safe, and MIME encoding variants."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do you encode Base64 without padding in Java?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Call the withoutPadding() method on any Encoder instance. For example: Base64.getEncoder().withoutPadding().encodeToString(data). This returns a Base64 string without trailing = characters. The withoutPadding() method works with basic, URL-safe, and MIME encoders."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is java.util.Base64 thread-safe?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Both Base64.Encoder and Base64.Decoder instances returned by the static factory methods are thread-safe and stateless. A single Encoder or Decoder instance can be shared across multiple threads without synchronization. Store them as static final fields for reuse."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the difference between getEncoder and getMimeEncoder?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "getEncoder() returns a basic encoder that produces a single continuous Base64 string with no line breaks (RFC 4648 Section 4). getMimeEncoder() returns an encoder that inserts CRLF line separators every 76 characters (RFC 2045). MIME encoding is used for email attachments and multipart messages."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

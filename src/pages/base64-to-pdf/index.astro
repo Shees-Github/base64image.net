@@ -1,0 +1,281 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="base64ToPdf()">
+        <h1><i class="fas fa-file-pdf"></i> Base64 to PDF Converter</h1>
+        <p class="intro">Encode PDF files to Base64 or decode Base64 to PDF</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <!-- Mode Toggle -->
+        <div style="display: flex; justify-content: center; gap: 10px; margin: 30px 0;">
+            <button
+                @click="mode = 'encode'; clearAll()"
+                :class="mode === 'encode' ? 'btn-primary' : 'btn-secondary'"
+                style="min-width: 150px;">
+                <i class="fas fa-lock"></i> Encode (PDF → Base64)
+            </button>
+            <button
+                @click="mode = 'decode'; clearAll()"
+                :class="mode === 'decode' ? 'btn-primary' : 'btn-secondary'"
+                style="min-width: 150px;">
+                <i class="fas fa-unlock"></i> Decode (Base64 → PDF)
+            </button>
+        </div>
+
+        <!-- Encode Mode -->
+        <section class="tool-section" x-show="mode === 'encode'">
+            <div class="input-group">
+                <label for="pdfFile">Upload PDF file:</label>
+                <input
+                    type="file"
+                    id="pdfFile"
+                    @change="encodePdf($event)"
+                    accept=".pdf,application/pdf"
+                    class="file-input">
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="preview-container" x-show="base64Output">
+                <h2><i class="fas fa-code"></i> Base64 Output</h2>
+                <div class="input-group">
+                    <textarea
+                        x-model="base64Output"
+                        readonly
+                        rows="10"
+                        placeholder="Base64 string will appear here..."
+                    ></textarea>
+                </div>
+                <div class="image-info" x-show="fileInfo">
+                    <p><strong>Filename:</strong> <span x-text="fileInfo.name"></span></p>
+                    <p><strong>Size:</strong> <span x-text="fileInfo.size"></span></p>
+                    <p><strong>Base64 Length:</strong> <span x-text="base64Output.length"></span> characters</p>
+                </div>
+                <button @click="copyBase64" class="btn-primary">
+                    <i class="fas fa-copy"></i> <span x-text="copyButtonText"></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Decode Mode -->
+        <section class="tool-section" x-show="mode === 'decode'">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="decodePdf"
+                    placeholder="Paste your Base64 string here..."
+                    rows="8"
+                ></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="preview-container" x-show="pdfUrl">
+                <h2><i class="fas fa-file-pdf"></i> PDF Preview</h2>
+                <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <iframe
+                        :src="pdfUrl"
+                        style="width: 100%; height: 600px; border: 1px solid #ddd; border-radius: 4px;"
+                        x-show="pdfUrl"
+                    ></iframe>
+                </div>
+                <div class="image-info" x-show="decodedInfo">
+                    <p><strong>Size:</strong> <span x-text="decodedInfo.size"></span></p>
+                    <p><strong>Type:</strong> PDF Document</p>
+                </div>
+                <button @click="downloadPdf" class="btn-primary">
+                    <i class="fas fa-download"></i> Download PDF
+                </button>
+            </div>
+        </section>
+
+        <div class="actions" x-show="base64Output || pdfUrl">
+            <button @click="clearAll" class="btn-secondary">Clear</button>
+        </div>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 PDF Conversion?</h2>
+            <p>
+                Base64 PDF conversion encodes PDF binary data into ASCII text strings or decodes Base64 strings back into PDF documents. A 1 MB PDF produces approximately 1.33 MB of Base64 text due to the 33% encoding overhead defined in RFC 4648.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Why Convert PDF Files to Base64?</h2>
+            <p>
+                Base64 PDF encoding converts binary PDF data into text for transmission through text-only channels. This conversion serves 5 primary purposes in software development.
+            </p>
+            <ul>
+                <li><strong>JSON API responses:</strong> REST APIs return PDF invoices or reports as Base64 strings inside JSON payloads, eliminating separate file download endpoints.</li>
+                <li><strong>Database storage:</strong> Backend systems store generated PDF receipts in <code>TEXT</code> or <code>VARCHAR</code> database columns as Base64 strings.</li>
+                <li><strong>Email attachments:</strong> MIME email protocols encode PDF attachments as Base64 for transmission through SMTP. Use the <a href="/base64-file-encoder/">Base64 file encoder</a> for non-PDF attachments.</li>
+                <li><strong>WebSocket transmission:</strong> Web applications transmit PDF documents through WebSocket connections that only support text frames.</li>
+                <li><strong>Data URIs:</strong> The format <code>data:application/pdf;base64,...</code> embeds PDF data directly in HTML anchor tags.</li>
+            </ul>
+
+            <h2><i class="fas fa-cog"></i> How Does the Base64 PDF Converter Work?</h2>
+            <p>
+                The converter uses 2 browser APIs to process PDFs locally. For encoding, the FileReader API reads uploaded PDF binary data and converts it to a Base64 string. For decoding, the tool converts Base64 text back to binary, creates a Blob object with MIME type <code>application/pdf</code>, and generates a downloadable file via <code>URL.createObjectURL()</code>.
+            </p>
+
+            <h3>What Is the PDF File Signature?</h3>
+            <p>
+                Valid PDF files begin with the 4-byte magic number <code>%PDF</code> (hex: <code>25 50 44 46</code>). This tool checks for that signature when decoding Base64 to PDF, rejecting strings that do not represent valid PDF data. Use the <a href="/base64-validator/">Base64 validator</a> to check your string before decoding.
+            </p>
+
+            <h2><i class="fas fa-exchange-alt"></i> How Does PDF Base64 Compare to Other Formats?</h2>
+            <p>
+                PDF Base64 encoding differs from image Base64 encoding in MIME type and typical file size. The table below compares Base64 encoding across common document and image formats.
+            </p>
+            <table class="reference-table">
+                <thead><tr><th>Format</th><th>MIME Type</th><th>Typical Size Range</th><th>Data URI Prefix</th></tr></thead>
+                <tbody>
+                    <tr><td>PDF</td><td><code>application/pdf</code></td><td>50 KB – 50 MB</td><td><code>data:application/pdf;base64,</code></td></tr>
+                    <tr><td>PNG</td><td><code>image/png</code></td><td>1 KB – 5 MB</td><td><code>data:image/png;base64,</code></td></tr>
+                    <tr><td>JPEG</td><td><code>image/jpeg</code></td><td>5 KB – 10 MB</td><td><code>data:image/jpeg;base64,</code></td></tr>
+                    <tr><td>SVG</td><td><code>image/svg+xml</code></td><td>1 KB – 500 KB</td><td><code>data:image/svg+xml;base64,</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                For image-specific conversion, use the <a href="/base64-to-png/">Base64 to PNG converter</a> or the <a href="/base64-image-decoder/">Base64 image decoder</a>.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This PDF Converter Private and Secure?</h2>
+            <p>
+                All encoding and decoding operations run locally in your browser using the FileReader, Blob, and <code>URL.createObjectURL</code> APIs. Zero network requests are made to external servers. Your PDF files, Base64 data, and decoded documents never leave your device.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I convert a PDF to Base64?</h3>
+                <p>
+                    Click the Encode tab, upload your PDF file, and the tool generates a Base64 string instantly. Click "Copy Base64" to copy the output to your clipboard.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I convert Base64 to PDF?</h3>
+                <p>
+                    Click the Decode tab, paste your Base64 string into the text area, and the tool generates a downloadable PDF file. Click "Download PDF" to save it to your device.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the maximum PDF file size for conversion?</h3>
+                <p>
+                    The maximum size depends on your browser's available memory. Most modern browsers handle PDFs up to 10 MB without issues. PDFs over 10 MB may cause slower processing due to the 33% Base64 overhead increasing memory requirements.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does Base64 encoding change PDF content?</h3>
+                <p>
+                    No. Base64 encoding is a lossless, reversible transformation. The decoded PDF is byte-for-byte identical to the original file. Only the representation changes — from binary to ASCII text.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use Base64 PDFs in HTML?</h3>
+                <p>
+                    Yes. Embed a Base64 PDF in an HTML anchor tag: <code>&lt;a href="data:application/pdf;base64,..."&gt;Download PDF&lt;/a&gt;</code>. For generating embed snippets, use the <a href="/base64-embed-generator/">embed code generator</a>.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 to PDF Converter - Encode & Decode PDF Files Online"
+  description="Free online Base64 to PDF converter. Encode PDF files to Base64 strings or decode Base64 to PDF. Fast, secure, and privacy-focused."
+  canonical="https://base64image.net/base64-to-pdf/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert PDF to Base64 and Base64 to PDF",
+        "description": "Step-by-step guide to encode PDF files to Base64 and decode Base64 strings to PDF",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Choose Mode",
+            "text": "Select either Encode mode to convert PDF to Base64, or Decode mode to convert Base64 to PDF."
+        }, {
+            "@type": "HowToStep",
+            "name": "Upload or Paste",
+            "text": "For encoding, upload a PDF file. For decoding, paste your Base64 string into the text area."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Conversion",
+            "text": "The tool automatically processes your input. Encoding generates a Base64 string, decoding generates a PDF preview."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy or Download",
+            "text": "Copy the Base64 string to clipboard or download the decoded PDF file to your device."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I convert a PDF to Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Click the Encode tab, upload your PDF file, and the tool generates a Base64 string instantly. Click 'Copy Base64' to copy the output to your clipboard."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I convert Base64 to PDF?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Click the Decode tab, paste your Base64 string into the text area, and the tool generates a downloadable PDF file. Click 'Download PDF' to save it to your device."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the maximum PDF file size for conversion?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The maximum size depends on your browser's available memory. Most modern browsers handle PDFs up to 10 MB without issues. PDFs over 10 MB may cause slower processing due to the 33% Base64 overhead increasing memory requirements."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does Base64 encoding change PDF content?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Base64 encoding is a lossless, reversible transformation. The decoded PDF is byte-for-byte identical to the original file. Only the representation changes — from binary to ASCII text."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use Base64 PDFs in HTML?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Embed a Base64 PDF in an HTML anchor tag using the data URI format: <a href=\"data:application/pdf;base64,...\">Download PDF</a>."
+            }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to PDF Converter",
+            "item": "https://base64image.net/base64-to-pdf/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

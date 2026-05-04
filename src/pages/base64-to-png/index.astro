@@ -1,0 +1,213 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="base64ToPng()">
+        <h1><i class="fas fa-file-image"></i> Base64 to PNG Converter</h1>
+        <p class="intro">Convert Base64 strings directly to PNG images</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    @input="decodeImage"
+                    placeholder="Paste your Base64 string here..."
+                    rows="6"
+                ></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="actions">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+
+            <div class="preview-container" x-show="imageUrl">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imageUrl" alt="Converted PNG preview" x-show="imageUrl">
+                </div>
+                <div class="image-info" x-show="imageInfo">
+                    <p><strong>Original Format:</strong> <span x-text="imageInfo.originalFormat"></span></p>
+                    <p><strong>Output Format:</strong> PNG</p>
+                    <p><strong>Size:</strong> <span x-text="imageInfo.size"></span></p>
+                </div>
+                <button @click="downloadPng" class="btn-primary">Download PNG</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 to PNG Conversion?</h2>
+            <p>
+                Base64 to PNG conversion takes a Base64-encoded string and converts it into a downloadable PNG image file. PNG (Portable Network Graphics)
+                is a popular lossless image format that supports transparency and is widely used for web graphics, logos, and screenshots. This tool
+                decodes the Base64 string and saves the result as a standard PNG file.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> Why Convert to PNG Format?</h2>
+            <p>
+                PNG is the preferred format for many use cases due to its lossless compression and transparency support. Unlike JPEG, PNG preserves image
+                quality without artifacts, making it ideal for graphics with text, sharp edges, or transparent backgrounds. Converting Base64 to PNG is
+                useful when you need to extract images from API responses, save embedded images from web pages, or convert images from other formats
+                while maintaining quality.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does the Base64 to PNG Converter Work?</h2>
+            <p>
+                This tool first decodes your Base64 string to reveal the original image data. If the image is already in PNG format, it extracts it directly.
+                If it's in another format (like JPEG or WebP), the browser's Canvas API converts it to PNG automatically. The result is a clean PNG file
+                that preserves image quality and supports transparency. All processing happens locally in your browser for complete privacy.
+            </p>
+
+            <h2><i class="fas fa-star"></i> What Are the Advantages of PNG Format?</h2>
+            <p>
+                PNG provides 4 advantages over lossy formats like JPEG. It uses lossless compression — zero quality loss during encoding. It supports full alpha channel transparency with 256 levels of opacity. It renders sharp edges on text and graphics without compression artifacts. It is universally supported across all browsers and image editing software. For logos, icons, screenshots, and graphics with text, PNG produces superior results. For more format options, use the <a href="/base64-image-decoder/">Base64 image decoder</a> or the <a href="/base64-embed-generator/">embed code generator</a>.
+            </p>
+
+            <h2><i class="fas fa-list-ul"></i> What Are Common Use Cases for Base64 to PNG Conversion?</h2>
+            <p>
+                Base64 to PNG conversion serves 5 common use cases. Frontend developers extract PNG assets from CSS data URIs. Backend developers convert Base64 image data from API responses into downloadable files. Designers save logos and graphics from web sources as PNG files. Quality assurance teams extract screenshots from automated test results. DevOps engineers convert Base64 images from CI/CD pipeline outputs. For batch conversion of multiple images, use the <a href="/base64-bulk-converter/">bulk Base64 converter</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>How do I convert Base64 to PNG?</h3>
+                <p>
+                    Paste your Base64 string into the text area above and the tool will automatically decode it. If the image is in PNG format (or can be
+                    converted), click the "Download PNG" button to save it as a .png file.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can I convert non-PNG Base64 to PNG?</h3>
+                <p>
+                    Yes. This tool can convert Base64 strings from any image format (JPEG, GIF, WebP, etc.) to PNG format. The browser will automatically
+                    handle the format conversion.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Will converting to PNG increase file size?</h3>
+                <p>
+                    It depends on the source format. Converting from lossy formats like JPEG to PNG may increase file size since PNG uses lossless compression.
+                    However, the image quality will be preserved or improved.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does PNG support transparency?</h3>
+                <p>
+                    Yes. PNG supports full alpha channel transparency, allowing for smooth transparent backgrounds and semi-transparent pixels. This makes
+                    PNG ideal for logos and graphics that need to overlay on different backgrounds.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is this tool safe for sensitive images?</h3>
+                <p>
+                    Absolutely. All conversion happens locally in your browser. Your Base64 data and images never leave your device, ensuring complete
+                    privacy and security.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 to PNG Converter - Convert Base64 to PNG Image Online"
+  description="Free online Base64 to PNG converter. Paste your Base64 string and convert it directly to PNG format. Download high-quality PNG images from Base64 data."
+  canonical="https://base64image.net/base64-to-png/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert Base64 to PNG",
+        "description": "Step-by-step guide to convert Base64 strings to PNG images online",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Copy your Base64 string and paste it into the text area. The data:image prefix is optional."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Conversion",
+            "text": "The tool automatically decodes the Base64 string and converts it to PNG format if needed."
+        }, {
+            "@type": "HowToStep",
+            "name": "Preview PNG Image",
+            "text": "View the converted PNG image in the preview section along with file size information."
+        }, {
+            "@type": "HowToStep",
+            "name": "Download PNG",
+            "text": "Click the 'Download PNG' button to save the image as a .png file to your device."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to PNG Converter",
+            "item": "https://base64image.net/base64-to-png/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I convert Base64 to PNG?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Paste your Base64 string into the text area above and the tool will automatically decode it. If the image is in PNG format (or can be converted), click the Download PNG button to save it as a .png file."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I convert non-PNG Base64 to PNG?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. This tool can convert Base64 strings from any image format (JPEG, GIF, WebP, etc.) to PNG format. The browser will automatically handle the format conversion."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Will converting to PNG increase file size?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "It depends on the source format. Converting from lossy formats like JPEG to PNG may increase file size since PNG uses lossless compression. However, the image quality will be preserved or improved."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does PNG support transparency?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. PNG supports full alpha channel transparency, allowing for smooth transparent backgrounds and semi-transparent pixels. This makes PNG ideal for logos and graphics that need to overlay on different backgrounds."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is this tool safe for sensitive images?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Absolutely. All conversion happens locally in your browser. Your Base64 data and images never leave your device, ensuring complete privacy and security."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

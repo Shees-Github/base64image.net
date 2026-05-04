@@ -1,0 +1,213 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main>
+        <h1><i class="fas fa-unlock"></i> Base64 Text Decoder</h1>
+
+        <p class="intro">
+            Decode Base64 encoded strings back to plain text instantly. Extract text from Base64 data, decode API responses, or reverse Base64 encoding for any text data.
+        </p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All decoding happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div class="tool-section" x-data="textDecoder()">
+            <div class="input-group">
+                <label for="base64Input"><i class="fas fa-code"></i> Enter Base64 String to Decode</label>
+                <textarea
+                    id="base64Input"
+                    x-model="base64Input"
+                    rows="8"
+                    placeholder="Paste your Base64 encoded text here..."
+                ></textarea>
+            </div>
+
+            <div class="actions">
+                <button @click="decodeText" class="btn-primary" :disabled="!base64Input.trim()">
+                    <i class="fas fa-unlock"></i> Decode to Text
+                </button>
+                <button @click="clearAll" class="btn-secondary">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div x-show="error" class="error" x-text="error"></div>
+
+            <div x-show="textOutput" class="preview-container">
+                <h2><i class="fas fa-font"></i> Decoded Text</h2>
+
+                <div class="input-group">
+                    <label>Plain Text Output</label>
+                    <textarea
+                        x-model="textOutput"
+                        rows="8"
+                        readonly
+                    ></textarea>
+                </div>
+
+                <div class="actions">
+                    <button @click="copyToClipboard" class="btn-primary">
+                        <i class="fas fa-copy"></i> Copy to Clipboard
+                    </button>
+                    <button @click="downloadAsText" class="btn-secondary">
+                        <i class="fas fa-download"></i> Download as .txt
+                    </button>
+                </div>
+
+                <div x-show="copySuccess" class="success">
+                    ✓ Copied to clipboard!
+                </div>
+
+                <div class="image-info">
+                    <p><strong>Base64 Length:</strong> <span x-text="base64Input.length"></span> characters</p>
+                    <p><strong>Decoded Length:</strong> <span x-text="textOutput.length"></span> characters</p>
+                    <p><strong>Encoding:</strong> UTF-8</p>
+                </div>
+            </div>
+        </div>
+
+        <section class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What is Base64 Text Decoding?</h2>
+            <p>
+                Base64 text decoding converts Base64 encoded strings back to their original plain text format. This is essential when working with APIs, configuration files, or any system that transmits text data in Base64 format.
+            </p>
+
+            <h2><i class="fas fa-lightbulb"></i> When Do You Need Base64 Text Decoding?</h2>
+            <p>
+                <strong>API Responses:</strong> Many APIs return text data encoded in Base64 format. You need to decode it to read the actual content.
+            </p>
+            <p>
+                <strong>Email Headers:</strong> Email systems often encode subject lines and headers in Base64 to support international characters.
+            </p>
+            <p>
+                <strong>JWT Tokens:</strong> JSON Web Tokens contain Base64 encoded payloads that need decoding to read claims and user data.
+            </p>
+            <p>
+                <strong>Configuration Data:</strong> Configuration files and environment variables sometimes store text data in Base64 format for portability.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> How Does Base64 Text Decoding Work?</h2>
+            <p>
+                This tool takes your Base64 string and reverses the encoding process. It converts the Base64 characters back into bytes, then interprets those bytes as UTF-8 text. The tool automatically handles UTF-8 encoding to properly display international characters and special symbols.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> What Are Common Base64 Text Decoding Issues?</h2>
+            <p>
+                <strong>Invalid Base64:</strong> If your Base64 string contains invalid characters or incorrect padding, decoding will fail. Make sure you copied the complete Base64 string without extra spaces or line breaks.
+            </p>
+            <p>
+                <strong>Binary Data:</strong> If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show garbled characters. Use our <a href="/base64-image-decoder/">Base64 Image Decoder</a> or <a href="/base64-file-decoder/">File Decoder</a> instead.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This Base64 Text Decoder Private and Secure?</h2>
+            <p>
+                All decoding happens locally in your browser using JavaScript. Your Base64 data is never sent to any server. This ensures complete privacy when decoding sensitive information like API tokens, passwords, or confidential messages.
+            </p>
+
+            <h2><i class="fas fa-code"></i> What Does Base64 Text Decoding Look Like?</h2>
+            <p>Here's how a Base64 string decodes back to text:</p>
+            <p><strong>Base64 encoded:</strong></p>
+            <pre><code>SGVsbG8sIFdvcmxkIQ==</code></pre>
+            <p><strong>Decoded text:</strong></p>
+            <pre><code>Hello, World!</code></pre>
+            <p>
+                The decoder handles UTF-8 encoding automatically, so international characters and special symbols decode correctly.
+                Need to encode text instead? Use our <a href="/base64-text-encoder/">Base64 Text Encoder</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I decode Base64 to text?</h3>
+                <p>Paste your Base64 string into the input field and click "Decode to Text". The tool instantly converts it to readable plain text in your browser. No server uploads required.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Why does my decoded text show garbled characters?</h3>
+                <p>If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show unreadable characters. Use our <a href="/base64-image-decoder/">Base64 Image Decoder</a> or <a href="/base64-file-decoder/">File Decoder</a> for non-text data.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I decode JWT tokens with this tool?</h3>
+                <p>Yes. JWT tokens contain Base64-encoded payloads. Paste the middle section of a JWT (between the two dots) to decode it and read the claims and user data. For URL-safe Base64 used in JWTs, try our <a href="/base64-url-safe/">URL-Safe Base64 tool</a>.</p>
+            </div>
+        </section>
+    </main>`;
+---
+<BaseLayout
+  title="Base64 Text Decoder - Decode Base64 to Text Online Free"
+  description="Free online Base64 to text decoder. Convert Base64 strings back to plain text instantly. Decode API responses, JWT tokens, and email headers in your browser."
+  canonical="https://base64image.net/base64-text-decoder/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Decode Base64 to Text",
+        "description": "Step-by-step guide to decode Base64 strings to plain text online for free",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Paste your Base64 encoded string into the input area."
+        }, {
+            "@type": "HowToStep",
+            "name": "Click Decode",
+            "text": "Click the 'Decode to Text' button to convert the Base64 string back to plain text."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy or Download",
+            "text": "Copy the decoded text to your clipboard or download it as a text file."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I decode Base64 to text?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Paste your Base64 string into the input field and click 'Decode to Text'. The tool instantly converts it to readable plain text in your browser. No server uploads required."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Why does my decoded text show garbled characters?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "If the Base64 string represents binary data (like images or files) rather than text, the decoded output will show unreadable characters. Use a Base64 image decoder or file decoder for non-text data."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I decode JWT tokens with this tool?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. JWT tokens contain Base64-encoded payloads. Paste the middle section of a JWT (between the two dots) to decode it and read the claims and user data inside."
+            }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 Text Decoder",
+            "item": "https://base64image.net/base64-text-decoder/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>

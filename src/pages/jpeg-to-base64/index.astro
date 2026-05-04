@@ -1,0 +1,271 @@
+﻿---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const mainHtml = `<main x-data="jpegToBase64()">
+        <div x-show="isProcessing" x-cloak class="processing-overlay">
+            <div class="processing-spinner">
+                <div class="spinner"></div>
+                <p>Encoding JPEG...</p>
+            </div>
+        </div>
+
+        <h1><i class="fas fa-file-upload"></i> JPEG to Base64 Converter</h1>
+        <p class="intro">Upload a JPEG image and get its Base64-encoded data URI instantly</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All encoding happens locally in your browser. Your images never leave your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="fileInput">Select a JPEG image:</label>
+                <input
+                    type="file"
+                    id="fileInput"
+                    @change="handleFileUpload"
+                    accept="image/jpeg,.jpg,.jpeg"
+                >
+                <div class="error" x-show="error" x-text="error"></div>
+                <div class="success" x-show="success" x-text="success"></div>
+            </div>
+
+            <div class="preview-container" x-show="imagePreview">
+                <h2><i class="fas fa-image"></i> Preview</h2>
+                <div class="image-wrapper">
+                    <img :src="imagePreview" alt="JPEG image preview" x-show="imagePreview">
+                </div>
+                <div class="image-info" x-show="fileInfo">
+                    <p><strong>Filename:</strong> <span x-text="fileInfo.name"></span></p>
+                    <p><strong>Format:</strong> <span x-text="fileInfo.type"></span></p>
+                    <p><strong>Original Size:</strong> <span x-text="fileInfo.size"></span></p>
+                    <p><strong>Dimensions:</strong> <span x-text="fileInfo.dimensions"></span></p>
+                    <p><strong>Base64 Size:</strong> <span x-text="fileInfo.base64Size"></span></p>
+                </div>
+            </div>
+
+            <div class="input-group" x-show="base64Output">
+                <label for="base64Output">Base64 String:</label>
+                <textarea
+                    id="base64Output"
+                    x-model="base64Output"
+                    readonly
+                    rows="8"
+                    @click="$el.select()"
+                ></textarea>
+            </div>
+
+            <div class="actions" x-show="base64Output">
+                <button @click="copyToClipboard" class="btn-primary">Copy to Clipboard</button>
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2>What Is JPEG to Base64 Conversion?</h2>
+            <p>
+                JPEG to Base64 conversion encodes the binary data of a JPEG file into a text string prefixed with <code>data:image/jpeg;base64,</code>. The output is a complete data URI that browsers render as an inline image. This string can be embedded in HTML <code>&lt;img&gt;</code> tags, CSS <code>background-image</code> rules, JSON API payloads, or JavaScript source code without referencing an external file.
+            </p>
+
+            <h2>Why Convert JPEG Images to Base64?</h2>
+            <p>
+                JPEG Base64 encoding is useful for embedding photo thumbnails in JSON API responses, including product images in HTML email templates, reducing HTTP requests for small photo assets, and bundling preview images in single-file HTML documents. JPEG's lossy compression produces smaller source files than PNG for photographs, which means shorter Base64 strings. The technique works best for thumbnails under 20 KB. For encoding any image format, see the <a href="/base64-image-encoder/">Base64 image encoder</a>.
+            </p>
+
+            <h2>How Does JPEG Differ from PNG for Base64 Encoding?</h2>
+            <p>
+                JPEG and PNG serve different purposes in Base64 encoding. The following table compares their characteristics for inline embedding.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>JPEG</th>
+                        <th>PNG</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Compression</td>
+                        <td>Lossy</td>
+                        <td>Lossless</td>
+                    </tr>
+                    <tr>
+                        <td>Transparency</td>
+                        <td>Not supported</td>
+                        <td>Full alpha channel</td>
+                    </tr>
+                    <tr>
+                        <td>Photo file size</td>
+                        <td>Smaller (5-20 KB typical)</td>
+                        <td>Larger (20-100 KB typical)</td>
+                    </tr>
+                    <tr>
+                        <td>Best for</td>
+                        <td>Photos, gradients, thumbnails</td>
+                        <td>Icons, logos, screenshots</td>
+                    </tr>
+                    <tr>
+                        <td>Base64 string length</td>
+                        <td>Shorter for photos</td>
+                        <td>Shorter for simple graphics</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Choose JPEG for photographic content where transparency is not required. Choose PNG for graphics with sharp edges, text, or transparent backgrounds. Compare encoding trade-offs at <a href="/base64-vs-binary/">Base64 vs binary</a>. To encode PNG files, use the <a href="/png-to-base64/">PNG to Base64 converter</a>.
+            </p>
+
+            <h2>What Are the Size Considerations for JPEG Base64?</h2>
+            <p>
+                JPEG photos are typically larger than icon files, so the 33% Base64 overhead has greater impact. A 50 KB JPEG becomes approximately 67 KB as a Base64 string. A 20 KB thumbnail becomes roughly 27 KB. For web performance, embed only JPEG thumbnails under 20 KB as Base64. Larger photographs should be served as separate cached files via a CDN. Calculate exact sizes with the <a href="/base64-size-calculator/">Base64 size calculator</a>. Learn the fundamentals at <a href="/what-is-base64/">What Is Base64</a>.
+            </p>
+
+            <h2>How Do You Embed JPEG Base64 in Web Pages?</h2>
+            <p>
+                In HTML, use the Base64 data URI as the <code>src</code> attribute of an <code>&lt;img&gt;</code> element. In CSS, place it inside <code>url()</code> for background images. Both approaches render the JPEG inline without an external HTTP request.
+            </p>
+<pre><code>&lt;!-- HTML inline image --&gt;
+&lt;img src="data:image/jpeg;base64,/9j/4AAQSkZJRg..." alt="Photo"&gt;
+
+/* CSS background image */
+.thumbnail {
+  background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRg...');
+  background-size: cover;
+}</code></pre>
+            <p>
+                Generate ready-to-use code snippets with the <a href="/base64-embed-generator/">Base64 embed generator</a>. To decode JPEG Base64 back to an image file, use the <a href="/base64-to-jpeg/">Base64 to JPEG converter</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq">
+                <h3>Does JPEG to Base64 affect image quality?</h3>
+                <p>
+                    No, the encoding is lossless. The JPEG quality set during original compression is preserved exactly. Base64 encodes the binary data byte-for-byte without altering any pixel information or recompressing the image.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is JPEG Base64 smaller than PNG Base64?</h3>
+                <p>
+                    For photographs, yes. JPEG uses lossy compression that produces smaller source files than PNG for photographic content. A 100x100 photo thumbnail may be 5 KB as JPEG but 15 KB as PNG, resulting in proportionally shorter Base64 strings.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Can I convert JPEG Base64 back to a JPEG file?</h3>
+                <p>
+                    Yes, use the <a href="/base64-to-jpeg/">Base64 to JPEG converter</a> or the <a href="/base64-image-decoder/">Base64 image decoder</a> to decode the string back into a downloadable JPEG file. The process is fully reversible.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Does JPEG support transparency in Base64?</h3>
+                <p>
+                    No, JPEG does not support transparency in any format. The JPEG specification lacks an alpha channel. If you need transparency, convert your image to PNG first and use the <a href="/png-to-base64/">PNG to Base64 converter</a> instead.
+                </p>
+            </div>
+
+            <div class="faq">
+                <h3>Is my JPEG uploaded to any server?</h3>
+                <p>
+                    No, all encoding happens locally in your browser. The JPEG file is read using the JavaScript FileReader API and never leaves your device. No data is transmitted over the network.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<BaseLayout
+  title="JPEG to Base64 Converter - Encode JPEG Images to Base64 Online"
+  description="Convert JPEG images to Base64 strings online. Upload any JPEG file and get a Base64-encoded data URI for embedding in HTML, CSS, or JavaScript."
+  canonical="https://base64image.net/jpeg-to-base64/"
+  ogType="website"
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "JPEG to Base64 Converter",
+            "item": "https://base64image.net/jpeg-to-base64/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Convert JPEG to Base64",
+        "description": "Step-by-step guide to encode a JPEG image into a Base64 string online",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Upload JPEG File",
+            "text": "Click the file input and select a JPEG image (.jpg or .jpeg) from your device."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Encoding",
+            "text": "The tool reads the JPEG file using the FileReader API and converts it to a Base64 data URI automatically."
+        }, {
+            "@type": "HowToStep",
+            "name": "Review Output",
+            "text": "View the image preview, file information including dimensions, and the full Base64 string in the output textarea."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy Base64 String",
+            "text": "Click the Copy to Clipboard button to copy the Base64 data URI for use in HTML, CSS, or JavaScript."
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Does JPEG to Base64 affect image quality?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, the encoding is lossless. The JPEG quality from original compression is preserved exactly. Base64 encodes the binary data without altering any pixel information."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is JPEG Base64 smaller than PNG Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For photographs, yes. JPEG uses lossy compression that produces smaller source files than PNG for photographic content, resulting in shorter Base64 strings."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I convert JPEG Base64 back to a JPEG file?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, use the Base64 to JPEG converter or the Base64 image decoder to decode the string back into a downloadable JPEG file."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does JPEG support transparency in Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, JPEG does not support transparency in any format. The JPEG specification does not include an alpha channel. Use PNG or WebP if you need transparency."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is my JPEG uploaded to any server?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No, all encoding happens locally in your browser. The JPEG file is read using the JavaScript FileReader API and never leaves your device."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={mainHtml} />
+</BaseLayout>
