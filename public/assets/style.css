@@ -979,22 +979,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     left: 0; right: 0; bottom: 0;
     background: var(--bg);
     border-top: 1px solid var(--line);
+    overflow-x: hidden;   /* kill horizontal scrollbar */
     overflow-y: auto;
     z-index: 49;
-    padding: 12px 0 40px;
+    padding: 8px 0 40px;
   }
   .main-nav.open { display: block; }
 
-  /* Override the desktop flex layout entirely — block stacking is simpler and reliable */
+  /* Remove desktop hover-bridge — causes layout bleed on mobile */
+  .dropdown::after { display: none; }
+
+  /* Override the desktop flex layout — block stacking */
   .main-nav > ul {
     display: block;
-    padding: 8px 12px 24px;
+    padding: 0;
     margin: 0;
+    list-style: none;
   }
   .main-nav > ul > li {
     display: block;
     width: 100%;
-    margin-bottom: 2px;
   }
 
   /* Top-level nav links */
@@ -1004,46 +1008,57 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 48px;
-    padding: 0 14px;
-    border-radius: 10px;
+    height: 52px;
+    padding: 0 20px;
+    border-radius: 0;
     font-size: 15px;
     font-weight: 500;
     color: var(--fg-mute);
     box-sizing: border-box;
+    border-bottom: 1px solid var(--line-soft);
   }
   .main-nav > ul > li > a:hover,
-  .main-nav > ul > li .nav-link:hover { background: var(--bg-2); color: var(--fg); }
+  .main-nav > ul > li .nav-link:hover { color: var(--fg); background: var(--bg-1); }
 
-  /* Mobile dropdown menus — inline, not absolute */
+  /* Mobile dropdown menus — inline block, full width, no absolute positioning */
   .dropdown-menu {
-    position: static;
-    opacity: 1;
-    pointer-events: auto;
-    transform: none;
-    transition: none;
+    position: static !important;
     display: none;
-    box-shadow: none;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    transition: none !important;
+    box-shadow: none !important;
     background: var(--bg-1);
-    border: 1px solid var(--line-soft);
-    border-radius: 10px;
-    padding: 4px 6px 6px;
-    margin: 2px 0 4px 14px;
-    min-width: 0;
-    width: calc(100% - 14px);
+    border: none;
+    border-radius: 0;
+    padding: 4px 0 8px 0;
+    margin: 0;
+    min-width: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box;
   }
   .dropdown.active .dropdown-menu { display: block; }
+
+  /* Dropdown sub-items */
+  .dropdown-menu li { display: block; list-style: none; }
+  .dropdown-menu li a,
   .dropdown-menu a {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 10px;
-    height: 42px;
-    padding: 0 10px;
-    border-radius: 7px;
+    height: 44px;
+    padding: 0 32px;
+    border-radius: 0;
     font-size: 14px;
     color: var(--fg-mute);
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid var(--line-soft);
   }
+  .dropdown-menu li a:hover,
   .dropdown-menu a:hover { background: var(--bg-2); color: var(--fg); }
+  .dropdown-menu li:last-child a { border-bottom: none; }
 
   /* Chevron rotates when dropdown opens on mobile */
   .dropdown.active .chev { transform: rotate(180deg); }
