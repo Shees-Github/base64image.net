@@ -1,0 +1,111 @@
+﻿---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<article class="content-section">
+    <h2>How Do You Encode Base64 on Linux?</h2>
+    <p>The <code>base64</code> command is part of GNU coreutils and is available on all Linux distributions. To encode a string, pipe it to <code>base64</code>. Use <code>echo -n</code> to avoid including the trailing newline in the encoded output:</p>
+    <pre><code>echo -n 'Hello World' | base64
+# Output: SGVsbG8gV29ybGQ=
+
+# Wrong — includes the newline character in encoding
+echo 'Hello World' | base64
+# Output: SGVsbG8gV29ybGQK  (different result — K at end encodes the newline)</code></pre>
+
+    <h2>How Do You Decode Base64 on Linux?</h2>
+    <p>Use the <code>-d</code> flag to decode. On Linux (GNU base64), the flag is lowercase <code>-d</code>. On macOS (BSD base64), the flag is uppercase <code>-D</code>:</p>
+    <pre><code>echo 'SGVsbG8gV29ybGQ=' | base64 -d
+# Output: Hello World
+
+# Decode to stdout (no trailing newline added)
+echo 'SGVsbG8gV29ybGQ=' | base64 --decode</code></pre>
+
+    <h2>How Do You Encode and Decode Files in Bash?</h2>
+    <p>Use file redirection to encode or decode whole files without piping:</p>
+    <pre><code># Encode a binary file to Base64
+base64 image.png > image.b64
+
+# Encode and suppress line wrapping (single line)
+base64 -w 0 image.png > image.b64
+
+# Decode Base64 file back to binary
+base64 -d image.b64 > decoded-image.png
+
+# One-liner: encode file and save inline
+base64 -w 0 certificate.pem > certificate.b64</code></pre>
+
+    <h2>How Do You Disable Line Wrapping in bash?</h2>
+    <p>By default, GNU base64 wraps output at 76 characters per line (MIME format). Use <code>-w 0</code> to produce a single continuous line — required when embedding Base64 in JSON, HTML, or environment variables:</p>
+    <pre><code># Single-line output (required for JSON/HTML embedding)
+echo -n 'Hello World' | base64 -w 0
+# Output: SGVsbG8gV29ybGQ=  (no line breaks)
+
+# Kubernetes secret value (must be single line)
+kubectl create secret generic my-secret \\\\
+  --from-literal=password=$(echo -n 'mypassword' | base64 -w 0)</code></pre>
+
+    <h2>How Do You Use Base64 in bash Scripts?</h2>
+    <p>Base64 encoding is commonly used in bash scripts for API authentication, Kubernetes secrets, and embedding binary assets:</p>
+    <pre><code>#!/bin/bash
+
+# Basic Auth header for API calls
+USERNAME="admin"
+PASSWORD="secret"
+CREDENTIALS=$(echo -n "$USERNAME:$PASSWORD" | base64 -w 0)
+curl -H "Authorization: Basic $CREDENTIALS" https://api.example.com/data
+
+# Encode a file as a variable
+IMAGE_B64=$(base64 -w 0 logo.png)
+echo '&#123;"image": "'"'"'$IMAGE_B64'"'"'"&#125;' | curl -X POST -d @- https://api.example.com/upload
+
+# Decode a secret from an environment variable
+echo "$BASE64_SECRET" | base64 -d > /tmp/secret.key</code></pre>
+
+    <h2>Linux vs macOS Base64 Commands — Key Differences</h2>
+    <table class="reference-table">
+      <thead><tr><th>Operation</th><th>Linux (GNU)</th><th>macOS (BSD)</th></tr></thead>
+      <tbody>
+        <tr><td>Encode string</td><td><code>echo -n 'str' | base64</code></td><td><code>echo -n 'str' | base64</code></td></tr>
+        <tr><td>Decode string</td><td><code>echo 'b64' | base64 -d</code></td><td><code>echo 'b64' | base64 -D</code></td></tr>
+        <tr><td>No line wrap</td><td><code>base64 -w 0</code></td><td><code>base64 -b 0</code></td></tr>
+        <tr><td>Encode file</td><td><code>base64 file.bin</code></td><td><code>base64 -i file.bin</code></td></tr>
+        <tr><td>Decode file</td><td><code>base64 -d file.b64</code></td><td><code>base64 -D -i file.b64</code></td></tr>
+      </tbody>
+    </table>
+    <p>For macOS-specific usage see the <a href="/base64-mac/">Base64 on Mac guide</a>. For browser-based encoding without a terminal, use the <a href="/base64-text-encoder/">Text Encoder</a> or <a href="/base64-file-encoder/">File Encoder</a>.</p>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><h3>How do I encode Base64 on Linux?</h3><p>Run <code>echo -n 'text' | base64</code>. For files: <code>base64 file.bin > file.b64</code>. Use <code>-w 0</code> to disable line wrapping.</p></div>
+    <div class="faq-item"><h3>How do I decode Base64 on Linux?</h3><p>Run <code>echo 'BASE64' | base64 -d</code>. For files: <code>base64 -d input.b64 > output.bin</code>.</p></div>
+    <div class="faq-item"><h3>Why does base64 -d not work on Mac?</h3><p>macOS uses <code>-D</code> (uppercase). Linux uses <code>-d</code> (lowercase). See the <a href="/base64-mac/">macOS Base64 guide</a> for Mac-specific commands.</p></div>
+    <div class="faq-item"><h3>How do I Base64 encode without newlines in bash?</h3><p>Use <code>base64 -w 0</code>: <code>echo -n 'text' | base64 -w 0</code>. This produces a single continuous string, required for JSON embedding and Kubernetes secrets.</p></div>
+  </article>`;
+---
+<ArticleLayout
+  title="Base64 Encode &amp; Decode on Linux — bash Command Guide with Examples"
+  description="Complete guide to Base64 encoding and decoding on Linux using the base64 command in bash. Examples for strings, files, piping, no-newline encoding, and scripting."
+  canonical="https://base64image.net/base64-linux/"
+  h1="Base64 Encode &amp; Decode on Linux (bash Command Guide)"
+  lede="How to use the Linux base64 command in bash to encode and decode strings, files, and binary data — with practical examples for scripting and CI/CD."
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 on Linux'}]}
+
+>
+  <Fragment slot="head">
+
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "HowTo", "name": "How to Encode and Decode Base64 on Linux", "step": [
+      {"@type":"HowToStep","name":"Encode a string","text":"Run: echo -n 'Hello World' | base64"},
+      {"@type":"HowToStep","name":"Decode a Base64 string","text":"Run: echo 'SGVsbG8gV29ybGQ=' | base64 -d"},
+      {"@type":"HowToStep","name":"Encode a file","text":"Run: base64 input.png > output.b64"}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+      {"@type":"Question","name":"How do I encode Base64 on Linux?","acceptedAnswer":{"@type":"Answer","text":"Use the base64 command: echo -n 'text' | base64. The -n flag suppresses the trailing newline. For files: base64 input.file > output.b64. The base64 command is part of GNU coreutils and is available on all major Linux distributions."}},
+      {"@type":"Question","name":"How do I decode Base64 on Linux?","acceptedAnswer":{"@type":"Answer","text":"Use: echo 'BASE64STRING' | base64 -d or base64 -d input.b64 > output.file. The -d flag decodes. On macOS, use -D (uppercase) instead."}},
+      {"@type":"Question","name":"How do I encode Base64 without newlines in bash?","acceptedAnswer":{"@type":"Answer","text":"Use base64 -w 0: echo -n 'text' | base64 -w 0. The -w 0 flag disables line wrapping and produces a single continuous Base64 string with no newline characters. This is essential when embedding Base64 in JSON or HTML."}}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://base64image.net/"},
+      {"@type":"ListItem","position":2,"name":"Base64 on Linux","item":"https://base64image.net/base64-linux/"}
+    ]}</script>
+    </Fragment>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

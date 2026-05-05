@@ -1,0 +1,268 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
+        <h1><i class="fas fa-code"></i> Base64 in Rust</h1>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: May 2026</p>
+        <p class="intro">How to Base64 encode and decode in Rust using the base64 crate — with examples for standard encoding, URL-safe encoding, and decoding byte slices</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <!-- Section 1: Adding the Crate -->
+            <h2><i class="fas fa-plus-circle"></i> How Do You Add Base64 to a Rust Project?</h2>
+            <p>
+                Rust's standard library does not include Base64 encoding. Add the <code>base64</code> crate to your project by including it in <code>Cargo.toml</code>. The <code>base64</code> crate is the most widely used Base64 implementation in the Rust ecosystem and follows RFC 4648.
+            </p>
+            <pre><code># Cargo.toml
+[dependencies]
+base64 = "0.22"</code></pre>
+            <p>
+                After adding the dependency, run <code>cargo build</code> to download and compile the crate. Import the engine and alphabet types you need at the top of your Rust file. The crate uses an <code>Engine</code> trait to decouple the encoding logic from the alphabet and padding configuration.
+            </p>
+            <pre><code>use base64::{Engine, engine::general_purpose};</code></pre>
+            <p>
+                The <code>Engine</code> trait is the core abstraction. Each predefined engine (like <code>general_purpose::STANDARD</code>) bundles an alphabet with a padding configuration. You call <code>encode()</code> and <code>decode()</code> on the engine. For a browser-based alternative that requires no code, use the <a href="/base64-text-encoder/">Base64 text encoder</a>.
+            </p>
+
+            <!-- Section 2: Encoding -->
+            <h2><i class="fas fa-lock"></i> How Do You Encode a String to Base64 in Rust?</h2>
+            <p>
+                Call <code>.encode()</code> on any of the predefined engines in <code>general_purpose</code>. The method accepts any type that implements <code>AsRef&lt;[u8]&gt;</code>, including <code>&amp;str</code>, <code>String</code>, and <code>&amp;[u8]</code>. It returns an owned <code>String</code> containing the Base64-encoded output.
+            </p>
+            <pre><code>use base64::{Engine, engine::general_purpose};
+
+fn main() {
+    let input = "Hello, World!";
+    let encoded = general_purpose::STANDARD.encode(input);
+    println!("{}", encoded);
+    // Output: SGVsbG8sIFdvcmxkIQ==
+}
+</code></pre>
+            <p>
+                String slices (<code>&amp;str</code>) implement <code>AsRef&lt;[u8]&gt;</code>, so you can pass them directly without calling <code>.as_bytes()</code>. The <code>STANDARD</code> engine uses the standard Base64 alphabet (A-Z, a-z, 0-9, +, /) with <code>=</code> padding as defined in RFC 4648 Section 4. For binary data, pass a byte slice (<code>&amp;[u8]</code>) directly. For a complete explanation of the Base64 format, see the <a href="/what-is-base64/">What is Base64</a> guide.
+            </p>
+
+            <!-- Section 3: Decoding -->
+            <h2><i class="fas fa-unlock"></i> How Do You Decode Base64 in Rust?</h2>
+            <p>
+                Call <code>.decode()</code> on an engine to decode a Base64 string. The method returns <code>Result&lt;Vec&lt;u8&gt;, DecodeError&gt;</code>. You must handle the error case because invalid Base64 input causes a <code>DecodeError</code> rather than a panic. Convert the decoded bytes back to a string using <code>String::from_utf8()</code>.
+            </p>
+            <pre><code>use base64::{Engine, engine::general_purpose};
+
+fn main() -> Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    let encoded = "SGVsbG8sIFdvcmxkIQ==";
+
+    // Decode Base64 to bytes
+    let decoded_bytes = general_purpose::STANDARD.decode(encoded)?;
+
+    // Convert bytes to UTF-8 string
+    let decoded_str = String::from_utf8(decoded_bytes)?;
+    println!("{}", decoded_str);
+    // Output: Hello, World!
+
+    Ok(())
+}
+</code></pre>
+            <p>
+                The <code>?</code> operator propagates errors up the call stack. In production code, match on the <code>Result</code> to provide specific error messages. <code>DecodeError</code> variants include <code>InvalidByte</code> (unexpected character), <code>InvalidLength</code> (input length not valid for Base64), and <code>InvalidPadding</code> (malformed <code>=</code> padding). <code>String::from_utf8()</code> fails if the decoded bytes are not valid UTF-8. To decode Base64 interactively in your browser, use the <a href="/base64-text-decoder/">Base64 text decoder</a>.
+            </p>
+
+            <!-- Section 4: Engines Reference Table -->
+            <h2><i class="fas fa-table"></i> What Are the Base64 Engines in Rust?</h2>
+            <p>
+                The <code>base64</code> crate provides 4 predefined engines in the <code>engine::general_purpose</code> module. Each engine is a combination of an alphabet (standard or URL-safe) and a padding policy (with or without <code>=</code> padding). Choose the engine that matches the system you are interoperating with.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Engine Constant</th><th>Alphabet</th><th>Padding</th><th>Common Use</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>STANDARD</code></td>
+                        <td>+, / (RFC 4648 &sect;4)</td>
+                        <td>Yes (<code>=</code>)</td>
+                        <td>General Base64, MIME, email</td>
+                    </tr>
+                    <tr>
+                        <td><code>STANDARD_NO_PAD</code></td>
+                        <td>+, / (RFC 4648 &sect;4)</td>
+                        <td>No</td>
+                        <td>Compact storage, no padding needed</td>
+                    </tr>
+                    <tr>
+                        <td><code>URL_SAFE</code></td>
+                        <td>-, _ (RFC 4648 &sect;5)</td>
+                        <td>Yes (<code>=</code>)</td>
+                        <td>URL query parameters, filenames</td>
+                    </tr>
+                    <tr>
+                        <td><code>URL_SAFE_NO_PAD</code></td>
+                        <td>-, _ (RFC 4648 &sect;5)</td>
+                        <td>No</td>
+                        <td>JWT tokens, OAuth tokens</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                URL-safe engines replace <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code> to prevent conflicts when Base64 strings appear in URLs or filenames. JWT tokens use <code>URL_SAFE_NO_PAD</code> because the JWT specification (RFC 7519) requires URL-safe Base64 without padding. For browser-based URL-safe encoding, use the <a href="/base64-url-safe/">URL-safe Base64 tool</a>. For the full character reference, see the <a href="/base64-character-table/">Base64 character table</a>.
+            </p>
+
+            <!-- Section 5: File Encoding -->
+            <h2><i class="fas fa-file"></i> How Do You Encode Files in Rust?</h2>
+            <p>
+                Read the file into a byte vector using <code>std::fs::read()</code>, then pass the byte slice to the engine's <code>encode()</code> method. The <code>fs::read()</code> function loads the entire file into a <code>Vec&lt;u8&gt;</code>, which is suitable for files that fit within available memory.
+            </p>
+            <pre><code>use base64::{Engine, engine::general_purpose};
+use std::fs;
+
+fn main() -> Result&lt;(), Box&lt;dyn std::error::Error&gt;&gt; {
+    // Read the entire file as bytes
+    let file_bytes = fs::read("image.png")?;
+
+    // Encode to Base64
+    let encoded = general_purpose::STANDARD.encode(&amp;file_bytes);
+    println!("Encoded length: {} chars", encoded.len());
+
+    // Create a data URI for HTML embedding
+    let data_uri = format!("data:image/png;base64,{}", encoded);
+    println!("{}", &amp;data_uri[..50]);  // Print first 50 chars
+
+    // Write Base64 output to a file
+    fs::write("image.b64", encoded)?;
+
+    Ok(())
+}
+</code></pre>
+            <p>
+                For large files, consider encoding in chunks using the engine's <code>encode_slice()</code> method with a pre-allocated output buffer, or use the lower-level <code>chunked_encoder</code> module for streaming support. The <a href="/base64-file-encoder/">Base64 file encoder</a> performs the same operation in your browser without any Rust code. To decode back to a file, call <code>engine.decode()</code> and write the resulting bytes with <code>fs::write()</code>.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I add Base64 to a Rust project?</h3>
+                <p>
+                    Add <code>base64 = "0.22"</code> (or the latest version) to the <code>[dependencies]</code> section of your <code>Cargo.toml</code> file, then run <code>cargo build</code>. Import the engine trait and the predefined engines with <code>use base64::{Engine, engine::general_purpose};</code>. The <code>base64</code> crate is the standard community choice for Base64 in Rust and is available on <a href="https://crates.io/crates/base64" rel="noopener">crates.io</a>.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I encode Base64 in Rust?</h3>
+                <p>
+                    Call <code>general_purpose::STANDARD.encode("your text")</code> after importing <code>use base64::{Engine, engine::general_purpose};</code>. The <code>encode()</code> method accepts any type that implements <code>AsRef&lt;[u8]&gt;</code>, including string slices, <code>String</code>, and byte slices. It returns an owned <code>String</code> containing the Base64-encoded output with standard padding.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is the difference between STANDARD and URL_SAFE in Rust base64?</h3>
+                <p>
+                    <code>STANDARD</code> uses the standard Base64 alphabet with <code>+</code> and <code>/</code> characters as defined in RFC 4648 Section 4. <code>URL_SAFE</code> replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code> as defined in RFC 4648 Section 5. Use <code>URL_SAFE</code> or <code>URL_SAFE_NO_PAD</code> when the Base64 string will appear in a URL, filename, or JSON field where <code>+</code> and <code>/</code> have special meaning.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I handle Base64 decode errors in Rust?</h3>
+                <p>
+                    The <code>decode()</code> method returns <code>Result&lt;Vec&lt;u8&gt;, DecodeError&gt;</code>. Handle errors with pattern matching: <code>match engine.decode(input) { Ok(bytes) =&gt; { ... }, Err(e) =&gt; { eprintln!("Decode error: {}", e); } }</code>. The <code>?</code> operator propagates the error to the caller. Common error variants are <code>InvalidByte</code>, <code>InvalidLength</code>, and <code>InvalidPadding</code>. Use the <a href="/base64-validator/">Base64 validator</a> to verify input before decoding.
+                </p>
+            </div>
+
+            <!-- Related Links -->
+            <h2><i class="fas fa-sitemap"></i> Related Base64 Tools and Guides</h2>
+            <ul>
+                <li><a href="/what-is-base64/">What is Base64?</a> - Comprehensive guide to the Base64 encoding format</li>
+                <li><a href="/base64-text-encoder/">Base64 Text Encoder</a> - Encode text to Base64 in your browser</li>
+                <li><a href="/base64-text-decoder/">Base64 Text Decoder</a> - Decode Base64 strings in your browser</li>
+                <li><a href="/base64-url-safe/">URL-Safe Base64 Encoder</a> - Encode with the URL-safe alphabet</li>
+                <li><a href="/base64-go/">Base64 in Go</a> - Base64 encoding with Go's standard library</li>
+                <li><a href="/base64-python/">Base64 in Python</a> - Base64 encoding with Python's base64 module</li>
+                <li><a href="/base64-character-table/">Base64 Character Table</a> - Complete alphabet reference</li>
+                <li><a href="/base64-validator/">Base64 Validator</a> - Validate Base64 strings instantly</li>
+                <li><a href="/">All Base64 Tools</a> - Browse the complete toolset</li>
+            </ul>
+        </article>
+    </main>`;
+---
+<ArticleLayout
+  title="Base64 in Rust — Encode and Decode with the base64 Crate"
+  description="Learn how to Base64 encode and decode in Rust using the base64 crate. Code examples for Engine::encode, Engine::decode, URL-safe variants, and streaming."
+  canonical="https://base64image.net/base64-rust/"
+  h1="Base64 in Rust"
+  lede="How to Base64 encode and decode in Rust using the base64 crate — with examples for standard encoding, URL-safe encoding, and decoding byte slices."
+  tag="learn"
+  tagLabel="Developer Guide"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in Rust'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in Rust",
+            "item": "https://base64image.net/base64-rust/"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Base64 in Rust — Encode and Decode with the base64 Crate",
+        "datePublished": "2026-05-05",
+        "dateModified": "2026-05-05",
+        "description": "Learn how to Base64 encode and decode in Rust using the base64 crate. Code examples for Engine::encode, Engine::decode, URL-safe variants, and streaming.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/base64-rust/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I add Base64 to a Rust project?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Add base64 = \"0.22\" (or the latest version) to the [dependencies] section of your Cargo.toml file, then run cargo build. Import the engine trait and predefined engines with: use base64::{Engine, engine::general_purpose}; The base64 crate is the standard community choice and is available on crates.io."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I encode Base64 in Rust?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Call general_purpose::STANDARD.encode(\"your text\") after importing use base64::{Engine, engine::general_purpose};. The encode() method accepts any type that implements AsRef<[u8]>, including string slices, String, and byte slices. It returns an owned String containing the Base64-encoded output."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is the difference between STANDARD and URL_SAFE in Rust base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "STANDARD uses the standard Base64 alphabet with + and / characters as defined in RFC 4648 Section 4. URL_SAFE replaces + with - and / with _ as defined in RFC 4648 Section 5. Use URL_SAFE or URL_SAFE_NO_PAD when the Base64 string will appear in a URL, filename, or JSON field where + and / have special meaning."
+            }
+        }]
+    }
+    </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>

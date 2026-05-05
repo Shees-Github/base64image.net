@@ -1,0 +1,309 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
+        <h1><i class="fas fa-code"></i> Base64 to JSON Converter</h1>
+        <p class="intro">Decode a Base64 string and pretty-print the result as formatted JSON. Perfect for debugging API responses and JWT payloads.</p>
+
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All decoding happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="b64jsonInput">Paste your Base64 string:</label>
+                <textarea
+                    id="b64jsonInput"
+                    placeholder="Paste a Base64-encoded string here..."
+                    rows="6"
+                    oninput="b64jsonConvert()"
+                ></textarea>
+            </div>
+
+            <div id="b64jsonError" class="error" style="display:none;"></div>
+
+            <div class="input-group" id="b64jsonOutputGroup" style="display:none;">
+                <label for="b64jsonOutput"><i class="fas fa-file-code"></i> Decoded Output</label>
+                <textarea id="b64jsonOutput" rows="10" readonly></textarea>
+            </div>
+
+            <div class="actions">
+                <button id="b64jsonCopy" class="btn-secondary" onclick="b64jsonCopyOutput()" style="display:none;">
+                    <i class="fas fa-copy"></i> Copy Output
+                </button>
+                <button id="b64jsonClear" class="btn-secondary" onclick="b64jsonClearAll()">
+                    <i class="fas fa-trash"></i> Clear
+                </button>
+            </div>
+        </section>
+
+        <article class="content-section">
+
+            <!-- Section 1: What is Base64 to JSON -->
+            <h2><i class="fas fa-question-circle"></i> What Is Base64 to JSON Conversion?</h2>
+            <p>
+                Many APIs, tokens, and configuration systems transmit JSON data encoded as Base64. The encoded string travels safely through HTTP headers, URL parameters, and text-only channels that cannot handle raw JSON's special characters. Decoding the Base64 string reveals the underlying structured JSON object.
+            </p>
+            <p>
+                Common examples include JWT token payloads, AWS Lambda event bodies, GitHub webhook secrets, and Kubernetes ConfigMap values. This tool decodes the Base64 string and attempts to parse the result as JSON — if successful, it pretty-prints the object with proper indentation. If the decoded content is not valid JSON (for example, it is plain text or binary data), the raw decoded text is displayed instead.
+            </p>
+
+            <!-- Section 2: JWT Tokens -->
+            <h2><i class="fas fa-shield-alt"></i> How Do JWT Tokens Use Base64?</h2>
+            <p>
+                A JSON Web Token (JWT) consists of three sections separated by dots: <code>header.payload.signature</code>. Each section is independently Base64URL-encoded (the URL-safe variant that uses <code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code>, without padding). Pasting the middle section — the payload — into this tool reveals the claims inside the token.
+            </p>
+            <pre><code>// Example JWT structure
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9   ← Header
+.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ   ← Payload
+.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c   ← Signature
+
+// Decoded payload:
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "iat": 1516239022
+}</code></pre>
+            <p>
+                This tool handles both standard Base64 (with <code>=</code> padding and <code>+</code>/<code>/</code> characters) and URL-safe Base64 (without padding, using <code>-</code>/<code>_</code>). Paste just the payload section (between the first and second dot) to inspect the claims. Note: this tool does not verify the signature — use a dedicated JWT library for signature verification.
+            </p>
+
+            <!-- Section 3: Common API Patterns -->
+            <h2><i class="fas fa-network-wired"></i> Common API Patterns That Use Base64-Encoded JSON</h2>
+            <p>
+                Several widely used platforms encode JSON payloads as Base64 before transmitting them. Knowing these patterns helps when debugging integrations and parsing webhook data.
+            </p>
+            <ul>
+                <li><strong>AWS Lambda event payloads:</strong> API Gateway passes request bodies as Base64 when <code>isBase64Encoded</code> is <code>true</code> in the Lambda event object.</li>
+                <li><strong>GitHub webhooks:</strong> Some GitHub App payloads and content API responses return file contents Base64-encoded.</li>
+                <li><strong>OAuth tokens:</strong> OAuth 2.0 access tokens and ID tokens from providers like Google and Auth0 are JWTs with Base64URL-encoded payloads containing user and permission claims.</li>
+                <li><strong>Kubernetes ConfigMaps and Secrets:</strong> Kubernetes <code>Secret</code> objects store all values as Base64-encoded strings. <code>kubectl get secret my-secret -o json</code> shows the encoded values.</li>
+                <li><strong>HTTP Basic Auth headers:</strong> The <code>Authorization: Basic</code> header encodes <code>username:password</code> as Base64. Decoding the value after <code>Basic </code> reveals the credentials.</li>
+            </ul>
+            <p>
+                For quick validation of a Base64 string before decoding, use the <a href="/base64-validator/">Base64 validator</a>.
+            </p>
+
+            <!-- Section 4: Code Examples -->
+            <h2><i class="fas fa-terminal"></i> How Do You Decode Base64 to JSON in Code?</h2>
+            <p>
+                Every major language provides built-in Base64 decoding. Combine it with a JSON parser to extract the structured data.
+            </p>
+            <pre><code>// JavaScript (browser or Node.js)
+const decoded = JSON.parse(atob(base64str));
+console.log(decoded);
+
+// Node.js (Buffer API)
+const decoded = JSON.parse(Buffer.from(base64str, 'base64').toString('utf8'));
+
+// Python
+import base64, json
+decoded = json.loads(base64.b64decode(b64str))
+
+// Java
+import java.util.Base64;
+import com.fasterxml.jackson.databind.ObjectMapper;
+byte[] bytes = Base64.getDecoder().decode(b64str);
+Map decoded = new ObjectMapper().readValue(bytes, Map.class);
+
+// Go
+import ("encoding/base64"; "encoding/json")
+bytes, _ := base64.StdEncoding.DecodeString(b64str)
+var result map[string]interface{}
+json.Unmarshal(bytes, &amp;result)
+
+// PowerShell
+$bytes = [Convert]::FromBase64String($b64str)
+$json = [Text.Encoding]::UTF8.GetString($bytes) | ConvertFrom-Json</code></pre>
+            <p>
+                For URL-safe Base64 (JWT payloads), replace <code>-</code> with <code>+</code> and <code>_</code> with <code>/</code>, then add <code>=</code> padding before decoding. In Python, use <code>base64.urlsafe_b64decode()</code> instead. See the <a href="/base64-python/">Base64 in Python guide</a> or the <a href="/base64-javascript/">Base64 in JavaScript guide</a> for full examples. For PowerShell, see the <a href="/base64-powershell/">Base64 in PowerShell guide</a>.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What does this Base64 to JSON converter do?</h3>
+                <p>
+                    This tool decodes a Base64 string using <code>atob()</code>, then attempts to parse the decoded text as JSON using <code>JSON.parse()</code>. If parsing succeeds, the output is displayed as pretty-printed JSON with 2-space indentation using <code>JSON.stringify(obj, null, 2)</code>. If the decoded content is not valid JSON, the raw decoded text is shown along with a note. All processing runs in your browser — no data is sent to a server.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use this tool to decode JWT payloads?</h3>
+                <p>
+                    Yes. Paste the middle section of a JWT (the text between the first and second dot) into the input. JWT tokens use URL-safe Base64 without padding — this tool automatically handles the URL-safe alphabet (<code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code>) and adds padding as needed. The decoded payload shows the JWT claims such as <code>sub</code>, <code>iat</code>, <code>exp</code>, and custom fields.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What happens if the decoded content is not valid JSON?</h3>
+                <p>
+                    If the Base64 string decodes to something that is not valid JSON — such as plain text, HTML, or binary data — the tool displays the raw decoded text with a note explaining that JSON parsing was not possible. You can still copy the raw decoded content. For binary data, the output may contain garbled characters because the browser interprets the bytes as Latin-1 text.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Base64 to JSON conversion secure?</h3>
+                <p>
+                    All decoding runs locally in your browser using native JavaScript APIs (<code>atob()</code> and <code>JSON.parse()</code>). No data is transmitted to any server. This makes the tool safe for decoding sensitive payloads such as API tokens, JWT claims, and internal configuration data. The tool does not log, store, or transmit your input or output.
+                </p>
+            </div>
+        </article>
+    </main>`;
+---
+<ToolLayout
+  title="Base64 to JSON Converter — Decode Base64 and Format as JSON Online"
+  description="Decode a Base64 string and display the result as formatted JSON. Useful for debugging API responses, JWT payloads, and Base64-encoded JSON data."
+  canonical="https://base64image.net/base64-to-json/"
+  h1="Base64 to JSON Converter"
+  mono="// JSON.parse(atob())"
+  lede="Decode a Base64 string and pretty-print the result as formatted JSON. Perfect for debugging API responses and JWT payloads."
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → JSON'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 to JSON Converter",
+            "item": "https://base64image.net/base64-to-json/"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to Decode Base64 to JSON",
+        "description": "Step-by-step guide to decode a Base64 string and display it as formatted JSON",
+        "step": [{
+            "@type": "HowToStep",
+            "name": "Paste Base64 String",
+            "text": "Copy your Base64-encoded string (such as a JWT payload or API response body) and paste it into the input field."
+        }, {
+            "@type": "HowToStep",
+            "name": "Automatic Decoding",
+            "text": "The tool automatically decodes the Base64 string using atob() and attempts to parse the result as JSON."
+        }, {
+            "@type": "HowToStep",
+            "name": "View Formatted JSON",
+            "text": "If the decoded content is valid JSON, it is displayed as pretty-printed output with indentation. Otherwise, the raw decoded text is shown."
+        }, {
+            "@type": "HowToStep",
+            "name": "Copy the Result",
+            "text": "Click the Copy button to copy the formatted JSON or decoded text to your clipboard."
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What does this Base64 to JSON converter do?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "This tool decodes a Base64 string using atob(), then attempts to parse the decoded text as JSON using JSON.parse(). If parsing succeeds, the output is displayed as pretty-printed JSON with 2-space indentation. If the decoded content is not valid JSON, the raw decoded text is shown with a note. All processing runs in your browser — no data is sent to a server."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use this tool to decode JWT payloads?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Paste the middle section of a JWT (between the first and second dot) into the input. JWT tokens use URL-safe Base64 without padding — this tool automatically handles the URL-safe alphabet and adds padding as needed. The decoded payload shows the JWT claims such as sub, iat, exp, and custom fields."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What happens if the decoded content is not valid JSON?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "If the Base64 string decodes to something that is not valid JSON — such as plain text or binary data — the tool displays the raw decoded text with a note explaining that JSON parsing was not possible. You can still copy the raw decoded content."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base64 to JSON conversion secure?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "All decoding runs locally in your browser using native JavaScript APIs (atob() and JSON.parse()). No data is transmitted to any server. This makes the tool safe for decoding sensitive payloads such as API tokens, JWT claims, and internal configuration data."
+            }
+        }]
+    }
+    </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <script is:inline>
+    function b64jsonConvert() {
+      var input = document.getElementById('b64jsonInput').value.trim();
+      var errorEl = document.getElementById('b64jsonError');
+      var outputEl = document.getElementById('b64jsonOutput');
+      var outputGroup = document.getElementById('b64jsonOutputGroup');
+      var copyBtn = document.getElementById('b64jsonCopy');
+
+      errorEl.style.display = 'none';
+      errorEl.textContent = '';
+      outputEl.value = '';
+      outputGroup.style.display = 'none';
+      copyBtn.style.display = 'none';
+
+      if (!input) return;
+
+      // Normalize URL-safe Base64: replace - with + and _ with /
+      var normalized = input.replace(/-/g, '+').replace(/_/g, '/');
+      // Add padding if missing
+      var padNeeded = (4 - (normalized.length % 4)) % 4;
+      normalized += '==='.slice(0, padNeeded);
+
+      var decoded;
+      try {
+        decoded = atob(normalized);
+      } catch (e) {
+        errorEl.textContent = 'Invalid Base64: ' + e.message;
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      // Try to parse as JSON
+      try {
+        var obj = JSON.parse(decoded);
+        outputEl.value = JSON.stringify(obj, null, 2);
+      } catch (e) {
+        // Not valid JSON — show raw decoded text with a note
+        outputEl.value = decoded + '\n\n// Note: decoded content is not valid JSON — showing raw text.';
+      }
+
+      outputGroup.style.display = 'block';
+      copyBtn.style.display = 'inline-block';
+    }
+
+    function b64jsonCopyOutput() {
+      var outputEl = document.getElementById('b64jsonOutput');
+      var copyBtn = document.getElementById('b64jsonCopy');
+      navigator.clipboard.writeText(outputEl.value).then(function() {
+        copyBtn.textContent = 'Copied!';
+        setTimeout(function() {
+          copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy Output';
+        }, 2000);
+      });
+    }
+
+    function b64jsonClearAll() {
+      document.getElementById('b64jsonInput').value = '';
+      document.getElementById('b64jsonOutput').value = '';
+      document.getElementById('b64jsonError').style.display = 'none';
+      document.getElementById('b64jsonError').textContent = '';
+      document.getElementById('b64jsonOutputGroup').style.display = 'none';
+      document.getElementById('b64jsonCopy').style.display = 'none';
+    }
+  </script>
+</ToolLayout>

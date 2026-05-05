@@ -1,0 +1,117 @@
+﻿---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<div class="tool-section">
+    <div class="input-group">
+      <label for="pictureInput">Paste your Base64 picture string</label>
+      <textarea id="pictureInput" placeholder="Paste Base64 string here (with or without data:image/png;base64, prefix)..." rows="6"></textarea>
+      <div class="error" id="pictureError" style="display:none"></div>
+    </div>
+    <div class="actions">
+      <button id="pictureClear" class="btn-secondary">Clear</button>
+    </div>
+    <div class="preview-container" id="picturePreview" style="display:none">
+      <h2>Picture Preview</h2>
+      <div class="image-wrapper"><img id="pictureImg" alt="Decoded Base64 picture"></div>
+      <div class="image-info">
+        <p><strong>Format:</strong> <span id="pictureFmt"></span></p>
+        <p><strong>Size:</strong> <span id="pictureSize"></span></p>
+      </div>
+      <button id="pictureDownload" class="btn-primary">Download Picture</button>
+    </div>
+  </div>
+
+  <article class="content-section">
+    <h2>What Is a Base64 Picture?</h2>
+    <p>A Base64 picture is an image file encoded as a text string using the Base64 encoding scheme. Instead of referencing an external image file, the entire picture data is embedded directly as ASCII characters. You will see it starting with a prefix like <code>data:image/png;base64,</code> followed by the encoded string. Base64 pictures are used in HTML, CSS, JSON APIs, and email templates to embed images without separate file requests.</p>
+    <h2>How Do You Decode a Base64 Picture?</h2>
+    <p>Paste the Base64 string into the decoder above. The tool strips the data URI prefix if present, validates the string, converts it back to binary using the browser's native <code>atob()</code> function, and renders the picture in the preview area. You can then download the decoded picture file. For encoding a picture to Base64, use the <a href="/base64-image-encoder/">Base64 Image Encoder</a>.</p>
+    <h2>What Is the Difference Between a Base64 Picture and a Regular Image?</h2>
+    <p>A regular image is stored as a binary file (PNG, JPEG, etc.) and served via HTTP. A Base64 picture is the same binary data converted to text — it is 33% larger due to Base64 overhead, but can be embedded directly in HTML or CSS without a separate network request. Base64 pictures are best for small icons and thumbnails. For large photographs, serve binary files for better performance. See <a href="/base64-vs-binary/">Base64 vs Binary</a> for a detailed comparison.</p>
+    <h2>What Image Formats Are Supported?</h2>
+    <p>The decoder supports PNG, JPEG, GIF, WebP, SVG, and BMP. The format is detected automatically from the data URI prefix (e.g., <code>data:image/png;base64,</code>) or from the binary file signature bytes. Use the <a href="/base64-validator/">Base64 Validator</a> to check your string is valid before decoding.</p>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><h3>What is a Base64 picture?</h3><p>A Base64 picture is an image encoded as a Base64 text string. The string represents the raw binary bytes of the image using only ASCII characters, making it safe to embed in HTML, CSS, JSON, and XML.</p></div>
+    <div class="faq-item"><h3>How do I view a Base64 picture?</h3><p>Paste the Base64 string into the decoder above. The picture renders instantly in your browser. You can download it using the Download button.</p></div>
+    <div class="faq-item"><h3>Is it safe to decode Base64 pictures here?</h3><p>Yes. All processing happens locally in your browser. Nothing is uploaded to any server.</p></div>
+    <div class="faq-item"><h3>Can I convert a regular picture to Base64?</h3><p>Yes — use the <a href="/base64-image-encoder/">Base64 Image Encoder</a> to upload any image and get its Base64 string.</p></div>
+  </article>`;
+---
+<ToolLayout
+  title="Base64 Picture Decoder — View Base64 Images Online Free"
+  description="Decode any Base64 string to view the picture instantly. Paste your Base64 picture data and preview or download the image. Free, private, runs in your browser."
+  canonical="https://base64image.net/base64-picture/"
+  h1="Base64 Picture Decoder"
+  mono="// atob()"
+  lede="Paste a Base64 string to instantly view and download the decoded picture. Runs entirely in your browser — nothing uploaded."
+  tag="decode"
+  tagLabel="Decoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Decoders',href:'#'},{label:'Base64 Picture'}]}
+
+>
+  <Fragment slot="head">
+
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+      {"@type":"Question","name":"What is a Base64 picture?","acceptedAnswer":{"@type":"Answer","text":"A Base64 picture is an image file encoded as a Base64 string — a sequence of ASCII characters representing the raw binary bytes of the image. The string usually starts with a data URI prefix like data:image/png;base64, followed by the encoded data."}},
+      {"@type":"Question","name":"How do I view a Base64 picture?","acceptedAnswer":{"@type":"Answer","text":"Paste the Base64 string into the decoder above. The tool automatically detects the image format and renders the picture in your browser. You can then download it as a PNG, JPEG, or the original format."}},
+      {"@type":"Question","name":"What image formats does Base64 picture support?","acceptedAnswer":{"@type":"Answer","text":"PNG, JPEG, GIF, WebP, SVG, and BMP. The format is detected automatically from the data URI prefix or binary file signature."}},
+      {"@type":"Question","name":"Is it safe to decode a Base64 picture here?","acceptedAnswer":{"@type":"Answer","text":"Yes. All decoding happens in your browser using the native atob() function and Blob API. Nothing is sent to any server."}}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://base64image.net/"},
+      {"@type":"ListItem","position":2,"name":"Base64 Picture Decoder","item":"https://base64image.net/base64-picture/"}
+    ]}</script>
+    </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <script is:inline>
+  (function(){
+    var _blob=null,_ext='png';
+    var inp=document.getElementById('pictureInput'),errDiv=document.getElementById('pictureError'),
+        preview=document.getElementById('picturePreview'),img=document.getElementById('pictureImg'),
+        fmtEl=document.getElementById('pictureFmt'),szEl=document.getElementById('pictureSize'),
+        dlBtn=document.getElementById('pictureDownload'),clrBtn=document.getElementById('pictureClear');
+    function decode(){
+      errDiv.style.display='none';errDiv.textContent='';preview.style.display='none';
+      if(img.src){try{URL.revokeObjectURL(img.src);}catch(e){}img.src='';}
+      _blob=null;
+      var input=inp.value.trim();if(!input)return;
+      try{
+        var b64=input,fmt='unknown';
+        var m=input.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
+        if(m){fmt=m[1];b64=m[2];}
+        if(!/^[A-Za-z0-9+\/]*={0,2}$/.test(b64))throw new Error('Invalid Base64 string.');
+        var bin=atob(b64),bytes=new Uint8Array(bin.length);
+        for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+        if(fmt==='unknown')fmt=detect(bytes);
+        _blob=new Blob([bytes],{type:mime(fmt)});
+        _ext=fmt==='jpeg'?'jpg':fmt==='svg+xml'?'svg':fmt;
+        img.src=URL.createObjectURL(_blob);
+        fmtEl.textContent=fmt.toUpperCase();
+        szEl.textContent=fmtBytes(_blob.size);
+        preview.style.display='';
+      }catch(err){errDiv.textContent=err.message||'Failed to decode.';errDiv.style.display='';}
+    }
+    function detect(b){
+      if(b[0]===0xFF&&b[1]===0xD8)return'jpeg';
+      if(b[0]===0x89&&b[1]===0x50)return'png';
+      if(b[0]===0x47&&b[1]===0x49)return'gif';
+      if(b[0]===0x52&&b[1]===0x49)return'webp';
+      if(b[0]===0x42&&b[1]===0x4D)return'bmp';
+      if(b[0]===0x3C&&b[1]===0x73)return'svg+xml';
+      return'png';
+    }
+    function mime(f){return{png:'image/png',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',bmp:'image/bmp','svg+xml':'image/svg+xml'}[f]||'image/png';}
+    function fmtBytes(n){if(!n)return'0 B';var k=1024,s=['B','KB','MB'],i=Math.floor(Math.log(n)/Math.log(k));return Math.round((n/Math.pow(k,i))*100)/100+' '+s[i];}
+    inp.addEventListener('input',decode);
+    dlBtn.addEventListener('click',function(){
+      if(!img.src||!img.src.startsWith('blob:'))return;
+      var a=document.createElement('a');a.href=img.src;a.download='base64-picture-'+Date.now()+'.'+_ext;
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+    });
+    clrBtn.addEventListener('click',function(){
+      inp.value='';errDiv.style.display='none';preview.style.display='none';
+      if(img.src){try{URL.revokeObjectURL(img.src);}catch(e){}img.src='';}
+      _blob=null;
+    });
+  })();
+  </script>
+</ToolLayout>

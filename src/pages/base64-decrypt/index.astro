@@ -1,0 +1,98 @@
+﻿---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<div class="tool-section">
+    <div style="background:color-mix(in oklab,var(--amber,#ffb454) 10%,var(--bg-card));border:1px solid color-mix(in oklab,var(--amber,#ffb454) 30%,transparent);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:14px;color:var(--fg-mute,#9aa3b3);">
+      <strong style="color:var(--fg,#e6ebf2)">⚠ Base64 is not encryption.</strong> There is no password or key — anyone can decode it. If your data was actually encrypted (e.g. AES), you need the encryption key, not a Base64 decoder.
+    </div>
+    <div class="input-group">
+      <label for="decryptInput">Paste your Base64 string to decode</label>
+      <textarea id="decryptInput" placeholder="Paste Base64 string here..." rows="5"></textarea>
+    </div>
+    <div class="input-group" style="margin-top:12px">
+      <label>Decoded output</label>
+      <textarea id="decryptOutput" placeholder="Decoded text appears here..." rows="5" readonly style="opacity:0.8"></textarea>
+    </div>
+    <div class="error" id="decryptError" style="display:none;margin-top:8px"></div>
+    <div class="actions">
+      <button id="decryptCopy" class="btn-primary">Copy Output</button>
+      <button id="decryptClear" class="btn-secondary">Clear</button>
+    </div>
+  </div>
+
+  <article class="content-section">
+    <h2>Can You Decrypt Base64?</h2>
+    <p>Technically, no — because Base64 is not encryption. "Decrypting" Base64 is actually called <strong>decoding</strong>. Base64 is a reversible encoding scheme that converts binary data into ASCII text using 64 printable characters. Anyone can decode a Base64 string back to its original data without any key or password. The decoder above does exactly this using the browser's built-in <code>atob()</code> function.</p>
+    <p>If someone sent you a "Base64 encrypted" string, they mean "Base64 encoded." Paste it above and you'll see the original content immediately. If the original data was also encrypted (e.g., AES-encrypted ciphertext represented as Base64), decoding the Base64 gives you the raw ciphertext bytes — you would still need the encryption key to read the actual plaintext.</p>
+    <h2>What Is the Difference Between Base64 Decoding and Decryption?</h2>
+    <p><strong>Base64 decoding</strong> reverses the Base64 encoding algorithm. No key required. It simply converts each group of 4 Base64 characters back into 3 bytes of original data. The result is the exact original binary data — deterministic and reversible by anyone.</p>
+    <p><strong>Decryption</strong> reverses an encryption algorithm such as AES, RSA, or ChaCha20. A secret key is required. Without the correct key, the data cannot be recovered. Encryption provides confidentiality; Base64 does not.</p>
+    <p>Base64 encoding is frequently applied on top of encrypted data so that binary ciphertext can be safely transmitted in text-based protocols (JSON, HTTP headers, email). In this case you decode the Base64 first, then decrypt the resulting bytes using the appropriate key and algorithm.</p>
+    <h2>Is Base64 Secure?</h2>
+    <p>No. Base64 provides <strong>zero security</strong>. It is trivially reversible by anyone with a decoder (including this page). Do not use Base64 to protect passwords, API keys, tokens, or any sensitive data. Use proper cryptographic encryption (AES-256, RSA-2048, or similar) for confidentiality. See <a href="/what-is-base64/">What is Base64</a> for a complete explanation of how the encoding works.</p>
+    <h2>How Do You Decode Base64 in Code?</h2>
+    <p>Every major language has built-in Base64 decoding:</p>
+    <ul>
+      <li><strong>JavaScript:</strong> <code>atob(str)</code> — or <a href="/base64-javascript/">full JavaScript guide</a></li>
+      <li><strong>Python:</strong> <code>base64.b64decode(str).decode('utf-8')</code> — or <a href="/base64-python/">full Python guide</a></li>
+      <li><strong>Java:</strong> <code>Base64.getDecoder().decode(str)</code> — or <a href="/base64-java/">full Java guide</a></li>
+      <li><strong>Terminal (Linux/Mac):</strong> <code>echo 'str' | base64 -d</code></li>
+      <li><strong>PowerShell:</strong> <code>[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('str'))</code></li>
+    </ul>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><h3>Can you decrypt Base64?</h3><p>Base64 is encoding, not encryption — there is no key. Use the decoder above to instantly convert it back to the original text. If the underlying data was also encrypted, you need the encryption key separately.</p></div>
+    <div class="faq-item"><h3>Is Base64 the same as encryption?</h3><p>No. Base64 provides no security. Anyone can decode it without any key. It is used purely to represent binary data as ASCII text for safe transport in text-based systems.</p></div>
+    <div class="faq-item"><h3>What does a Base64 string look like?</h3><p>A Base64 string contains only A-Z, a-z, 0-9, +, /, and = (for padding). It may start with <code>data:...</code> as a data URI prefix. Use the <a href="/base64-validator/">Base64 Validator</a> to check if a string is valid Base64.</p></div>
+    <div class="faq-item"><h3>How do I decode Base64 to an image?</h3><p>If the Base64 string represents an image, use the <a href="/base64-image-decoder/">Base64 Image Decoder</a> to preview and download it.</p></div>
+  </article>`;
+---
+<ToolLayout
+  title="Base64 Decrypt — Decode (Not Decrypt) Base64 Strings Online"
+  description="Base64 is encoding, not encryption — there is no key or password. Paste your Base64 string to instantly decode it back to plain text or binary data. Free, private, browser-only."
+  canonical="https://base64image.net/base64-decrypt/"
+  h1="Base64 Decrypt (Decoder)"
+  mono="// atob()"
+  lede="Base64 is encoding, not encryption — it has no password or key. Paste any Base64 string to instantly decode it back to readable text."
+  tag="decode"
+  tagLabel="Decoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Decoders',href:'#'},{label:'Base64 Decrypt'}]}
+
+>
+  <Fragment slot="head">
+
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+      {"@type":"Question","name":"Can you decrypt Base64?","acceptedAnswer":{"@type":"Answer","text":"Base64 is not encryption — it is encoding. There is no key, password, or secret involved. Anyone can decode a Base64 string back to its original data using atob() or any Base64 decoder. If you need to decrypt actual encrypted data, you need the encryption key and algorithm (AES, RSA, etc.) — Base64 is only used to represent the encrypted bytes as text."}},
+      {"@type":"Question","name":"What is the difference between Base64 decoding and decryption?","acceptedAnswer":{"@type":"Answer","text":"Base64 decoding reverses the Base64 encoding scheme to recover the original binary data. It requires no key. Decryption reverses an encryption algorithm (like AES or RSA) and requires a secret key. Base64 is commonly used to represent encrypted data as text, but Base64 itself is not encryption."}},
+      {"@type":"Question","name":"Is Base64 secure?","acceptedAnswer":{"@type":"Answer","text":"No. Base64 provides zero security. Anyone can decode it instantly without any key. Do not use Base64 to protect sensitive data. Use proper encryption (AES-256, RSA) for security. Base64 is purely an encoding scheme for representing binary data as ASCII text."}},
+      {"@type":"Question","name":"How do I decode a Base64 string?","acceptedAnswer":{"@type":"Answer","text":"Paste the Base64 string into the decoder above and the decoded text appears instantly. In JavaScript use atob(str), in Python use base64.b64decode(str).decode('utf-8'), in the terminal use echo 'str' | base64 -d."}}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://base64image.net/"},
+      {"@type":"ListItem","position":2,"name":"Base64 Decrypt","item":"https://base64image.net/base64-decrypt/"}
+    ]}</script>
+    </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <script is:inline>
+  (function(){
+    var inp=document.getElementById('decryptInput'),out=document.getElementById('decryptOutput'),
+        err=document.getElementById('decryptError'),cpBtn=document.getElementById('decryptCopy'),
+        clrBtn=document.getElementById('decryptClear');
+    function decode(){
+      err.style.display='none';err.textContent='';out.value='';
+      var input=inp.value.trim();if(!input)return;
+      try{
+        var b64=input;
+        var m=input.match(/^data:[^;]+;base64,(.+)$/);
+        if(m)b64=m[1];
+        if(!/^[A-Za-z0-9+\/]*={0,2}$/.test(b64))throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+        out.value=atob(b64);
+      }catch(e){err.textContent=e.message||'Failed to decode.';err.style.display='';}
+    }
+    inp.addEventListener('input',decode);
+    cpBtn.addEventListener('click',function(){
+      if(!out.value)return;
+      navigator.clipboard.writeText(out.value).then(function(){cpBtn.textContent='Copied!';setTimeout(function(){cpBtn.textContent='Copy Output';},1500);});
+    });
+    clrBtn.addEventListener('click',function(){inp.value='';out.value='';err.style.display='';err.textContent='';});
+  })();
+  </script>
+</ToolLayout>

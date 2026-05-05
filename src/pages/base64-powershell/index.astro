@@ -1,0 +1,247 @@
+﻿---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
+        <h1><i class="fas fa-terminal"></i> Base64 Encode &amp; Decode in PowerShell</h1>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: May 2026</p>
+        <p class="intro">How to Base64 encode and decode strings, files, and credentials in PowerShell using System.Convert</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <!-- Section 1: Encoding a String -->
+            <h2><i class="fas fa-lock"></i> How Do You Base64 Encode a String in PowerShell?</h2>
+            <p>
+                Use <code>[System.Convert]::ToBase64String()</code> combined with <code>[System.Text.Encoding]::UTF8.GetBytes()</code> to encode any string to Base64. PowerShell has full access to the .NET framework, so the same <code>System.Convert</code> class used in C# is available directly.
+            </p>
+            <pre><code># Encode a string to Base64
+$text = "Hello World"
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($text)
+$encoded = [System.Convert]::ToBase64String($bytes)
+Write-Output $encoded
+# Output: SGVsbG8gV29ybGQ=</code></pre>
+            <p>
+                Always specify <code>[System.Text.Encoding]::UTF8</code> explicitly rather than relying on the system default encoding. The default encoding varies between Windows versions and locales, which can produce inconsistent output across machines. The result uses the standard Base64 alphabet (A-Z, a-z, 0-9, +, /) with <code>=</code> padding as defined in RFC 4648. For a browser-based alternative, use the <a href="/base64-text-encoder/">Base64 text encoder</a>.
+            </p>
+
+            <!-- Section 2: Decoding -->
+            <h2><i class="fas fa-unlock"></i> How Do You Decode Base64 in PowerShell?</h2>
+            <p>
+                Use <code>[System.Convert]::FromBase64String()</code> to convert a Base64 string back to a byte array, then <code>[System.Text.Encoding]::UTF8.GetString()</code> to reconstruct the original text. The <code>FromBase64String()</code> method validates the input and throws <code>System.FormatException</code> if the string contains invalid characters or malformed padding.
+            </p>
+            <pre><code># Decode a Base64 string
+$encoded = "SGVsbG8gV29ybGQ="
+$bytes = [System.Convert]::FromBase64String($encoded)
+$decoded = [System.Text.Encoding]::UTF8.GetString($bytes)
+Write-Output $decoded
+# Output: Hello World</code></pre>
+            <p>
+                Wrap decoding in a <code>try/catch</code> block in production scripts to handle malformed input gracefully. Invalid Base64 input — such as strings with incorrect padding or characters outside the Base64 alphabet — causes an exception rather than silently returning garbage data. To decode Base64 directly in your browser, use the <a href="/base64-text-decoder/">Base64 text decoder</a>.
+            </p>
+
+            <!-- Section 3: File Encoding -->
+            <h2><i class="fas fa-file"></i> How Do You Encode a File to Base64 in PowerShell?</h2>
+            <p>
+                Use <code>[Convert]::ToBase64String()</code> with <code>[IO.File]::ReadAllBytes()</code> to encode a binary file to Base64 in a single line. This loads the entire file into memory, so it works best for files that fit within available RAM. For large files, use a stream-based approach.
+            </p>
+            <pre><code># Encode a file to Base64
+$filePath = "C:\path\to\file.png"
+$fileBytes = [IO.File]::ReadAllBytes($filePath)
+$encoded = [Convert]::ToBase64String($fileBytes)
+Write-Output $encoded
+
+# Save the Base64 output to a text file
+$encoded | Out-File -FilePath "C:\path\to\file.b64" -NoNewline -Encoding ascii
+
+# Create a data URI for HTML embedding
+$dataUri = "data:image/png;base64," + $encoded
+Write-Output $dataUri</code></pre>
+            <p>
+                The <code>-NoNewline</code> flag on <code>Out-File</code> prevents PowerShell from appending a trailing newline, which would corrupt the Base64 string. Specify <code>-Encoding ascii</code> to avoid the UTF-16 BOM that PowerShell writes by default. The <a href="/base64-file-encoder/">Base64 file encoder</a> performs this same operation in your browser without uploading the file to any server.
+            </p>
+
+            <!-- Section 4: Basic Auth -->
+            <h2><i class="fas fa-key"></i> How Do You Use Base64 for Basic Auth in PowerShell?</h2>
+            <p>
+                HTTP Basic Authentication encodes credentials as <code>username:password</code> in Base64 and sends them in the <code>Authorization</code> header. PowerShell's <code>Invoke-RestMethod</code> and <code>Invoke-WebRequest</code> cmdlets accept custom headers, so you can construct a Basic Auth header manually using <code>[Convert]::ToBase64String()</code>.
+            </p>
+            <pre><code># Build a Basic Auth header
+$credentials = "user:password"
+$bytes = [Text.Encoding]::UTF8.GetBytes($credentials)
+$b64 = [Convert]::ToBase64String($bytes)
+$headers = @{ Authorization = "Basic $b64" }
+
+# Use with Invoke-RestMethod
+$response = Invoke-RestMethod -Uri "https://api.example.com/data" -Headers $headers -Method Get
+Write-Output $response
+
+# One-liner version
+$response = Invoke-RestMethod -Uri "https://api.example.com/data" -Method Get \\\
+    -Headers @{ Authorization = "Basic " + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("user:password")) }</code></pre>
+            <p>
+                Never hardcode credentials in scripts that are committed to version control. Use <code>Get-Credential</code> to prompt for credentials at runtime, or store secrets in environment variables or a secrets manager. PowerShell 7+ supports <code>-Credential</code> on many cmdlets which handles the encoding automatically. For understanding the encoding format, see the <a href="/what-is-base64/">What is Base64</a> guide.
+            </p>
+
+            <!-- Section 5: Comparison Table -->
+            <h2><i class="fas fa-table"></i> PowerShell vs Terminal Base64 Commands</h2>
+            <p>
+                Base64 encoding commands differ significantly across platforms. The table below compares the syntax for encoding a string on PowerShell (Windows), Linux bash, and macOS Terminal, which helps when writing cross-platform scripts or documentation.
+            </p>
+            <table class="reference-table">
+                <thead>
+                    <tr><th>Platform</th><th>Encode String</th><th>Decode String</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>PowerShell</strong></td>
+                        <td><code>[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("text"))</code></td>
+                        <td><code>[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String("dGV4dA=="))</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Linux (bash)</strong></td>
+                        <td><code>echo -n "text" | base64</code></td>
+                        <td><code>echo "dGV4dA==" | base64 -d</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>macOS Terminal</strong></td>
+                        <td><code>echo -n "text" | base64</code></td>
+                        <td><code>echo "dGV4dA==" | base64 -D</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>PowerShell Core (7+)</strong></td>
+                        <td colspan="2">Same .NET syntax as Windows PowerShell — works cross-platform</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>
+                Note that Linux uses <code>-d</code> and macOS uses <code>-D</code> for decoding — a common source of script portability issues. PowerShell Core (version 7+) runs identically on Windows, Linux, and macOS, making it a reliable choice for cross-platform automation. For Linux-specific commands, see the <a href="/base64-linux/">Base64 in Linux guide</a>. For macOS, see the <a href="/base64-mac/">Base64 on macOS guide</a>.
+            </p>
+
+            <!-- FAQ Section -->
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I Base64 encode in PowerShell?</h3>
+                <p>
+                    Use <code>[System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("your text"))</code>. This converts the string to UTF-8 bytes first, then encodes those bytes as a Base64 string using the standard RFC 4648 alphabet. No additional modules or cmdlets are required — the <code>System.Convert</code> class is part of the .NET framework included with all PowerShell versions.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I decode Base64 in PowerShell?</h3>
+                <p>
+                    Use <code>[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("your_base64"))</code>. The <code>FromBase64String()</code> method decodes the Base64 string to a byte array, and <code>GetString()</code> converts those bytes back to a readable string using UTF-8 encoding. If the input contains invalid Base64 characters, a <code>System.FormatException</code> is thrown.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I use Base64 for Basic Auth in PowerShell?</h3>
+                <p>
+                    Encode <code>"username:password"</code> as Base64 using <code>[Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("user:pass"))</code>, then pass it in an <code>Authorization</code> header as <code>"Basic " + $b64</code> when calling <code>Invoke-RestMethod</code> or <code>Invoke-WebRequest</code>. This constructs the HTTP Basic Authentication header defined in RFC 7617.
+                </p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use Base64 encoding in PowerShell scripts without external tools?</h3>
+                <p>
+                    Yes. PowerShell includes full access to the .NET framework, which provides <code>System.Convert.ToBase64String()</code> and <code>System.Convert.FromBase64String()</code>. No external modules, packages, or third-party tools are needed. These methods are available in Windows PowerShell 2.0 and later, as well as all versions of PowerShell Core (6+) and PowerShell 7+.
+                </p>
+            </div>
+
+            <!-- Related Links -->
+            <h2><i class="fas fa-sitemap"></i> Related Base64 Tools and Guides</h2>
+            <ul>
+                <li><a href="/what-is-base64/">What is Base64?</a> - Comprehensive guide to the Base64 encoding format</li>
+                <li><a href="/base64-text-encoder/">Base64 Text Encoder</a> - Encode text to Base64 in your browser</li>
+                <li><a href="/base64-text-decoder/">Base64 Text Decoder</a> - Decode Base64 strings in your browser</li>
+                <li><a href="/base64-csharp/">Base64 in C#</a> - Use the same System.Convert methods in C# and .NET</li>
+                <li><a href="/base64-linux/">Base64 in Linux</a> - Command-line Base64 encoding on Linux</li>
+                <li><a href="/base64-mac/">Base64 on macOS</a> - Base64 commands for macOS Terminal</li>
+                <li><a href="/base64-file-encoder/">Base64 File Encoder</a> - Encode files to Base64 client-side</li>
+                <li><a href="/">All Base64 Tools</a> - Browse the complete toolset</li>
+            </ul>
+        </article>
+    </main>`;
+---
+<ArticleLayout
+  title="Base64 Encode &amp; Decode in PowerShell — Complete Guide with Examples"
+  description="Learn how to Base64 encode and decode in PowerShell using Convert.ToBase64String and Convert.FromBase64String. Examples for strings, files, and Basic Auth headers."
+  canonical="https://base64image.net/base64-powershell/"
+  h1="Base64 Encode &amp; Decode in PowerShell"
+  lede="How to Base64 encode and decode strings, files, and credentials in PowerShell using System.Convert — with practical examples for API calls, secrets, and automation."
+  tag="learn"
+  tagLabel="Developer Guide"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 in PowerShell'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 in PowerShell",
+            "item": "https://base64image.net/base64-powershell/"
+        }]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Base64 Encode & Decode in PowerShell — Complete Guide with Examples",
+        "datePublished": "2026-05-05",
+        "dateModified": "2026-05-05",
+        "description": "Learn how to Base64 encode and decode in PowerShell using Convert.ToBase64String and Convert.FromBase64String. Examples for strings, files, and Basic Auth headers.",
+        "author": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "BASE64IMAGE",
+            "url": "https://base64image.net/"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://base64image.net/base64-powershell/"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I Base64 encode in PowerShell?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes('your text')). This converts the string to UTF-8 bytes first, then encodes those bytes as a Base64 string using the standard RFC 4648 alphabet. No additional modules or cmdlets are required — the System.Convert class is part of the .NET framework included with all PowerShell versions."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I decode Base64 in PowerShell?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('your_base64')). The FromBase64String() method decodes the Base64 string to a byte array, and GetString() converts those bytes back to a readable string using UTF-8 encoding. If the input contains invalid Base64 characters, a System.FormatException is thrown."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I use Base64 for Basic Auth in PowerShell?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Encode 'username:password' as Base64 using [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('user:pass')), then pass it in an Authorization header as 'Basic ' + $b64 when calling Invoke-RestMethod or Invoke-WebRequest. This constructs the HTTP Basic Authentication header defined in RFC 7617."
+            }
+        }]
+    }
+    </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>
+

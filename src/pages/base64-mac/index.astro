@@ -1,0 +1,102 @@
+﻿---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<article class="content-section">
+    <h2>How Do You Decode Base64 on Mac?</h2>
+    <p>macOS includes a built-in <code>base64</code> command in Terminal. To decode a Base64 string, pipe it to <code>base64 -D</code> (capital D — this is the macOS-specific flag):</p>
+    <pre><code>echo 'SGVsbG8gV29ybGQ=' | base64 -D
+# Output: Hello World</code></pre>
+    <p>Note: macOS uses <code>-D</code> (uppercase) for decode. Linux uses <code>-d</code> (lowercase). This is the most common source of errors when copying commands between platforms. For a browser-based alternative with no terminal required, use the <a href="/base64-text-decoder/">Base64 Text Decoder</a>.</p>
+
+    <h2>How Do You Encode a String to Base64 on Mac?</h2>
+    <p>Pipe the string to <code>base64</code> without any flags. Use <code>echo -n</code> to avoid encoding the trailing newline character, which would corrupt the output:</p>
+    <pre><code>echo -n 'Hello World' | base64
+# Output: SGVsbG8gV29ybGQ=</code></pre>
+    <p>Without <code>-n</code>, the newline at the end of <code>echo</code> output is included in the encoding, producing a different result. Always use <code>echo -n</code> when encoding strings.</p>
+
+    <h2>How Do You Encode and Decode Files on Mac?</h2>
+    <p>Use the <code>-i</code> (input) and <code>-o</code> (output) flags to work with files instead of pipes:</p>
+    <pre><code># Encode a file to Base64 and save to output.txt
+base64 -i image.png -o image.b64
+
+# Decode a Base64 file back to binary
+base64 -D -i image.b64 -o decoded-image.png
+
+# Encode and print to stdout
+base64 /path/to/file.pdf
+
+# Decode from file and print to stdout
+base64 -D /path/to/encoded.txt</code></pre>
+    <p>The file-based approach is better for large files than piping, as it avoids loading everything into memory. For a no-terminal alternative, use the <a href="/base64-file-encoder/">Base64 File Encoder</a> or <a href="/base64-file-decoder/">File Decoder</a>.</p>
+
+    <h2>What Is the Difference Between base64 -d and base64 -D on Mac?</h2>
+    <p>This is the most common Base64 confusion on macOS:</p>
+    <table class="reference-table">
+      <thead><tr><th>Flag</th><th>Platform</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr><td><code>base64 -D</code></td><td>macOS (BSD)</td><td>Decode Base64</td></tr>
+        <tr><td><code>base64 -d</code></td><td>Linux (GNU)</td><td>Decode Base64</td></tr>
+        <tr><td><code>base64</code> (no flag)</td><td>Both</td><td>Encode to Base64</td></tr>
+        <tr><td><code>base64 -w 0</code></td><td>Linux only</td><td>Encode without line wrapping</td></tr>
+        <tr><td><code>base64 -b 0</code></td><td>macOS only</td><td>Encode without line wrapping</td></tr>
+      </tbody>
+    </table>
+    <p>If you see an error like <code>base64: invalid option -- d</code> on macOS, switch to <code>-D</code>.</p>
+
+    <h2>How Do You Disable Line Wrapping on Mac?</h2>
+    <p>By default, macOS <code>base64</code> wraps output at 76 characters per line (MIME format). To get a single-line Base64 string with no line breaks, use <code>-b 0</code>:</p>
+    <pre><code># Single-line output (no newlines in Base64)
+echo -n 'Hello World' | base64 -b 0
+# Output: SGVsbG8gV29ybGQ=
+
+# With line wrapping (default, every 76 chars)
+base64 -i large-file.bin -o large-file.b64</code></pre>
+    <p>Use <code>-b 0</code> when you need the Base64 string for embedding in JSON, HTML, or CSS. Use the default (with wrapping) for MIME email attachments.</p>
+
+    <h2>How Do You Use Base64 with Clipboard on Mac?</h2>
+    <p>Combine <code>base64</code> with <code>pbcopy</code> and <code>pbpaste</code> to work with the clipboard:</p>
+    <pre><code># Encode clipboard contents to Base64 and copy back
+pbpaste | base64 -b 0 | pbcopy
+
+# Decode Base64 from clipboard and copy decoded text back
+pbpaste | base64 -D | pbcopy
+
+# Encode a file to Base64 and copy to clipboard
+base64 -i image.png -b 0 | pbcopy</code></pre>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><h3>How do I decode Base64 on Mac?</h3><p>Run <code>echo 'YOUR_BASE64' | base64 -D</code> in Terminal. Use capital D — macOS uses <code>-D</code> for decode, not <code>-d</code> like Linux.</p></div>
+    <div class="faq-item"><h3>Why does base64 -d fail on Mac?</h3><p>macOS uses BSD base64 which requires <code>-D</code> (uppercase) for decode. Linux uses GNU base64 which uses <code>-d</code> (lowercase). Switch to <code>-D</code> to fix the error.</p></div>
+    <div class="faq-item"><h3>How do I encode a file to Base64 on Mac?</h3><p>Run <code>base64 -i /path/to/file.png -o output.txt</code> to write to a file, or <code>base64 /path/to/file.png</code> to print to stdout.</p></div>
+    <div class="faq-item"><h3>Can I use Base64 on Mac without Terminal?</h3><p>Yes — use the browser-based tools: <a href="/base64-image-encoder/">Image Encoder</a>, <a href="/base64-text-encoder/">Text Encoder</a>, or <a href="/base64-file-encoder/">File Encoder</a>. No installation required.</p></div>
+  </article>`;
+---
+<ArticleLayout
+  title="Base64 Decode on Mac — Terminal Command Guide (macOS)"
+  description="How to encode and decode Base64 on Mac using the terminal. Complete guide covering base64 -D, base64 -d, piping, file encoding, and common macOS Base64 command examples."
+  canonical="https://base64image.net/base64-mac/"
+  h1="Base64 on Mac (macOS Terminal Guide)"
+  lede="How to encode and decode Base64 strings and files on macOS using the built-in base64 terminal command."
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 on Mac'}]}
+
+>
+  <Fragment slot="head">
+
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "HowTo", "name": "How to Decode Base64 on Mac", "step": [
+      {"@type":"HowToStep","name":"Open Terminal","text":"Open Terminal.app from Applications > Utilities or press Cmd+Space and type Terminal."},
+      {"@type":"HowToStep","name":"Decode a Base64 string","text":"Run: echo 'SGVsbG8gV29ybGQ=' | base64 -D"},
+      {"@type":"HowToStep","name":"Encode a string","text":"Run: echo -n 'Hello World' | base64"}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+      {"@type":"Question","name":"How do I decode Base64 on Mac?","acceptedAnswer":{"@type":"Answer","text":"Use the macOS terminal command: echo 'BASE64STRING' | base64 -D (capital D). The -D flag is the macOS decode flag. On Linux, the flag is lowercase -d. Both accept piped input or file input with the -i flag."}},
+      {"@type":"Question","name":"What is the difference between base64 -d and base64 -D on Mac?","acceptedAnswer":{"@type":"Answer","text":"On macOS, base64 -D (uppercase D) decodes Base64. On Linux, base64 -d (lowercase d) decodes Base64. If you run base64 -d on macOS, you get an error. This is the most common source of confusion when switching between platforms."}},
+      {"@type":"Question","name":"How do I encode a file to Base64 on Mac?","acceptedAnswer":{"@type":"Answer","text":"Run: base64 -i /path/to/file.png -o output.txt — this encodes the file and writes the Base64 string to output.txt. Or use: base64 /path/to/file.png to print directly to stdout."}}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://base64image.net/"},
+      {"@type":"ListItem","position":2,"name":"Base64 on Mac","item":"https://base64image.net/base64-mac/"}
+    ]}</script>
+    </Fragment>
+  <Fragment set:html={bodyHtml} />
+</ArticleLayout>
