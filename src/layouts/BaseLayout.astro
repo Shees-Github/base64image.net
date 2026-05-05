@@ -214,11 +214,13 @@ const year = new Date().getFullYear();
         : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
-    // Close menu when a nav link is tapped
-    nav?.querySelectorAll('a').forEach(a => {
+    // Close menu when a real page link is tapped — NOT dropdown toggles
+    // (dropdown toggles need to stay open so the sub-menu can be used)
+    nav?.querySelectorAll('a:not(.dropdown-toggle)').forEach(a => {
       a.addEventListener('click', () => {
         if (innerWidth <= 768) {
           nav.classList.remove('open');
+          dropdowns.forEach(d => d.classList.remove('active'));
           mt.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
           document.body.style.overflow = '';
         }
