@@ -89,6 +89,24 @@ with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>よくある質問</h2><div class="faq-item"><h3>Python 3で.encode()と.decode()が必要な理由は？</h3><p>base64はバイト列を扱います。.encode()で文字列をバイト列に、.decode()でバイト列を文字列に変換します。</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: 'プライバシー重視 · ローカル処理 · アカウント不要',
+    meta1: 'サーバーへの通信なし', meta2: '40以上のツール', meta3: 'オープンソース',
+    toolsH2: 'Base64に必要なすべて',
+    toolsP: 'エンコーダー、デコーダー、コンバーター、バリデーター — すべてのワークフローに対応。',
+    howH2: 'サーバーと接続しない。設計上。',
+    howP: 'すべての処理がブラウザのネイティブAPIで実行されます。データがタブを出ることはありません。',
+    step1H: '入力を提供する', step1P: 'ファイルをドロップ、文字列を貼り付け、または画像をアップロード。すべてローカルに保持されます。',
+    step2H: 'ブラウザがエンコード', step2P: 'FileReader、atob/btoa、Canvasがエンコードを処理 — すべてのブラウザに組み込み済み。',
+    step3H: '出力はあなたのもの', step3P: '文字列をコピー、ファイルをダウンロード。ネットワークリクエストはゼロ。',
+    faqH2: 'よくある質問',
+    faqs: [
+      { q: '本当にデータは安全ですか？', a: 'はい。いずれかのツールを使用中にDevTools → ネットワークを開いてください — POSTリクエストがゼロであることが確認できます。すべての処理にFileReader、atob()/btoa()、Canvasを使用しており、ネットワークにアクセスしません。' },
+      { q: 'Base64エンコーディングとは？', a: 'Base64は64種の印刷可能なASCII文字を使ってバイナリデータをテキストに変換します。HTML/CSSへの画像埋め込み、JSON APIでのファイル転送に使われます。エンコードにより約33%サイズが増加します。<a href="/ja/what-is-base64/">完全ガイド</a>' },
+      { q: 'CSSに画像を埋め込む方法は？', a: '<a href="/base64-image-encoder/">画像エンコーダー</a>で画像をエンコードし、<code>background-image: url(\'data:image/png;base64,…\')</code>を使用してください。' },
+      { q: '標準Base64 vs URL-safe Base64？', a: '標準Base64は<code>+</code>と<code>/</code>を使いますが、URLで問題が発生します。URL-safe版（RFC 4648 §5）はそれらを<code>-</code>と<code>_</code>に置き換えます。' },
+    ],
+  },
 } as const;
 
 export default ja;

@@ -119,6 +119,24 @@ echo 'SGVsbG8gV29ybGQ=' | base64 -d
 base64 -d image.b64 > image.png</code></pre><h2>Linux vs macOS</h2><p>Linux : <code>-d</code> pour décoder, <code>-w 0</code> sans retours. macOS : <code>-D</code> et <code>-b 0</code> respectivement.</p><h2>FAQ</h2><div class="faq-item"><h3>Pourquoi utiliser echo -n ?</h3><p>Sans -n, echo ajoute un saut de ligne qui est inclus dans l'encodage, produisant un résultat incorrect.</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: 'Confidentialité · Local · Sans compte',
+    meta1: 'Zéro requête serveur', meta2: '40+ outils', meta3: 'Open source',
+    toolsH2: 'Tout ce dont vous avez besoin pour Base64',
+    toolsP: 'Encodeurs, décodeurs, convertisseurs, validateurs — chaque flux de travail couvert.',
+    howH2: 'Zéro contact serveur. Par conception.',
+    howP: 'Chaque opération utilise les API natives du navigateur. Vos données ne quittent jamais l\'onglet.',
+    step1H: 'Vous fournissez l\'entrée', step1P: 'Déposez un fichier, collez une chaîne ou téléchargez une image. Elle reste locale.',
+    step2H: 'Le navigateur encode', step2P: 'FileReader, atob/btoa et Canvas gèrent l\'encodage — intégrés dans chaque navigateur.',
+    step3H: 'La sortie vous appartient', step3P: 'Copiez la chaîne, téléchargez le fichier. Zéro requête réseau effectuée.',
+    faqH2: 'Questions fréquentes',
+    faqs: [
+      { q: 'Mes données sont-elles vraiment privées ?', a: 'Oui. Ouvrez DevTools → Réseau pendant l\'utilisation de n\'importe quel outil — vous verrez zéro requête POST. Toutes les opérations utilisent FileReader, atob()/btoa() et Canvas — des API navigateur qui n\'accèdent jamais au réseau.' },
+      { q: 'Qu\'est-ce que l\'encodage Base64 ?', a: 'Base64 convertit des données binaires en texte ASCII en utilisant 64 caractères imprimables. Il est utilisé pour intégrer des images dans HTML/CSS, transmettre des fichiers dans des API JSON. L\'encodage ajoute ~33% de taille. <a href="/fr/what-is-base64/">Guide complet</a>' },
+      { q: 'Comment intégrer une image en CSS ?', a: 'Encodez votre image avec l\'<a href="/base64-image-encoder/">Encodeur d\'Images</a>, puis utilisez : <code>background-image: url(\'data:image/png;base64,…\')</code>.' },
+      { q: 'Base64 standard vs URL-safe ?', a: 'Le Base64 standard utilise <code>+</code> et <code>/</code> qui cassent dans les URLs. L\'URL-safe (RFC 4648 §5) les remplace par <code>-</code> et <code>_</code>, idéal pour les JWT et query strings.' },
+    ],
+  },
 } as const;
 
 export default fr;

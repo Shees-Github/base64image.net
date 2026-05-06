@@ -96,6 +96,24 @@ with open('saida.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>FAQ</h2><div class="faq-item"><h3>Por que .encode() e .decode() em Python 3?</h3><p>base64 trabalha com bytes. .encode() converte string para bytes, .decode() converte bytes para string.</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: 'Privacidade · Local · Sem conta',
+    meta1: 'Zero requisições ao servidor', meta2: '40+ ferramentas', meta3: 'Código aberto',
+    toolsH2: 'Tudo que você precisa para Base64',
+    toolsP: 'Codificadores, decodificadores, conversores, validadores — todos os fluxos cobertos.',
+    howH2: 'Zero contato com servidores. Por design.',
+    howP: 'Cada operação usa APIs nativas do navegador. Seus dados nunca saem da aba.',
+    step1H: 'Você fornece a entrada', step1P: 'Solte um arquivo, cole uma string ou faça upload de uma imagem. Fica local.',
+    step2H: 'O navegador codifica', step2P: 'FileReader, atob/btoa e Canvas gerenciam a codificação — integrados em todo navegador.',
+    step3H: 'A saída é sua', step3P: 'Copie a string, baixe o arquivo. Zero requisições de rede feitas.',
+    faqH2: 'Perguntas frequentes',
+    faqs: [
+      { q: 'Meus dados são realmente privados?', a: 'Sim. Abra DevTools → Rede enquanto usa qualquer ferramenta — você verá zero requisições POST. Todas as operações usam FileReader, atob()/btoa() e Canvas — APIs do navegador que nunca acessam a rede.' },
+      { q: 'O que é codificação Base64?', a: 'Base64 converte dados binários em texto ASCII usando 64 caracteres imprimíveis. Usado para incorporar imagens em HTML/CSS, transmitir arquivos em APIs JSON. A codificação adiciona ~33% de tamanho. <a href="/pt/what-is-base64/">Guia completo</a>' },
+      { q: 'Como incorporo uma imagem em CSS?', a: 'Codifique sua imagem com o <a href="/base64-image-encoder/">Codificador de Imagens</a>, depois use: <code>background-image: url(\'data:image/png;base64,…\')</code>.' },
+      { q: 'Base64 padrão vs URL-safe?', a: 'O Base64 padrão usa <code>+</code> e <code>/</code> que quebram em URLs. O URL-safe (RFC 4648 §5) os substitui por <code>-</code> e <code>_</code>.' },
+    ],
+  },
 } as const;
 
 export default pt;

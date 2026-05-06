@@ -89,6 +89,24 @@ with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>자주 묻는 질문</h2><div class="faq-item"><h3>Python 3에서 .encode()와 .decode()가 필요한 이유는?</h3><p>base64는 바이트를 처리합니다. .encode()로 문자열을 바이트로 변환하고, .decode()로 바이트를 문자열로 변환합니다.</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: '개인정보 보호 · 로컬 처리 · 계정 불필요',
+    meta1: '서버 요청 없음', meta2: '40개 이상의 도구', meta3: '오픈 소스',
+    toolsH2: 'Base64에 필요한 모든 것',
+    toolsP: '인코더, 디코더, 변환기, 유효성 검사기 — 모든 워크플로우 지원.',
+    howH2: '서버 접촉 없음. 설계상.',
+    howP: '모든 작업이 브라우저 네이티브 API에서 실행됩니다. 데이터가 탭을 벗어나지 않습니다.',
+    step1H: '입력을 제공합니다', step1P: '파일을 드래그하거나 문자열을 붙여넣거나 이미지를 업로드합니다. 로컬에 유지됩니다.',
+    step2H: '브라우저 API가 인코딩', step2P: 'FileReader, atob/btoa, Canvas가 인코딩을 처리합니다 — 모든 브라우저에 내장되어 있습니다.',
+    step3H: '출력은 당신의 것', step3P: '문자열을 복사하거나 파일을 다운로드합니다. 네트워크 요청 없음.',
+    faqH2: '자주 묻는 질문',
+    faqs: [
+      { q: '데이터가 정말 비공개인가요?', a: '네. 도구를 사용하는 동안 DevTools → 네트워크를 열어보세요 — POST 요청이 없음을 확인할 수 있습니다. 모든 작업은 FileReader, atob()/btoa(), Canvas를 사용하며 네트워크에 접근하지 않습니다.' },
+      { q: 'Base64 인코딩이란?', a: 'Base64는 64개의 인쇄 가능한 ASCII 문자를 사용하여 이진 데이터를 텍스트로 변환합니다. HTML/CSS에 이미지 삽입, JSON API에서 파일 전송에 사용됩니다. 인코딩은 약 33%의 크기를 추가합니다. <a href="/ko/what-is-base64/">완전한 가이드</a>' },
+      { q: 'CSS에 이미지를 삽입하는 방법은?', a: '<a href="/base64-image-encoder/">이미지 인코더</a>로 이미지를 인코딩하고: <code>background-image: url(\'data:image/png;base64,…\')</code>를 사용하세요.' },
+      { q: '표준 Base64 vs URL-safe?', a: '표준 Base64는 URL에서 문제가 되는 <code>+</code>와 <code>/</code>를 사용합니다. URL-safe 버전(RFC 4648 §5)은 이를 <code>-</code>와 <code>_</code>로 대체합니다.' },
+    ],
+  },
 } as const;
 
 export default ko;

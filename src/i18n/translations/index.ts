@@ -21,6 +21,17 @@ export type Translation = {
   nav: { encoders: string; decoders: string; convert: string; tools: string; learn: string };
   common: { useTool: string; toolNote: string; privacyNote: string };
   pages: Record<string, PageTranslation>;
+  homeExtra: {
+    eyebrowSub: string;
+    meta1: string; meta2: string; meta3: string;
+    toolsH2: string; toolsP: string;
+    howH2: string; howP: string;
+    step1H: string; step1P: string;
+    step2H: string; step2P: string;
+    step3H: string; step3P: string;
+    faqH2: string;
+    faqs: Array<{ q: string; a: string }>;
+  };
 };
 
 const translations: Record<string, Translation> = { es, fr, de, pt, ja, zh, ar, ru, it, ko };

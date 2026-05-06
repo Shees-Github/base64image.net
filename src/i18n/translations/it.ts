@@ -89,6 +89,24 @@ with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>FAQ</h2><div class="faq-item"><h3>Perché servono .encode() e .decode() in Python 3?</h3><p>base64 lavora con bytes. .encode() converte string in bytes, .decode() converte bytes in string.</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: 'Privacy totale · Locale · Senza account',
+    meta1: 'Zero richieste al server', meta2: '40+ strumenti', meta3: 'Open source',
+    toolsH2: 'Tutto ciò di cui hai bisogno per Base64',
+    toolsP: 'Codificatori, decodificatori, convertitori, validatori — ogni flusso di lavoro coperto.',
+    howH2: 'Zero contatto con i server. Per design.',
+    howP: 'Ogni operazione gira sulle API native del browser. I tuoi dati non lasciano mai la scheda.',
+    step1H: 'Fornisci l\'input', step1P: 'Trascina un file, incolla una stringa o carica un\'immagine. Rimane locale.',
+    step2H: 'Il browser codifica', step2P: 'FileReader, atob/btoa e Canvas gestiscono la codifica — integrati in ogni browser.',
+    step3H: 'L\'output è tuo', step3P: 'Copia la stringa, scarica il file. Zero richieste di rete effettuate.',
+    faqH2: 'Domande frequenti',
+    faqs: [
+      { q: 'I miei dati sono davvero privati?', a: 'Sì. Apri DevTools → Rete mentre usi qualsiasi strumento — vedrai zero richieste POST. Tutte le operazioni usano FileReader, atob()/btoa() e Canvas — API del browser che non accedono mai alla rete.' },
+      { q: 'Cos\'è la codifica Base64?', a: 'Base64 converte dati binari in testo ASCII usando 64 caratteri stampabili. Usato per incorporare immagini in HTML/CSS, trasmettere file in API JSON. La codifica aggiunge ~33% di dimensione. <a href="/it/what-is-base64/">Guida completa</a>' },
+      { q: 'Come incorporo un\'immagine in CSS?', a: 'Codifica l\'immagine con il <a href="/base64-image-encoder/">Codificatore Immagini</a>, poi: <code>background-image: url(\'data:image/png;base64,…\')</code>.' },
+      { q: 'Base64 standard vs URL-safe?', a: 'Il Base64 standard usa <code>+</code> e <code>/</code> che si rompono negli URL. L\'URL-safe (RFC 4648 §5) li sostituisce con <code>-</code> e <code>_</code>.' },
+    ],
+  },
 } as const;
 
 export default it;

@@ -92,6 +92,24 @@ base64 -w 0 bild.png > bild.b64</code></pre><h2>Dekodieren unter Linux</h2><pre>
 base64 -d bild.b64 > bild.png</code></pre><h2>Linux vs. macOS</h2><p>Linux: <code>-d</code> zum Dekodieren, <code>-w 0</code> ohne Zeilenumbrüche. macOS: <code>-D</code> und <code>-b 0</code>.</p><h2>FAQ</h2><div class="faq-item"><h3>Warum echo -n verwenden?</h3><p>Ohne -n fügt echo einen Zeilenumbruch hinzu, der in der Kodierung enthalten ist und ein falsches Ergebnis produziert.</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: 'Datenschutz · Lokal · Kein Konto',
+    meta1: 'Null Server-Anfragen', meta2: '40+ Tools', meta3: 'Open Source',
+    toolsH2: 'Alles, was Sie für Base64 brauchen',
+    toolsP: 'Encoder, Decoder, Konverter, Validatoren — jeder Workflow abgedeckt.',
+    howH2: 'Null Serverkontakt. By Design.',
+    howP: 'Jede Operation nutzt native Browser-APIs. Ihre Daten verlassen nie den Tab.',
+    step1H: 'Sie liefern die Eingabe', step1P: 'Legen Sie eine Datei ab, fügen Sie einen String ein oder laden Sie ein Bild hoch. Es bleibt lokal.',
+    step2H: 'Browser-API kodiert', step2P: 'FileReader, atob/btoa und Canvas übernehmen die Kodierung — in jedem Browser eingebaut.',
+    step3H: 'Die Ausgabe gehört Ihnen', step3P: 'Kopieren Sie den String, laden Sie die Datei herunter. Null Netzwerkanfragen.',
+    faqH2: 'Häufige Fragen',
+    faqs: [
+      { q: 'Sind meine Daten wirklich privat?', a: 'Ja. Öffnen Sie DevTools → Netzwerk während der Nutzung — Sie sehen null POST-Anfragen. Alle Operationen nutzen FileReader, atob()/btoa() und Canvas — Browser-APIs die nie das Netzwerk nutzen.' },
+      { q: 'Was ist Base64-Kodierung?', a: 'Base64 konvertiert Binärdaten in ASCII-Text mit 64 druckbaren Zeichen. Wird verwendet, um Bilder in HTML/CSS einzubetten, Dateien in JSON-APIs zu übertragen. Kodierung fügt ~33% Größe hinzu. <a href="/de/what-is-base64/">Vollständiger Leitfaden</a>' },
+      { q: 'Wie bette ich ein Bild in CSS ein?', a: 'Kodieren Sie Ihr Bild mit dem <a href="/base64-image-encoder/">Bild-Encoder</a>, dann: <code>background-image: url(\'data:image/png;base64,…\')</code>.' },
+      { q: 'Standard vs. URL-sicheres Base64?', a: 'Standard-Base64 verwendet <code>+</code> und <code>/</code>, die in URLs brechen. URL-sicheres Base64 (RFC 4648 §5) ersetzt sie durch <code>-</code> und <code>_</code>.' },
+    ],
+  },
 } as const;
 
 export default de;

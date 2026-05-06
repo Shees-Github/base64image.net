@@ -159,6 +159,24 @@ base64 -d imagen.b64 > imagen.png</code></pre><h2>Linux vs macOS</h2><p>Linux: <
       bodyHtml: `<article class="content-section"><h2>¿Cómo Codificar un Archivo en Base64?</h2><p>Usa el <a href="/base64-file-encoder/">codificador de archivos</a>: arrastra tu archivo o haz clic para seleccionarlo. La cadena Base64 se genera al instante en tu navegador.</p><h2>Tipos de Archivo Soportados</h2><p>Cualquier tipo: PDFs, documentos Office, archivos ZIP, audio (MP3, WAV), video, fuentes, certificados PEM/CRT y cualquier formato binario.</p><h2>¿Cuándo Usar?</h2><ul><li>Adjuntar binarios en APIs JSON</li><li>Incrustar PDFs en páginas web</li><li>Almacenar certificados en variables de entorno</li><li>Transmitir archivos por canales de solo texto</li></ul><h2>Preguntas Frecuentes</h2><div class="faq-item"><h3>¿Hay límite de tamaño?</h3><p>Depende de la memoria del navegador. Hasta 50MB funciona bien en la mayoría de los casos.</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: 'Privacidad total · Local · Sin cuenta',
+    meta1: 'Sin peticiones al servidor', meta2: '40+ herramientas', meta3: 'Código abierto',
+    toolsH2: 'Todo lo que necesitas para Base64',
+    toolsP: 'Codificadores, decodificadores, conversores, validadores — todos los flujos cubiertos.',
+    howH2: 'Cero contacto con servidores. Por diseño.',
+    howP: 'Cada operación usa APIs nativas del navegador. Tus datos nunca salen de la pestaña.',
+    step1H: 'Proporcionas la entrada', step1P: 'Suelta un archivo, pega una cadena o sube una imagen. Permanece en tu equipo.',
+    step2H: 'El navegador codifica', step2P: 'FileReader, atob/btoa y Canvas gestionan la codificación — integrados en todos los navegadores.',
+    step3H: 'La salida es tuya', step3P: 'Copia la cadena, descarga el archivo. Sin ninguna petición de red.',
+    faqH2: 'Preguntas frecuentes',
+    faqs: [
+      { q: '¿Son realmente privados mis datos?', a: 'Sí. Abre DevTools → Red mientras usas cualquier herramienta — verás cero peticiones POST. Todas las operaciones usan FileReader, atob()/btoa() y Canvas — APIs del navegador que nunca acceden a la red.' },
+      { q: '¿Qué es la codificación Base64?', a: 'Base64 convierte datos binarios en texto ASCII usando 64 caracteres imprimibles. Se usa para incrustar imágenes en HTML/CSS, transmitir archivos en APIs JSON y codificar adjuntos de email. Añade ~33% de tamaño. <a href="/es/what-is-base64/">Guía completa</a>' },
+      { q: '¿Cómo incrusto una imagen en CSS?', a: 'Codifica tu imagen con el <a href="/base64-image-encoder/">Codificador de Imágenes</a>, luego usa: <code>background-image: url(\'data:image/png;base64,…\')</code>.' },
+      { q: '¿Base64 estándar vs URL-safe?', a: 'El Base64 estándar usa <code>+</code> y <code>/</code> que se rompen en URLs. El URL-safe (RFC 4648 §5) los reemplaza por <code>-</code> y <code>_</code>, ideal para JWT y query strings.' },
+    ],
+  },
 } as const;
 
 export default es;

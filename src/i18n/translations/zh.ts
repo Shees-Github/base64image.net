@@ -89,6 +89,24 @@ with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>常见问题</h2><div class="faq-item"><h3>为什么Python 3需要.encode()和.decode()？</h3><p>base64处理字节。.encode()将字符串转为字节，.decode()将字节转为字符串。</p></div></article>`,
     },
   },
+  homeExtra: {
+    eyebrowSub: '隐私优先 · 本地处理 · 无需账户',
+    meta1: '零服务器请求', meta2: '40+工具', meta3: '开源',
+    toolsH2: 'Base64所需的一切',
+    toolsP: '编码器、解码器、转换器、验证器 — 覆盖所有工作流程。',
+    howH2: '零服务器接触。设计如此。',
+    howP: '每项操作都在浏览器原生API上运行。您的数据永不离开标签页。',
+    step1H: '您提供输入', step1P: '拖放文件、粘贴字符串或上传图片。数据保持本地。',
+    step2H: '浏览器API编码', step2P: 'FileReader、atob/btoa和Canvas处理编码 — 内置于每个浏览器。',
+    step3H: '输出属于您', step3P: '复制字符串，下载文件。零网络请求。',
+    faqH2: '常见问题',
+    faqs: [
+      { q: '我的数据真的私密吗？', a: '是的。使用任何工具时打开DevTools → 网络 — 您将看到零POST请求。所有操作使用FileReader、atob()/btoa()和Canvas — 从不访问网络的浏览器API。' },
+      { q: '什么是Base64编码？', a: 'Base64使用64个可打印ASCII字符将二进制数据转换为文本。用于在HTML/CSS中嵌入图片，在JSON API中传输文件。编码增加约33%的大小。<a href="/zh/what-is-base64/">完整指南</a>' },
+      { q: '如何在CSS中嵌入图片？', a: '使用<a href="/base64-image-encoder/">图片编码器</a>编码您的图片，然后使用：<code>background-image: url(\'data:image/png;base64,…\')</code>。' },
+      { q: '标准Base64 vs URL安全Base64？', a: '标准Base64使用<code>+</code>和<code>/</code>，在URL中会出问题。URL安全版本（RFC 4648 §5）将它们替换为<code>-</code>和<code>_</code>。' },
+    ],
+  },
 } as const;
 
 export default zh;
