@@ -65,7 +65,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 
   <script is:inline>
   (function () {
-    var _blob = null, _ext = 'png';
+    var _blob = null, _ext = 'png', _b64 = '', _mime = 'image/png';
     var textarea  = document.getElementById('base64Input');
     var errorDiv  = document.getElementById('decodeError');
     var container = document.getElementById('previewContainer');
@@ -80,12 +80,9 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       container.style.display = 'none';
       errorDiv.style.display  = 'none';
       errorDiv.textContent    = '';
-      // Revoke any previous preview URL so the browser can free memory
-      if (img.src && img.src.startsWith('blob:')) {
-        URL.revokeObjectURL(img.src);
-      }
+      if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
       img.src = '';
-      _blob = null;
+      _blob = null; _b64 = ''; _mime = 'image/png';
     }
 
     function decode() {
@@ -103,9 +100,11 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
         var bytes = new Uint8Array(bin.length);
         for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         if (format === 'unknown') format = detectFmt(bytes);
-        _blob = new Blob([bytes], { type: getMime(format) });
+        _mime = getMime(format);
+        _b64  = base64;
         _ext  = format === 'jpeg' ? 'jpg' : format === 'svg+xml' ? 'svg' : format;
-        // Use a fresh blob URL for preview
+        _blob = new Blob([bytes], { type: _mime });
+        // Blob URL for preview only — renders faster than data URI for large images
         img.src = URL.createObjectURL(_blob);
         fmtSpan.textContent  = format.toUpperCase();
         sizeSpan.textContent = fmtBytes(_blob.size);
@@ -145,20 +144,17 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) decode();
     });
 
-    // Download: create a brand-new blob URL each time so the browser
-    // always treats it as a fresh resource and triggers the save dialog.
+    // Download: use data URI — data is inline in the href, no async blob
+    // registry lookup, no memory paging → consistent speed every time.
     dlBtn.addEventListener('click', function() {
-      if (!_blob) return;
-      var url = URL.createObjectURL(_blob);
-      var a   = document.createElement('a');
-      a.href     = url;
+      if (!_b64) return;
+      var a = document.createElement('a');
+      a.href     = 'data:' + _mime + ';base64,' + _b64;
       a.download = 'decoded-image-' + Date.now() + '.' + _ext;
       a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      // Revoke after 60 s — enough time for the browser to begin the download
-      setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
     });
 
     clrBtn.addEventListener('click', function() {
