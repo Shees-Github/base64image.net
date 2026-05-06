@@ -46,7 +46,8 @@ const alternates = [
 const isHome = pageType === 'home';
 const isTool = pageType === 'tool';
 
-const homeSectionsHtml = isHome ? renderHomeSections(t.homeExtra, lang) : '';
+const translatedSlugsSet = new Set(Object.keys(t.pages as Record<string, unknown>));
+const homeSectionsHtml = isHome ? renderHomeSections(t.homeExtra, lang, translatedSlugsSet) : '';
 const toolSection = isTool ? TOOL_SECTIONS[slug] : null;
 ---
 

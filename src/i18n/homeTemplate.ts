@@ -32,10 +32,12 @@ function faqItem(q: string, a: string) {
   return `<details class="faq-item"><summary>${q}<span class="ic">${PLUS_SVG}</span></summary><div class="a">${a}</div></details>`;
 }
 
-export function renderHomeSections(ex: HomeExtra, lang: string = 'en'): string {
-  // Build a URL that stays in the current language when a translated page
-  // exists, otherwise falls back to the English tool.
-  const p = (slug: string) => lang === 'en' ? `/${slug}/` : `/${lang}/${slug}/`;
+export function renderHomeSections(ex: HomeExtra, lang: string = 'en', translatedSlugs: Set<string> = new Set()): string {
+  // Link to /{lang}/slug/ only when that page actually exists; fall back to English.
+  const p = (slug: string) => {
+    if (lang === 'en') return `/${slug}/`;
+    return translatedSlugs.has(slug) ? `/${lang}/${slug}/` : `/${slug}/`;
+  };
   const trustStrip = `
 <div class="trust-strip">
   <div class="trust-inner">
@@ -99,8 +101,8 @@ export function renderHomeSections(ex: HomeExtra, lang: string = 'en'): string {
     ${tile(p('base64-to-jpeg'), '--cat-convert', IMG_IC, 'Base64 → JPEG', 'Convert with adjustable quality.', 'Converter', 'span-4')}
     ${tile(p('base64-to-webp'), '--cat-convert', IMG_IC, 'Base64 → WebP', 'Modern format, smaller file sizes.', 'Converter', 'span-4')}
     ${tile(p('base64-validator'), '--cat-tools', CHK_IC, 'Validator', 'Check if a string is valid Base64.', 'Utility')}
-    ${tile('/base64-size-calculator/', '--cat-tools', BAR_IC, 'Size Calculator', 'Calculate encoded output size before embedding.', 'Utility')}
-    ${tile('/base64-embed-generator/', '--cat-tools', CODE_IC, 'Embed Generator', 'Get HTML/CSS embed code in one click.', 'Utility')}
+    ${tile(p('base64-size-calculator'), '--cat-tools', BAR_IC, 'Size Calculator', 'Calculate encoded output size before embedding.', 'Utility')}
+    ${tile(p('base64-embed-generator'), '--cat-tools', CODE_IC, 'Embed Generator', 'Get HTML/CSS embed code in one click.', 'Utility')}
     ${tile(p('what-is-base64'), '--cat-learn', BOOK_IC, 'What is Base64?', 'Complete guide to Base64 encoding and RFC 4648.', 'Reference')}
   </div>
 </section>`;

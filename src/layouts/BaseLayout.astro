@@ -9,26 +9,21 @@ const {
 } = Astro.props;
 const year = new Date().getFullYear();
 
-// Auto-detect page slug from the URL when not explicitly passed.
-// This makes the language switcher work correctly on every English page
-// without requiring each page file to pass currentSlug.
+// Auto-detect page slug from URL when not explicitly passed.
 const autoSlug = Astro.url.pathname
-  .replace(/^\/([a-z]{2}\/)?/, '') // strip optional /lang/ prefix
-  .replace(/\/$/, '');             // strip trailing slash
+  .replace(/^\/([a-z]{2}\/)?/, '')
+  .replace(/\/$/, '');
 const resolvedSlug = currentSlug || autoSlug;
 
-// Which non-English locales actually have a translation for this slug?
-// Used to generate accurate hreflang tags — no phantom links to 404s.
+// Which non-English locales have a translation for this slug?
 const translatedLocales = NON_ENGLISH_LOCALES.filter(l => {
   const t = allTranslations[l.code];
   if (!t) return false;
-  // Home page (empty slug): all languages have a translation
   if (!resolvedSlug) return true;
   return !!(t.pages as Record<string, any>)[resolvedSlug];
 });
 
-// hreflang link list — prefer explicitly passed alternates (catch-all pages),
-// otherwise build from the translation registry.
+// hreflang links — only for language versions that actually exist.
 const hreflangLinks: Array<{hreflang: string; href: string}> = alternates.length > 0
   ? alternates
   : [
@@ -40,14 +35,30 @@ const hreflangLinks: Array<{hreflang: string; href: string}> = alternates.length
       })),
     ];
 
+// Language switcher: keep current page, fall back to language home if untranslated.
 function langUrl(code: string) {
   const slug = resolvedSlug ? resolvedSlug + '/' : '';
   if (code === 'en') return `/${slug}`;
-  // Only deep-link to the translated slug if a translation actually exists for it.
-  // Otherwise fall back to the language homepage to avoid 404s.
   const hasTranslation = !resolvedSlug || translatedLocales.some(l => l.code === code);
   return hasTranslation ? `/${code}/${slug}` : `/${code}/`;
 }
+
+// NAV helper: for non-English pages, link to translated slug when it exists,
+// fall back to English when the slug has no translation.
+function navUrl(slug: string): string {
+  if (lang === 'en') return `/${slug}/`;
+  const t = allTranslations[lang];
+  const hasTranslation = t && !!(t.pages as Record<string, any>)[slug];
+  return hasTranslation ? `/${lang}/${slug}/` : `/${slug}/`;
+}
+
+// Logo and home link.
+const homeUrl = lang === 'en' ? '/' : `/${lang}/`;
+
+// Slugs translated in the current language — used by the client-side link upgrader.
+const translatedSlugsForLang: string[] = lang !== 'en'
+  ? Object.keys((allTranslations[lang]?.pages ?? {}) as Record<string, unknown>)
+  : [];
 ---
 <!DOCTYPE html>
 <html lang={lang} dir={dir}>
@@ -77,7 +88,6 @@ function langUrl(code: string) {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome kept for legacy page icons during transition -->
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -98,7 +108,7 @@ function langUrl(code: string) {
 
   <header class="site-header">
     <div class="header-container">
-      <a href="/" class="logo">
+      <a href={homeUrl} class="logo">
         <span class="logo-mark">B64</span>
         <span class="logo-text">base64image<span class="dot">.net</span></span>
       </a>
@@ -110,57 +120,57 @@ function langUrl(code: string) {
           <li class="dropdown">
             <a href="#" class="nav-link dropdown-toggle">Encoders <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-text-encoder/"><span class="dot" style="color:var(--cat-encode)"></span>Text → Base64</a></li>
-              <li><a href="/base64-file-encoder/"><span class="dot" style="color:var(--cat-encode)"></span>File → Base64</a></li>
-              <li><a href="/base64-image-encoder/"><span class="dot" style="color:var(--cat-encode)"></span>Image → Base64</a></li>
+              <li><a href={navUrl('base64-text-encoder')}><span class="dot" style="color:var(--cat-encode)"></span>Text → Base64</a></li>
+              <li><a href={navUrl('base64-file-encoder')}><span class="dot" style="color:var(--cat-encode)"></span>File → Base64</a></li>
+              <li><a href={navUrl('base64-image-encoder')}><span class="dot" style="color:var(--cat-encode)"></span>Image → Base64</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" class="nav-link dropdown-toggle">Decoders <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-text-decoder/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 → Text</a></li>
-              <li><a href="/base64-file-decoder/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 → File</a></li>
-              <li><a href="/base64-image-decoder/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 → Image</a></li>
-              <li><a href="/base64-picture/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 Picture</a></li>
-              <li><a href="/base64-decrypt/"><span class="dot" style="color:var(--cat-decode)"></span>Base64 Decrypt</a></li>
+              <li><a href={navUrl('base64-text-decoder')}><span class="dot" style="color:var(--cat-decode)"></span>Base64 → Text</a></li>
+              <li><a href={navUrl('base64-file-decoder')}><span class="dot" style="color:var(--cat-decode)"></span>Base64 → File</a></li>
+              <li><a href={navUrl('base64-image-decoder')}><span class="dot" style="color:var(--cat-decode)"></span>Base64 → Image</a></li>
+              <li><a href={navUrl('base64-picture')}><span class="dot" style="color:var(--cat-decode)"></span>Base64 Picture</a></li>
+              <li><a href={navUrl('base64-decrypt')}><span class="dot" style="color:var(--cat-decode)"></span>Base64 Decrypt</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" class="nav-link dropdown-toggle">Convert <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-to-png/">Base64 → PNG</a></li>
-              <li><a href="/base64-to-jpeg/">Base64 → JPEG</a></li>
-              <li><a href="/base64-to-svg/">Base64 → SVG</a></li>
-              <li><a href="/base64-to-webp/">Base64 → WebP</a></li>
-              <li><a href="/base64-to-gif/">Base64 → GIF</a></li>
-              <li><a href="/base64-to-pdf/">Base64 → PDF</a></li>
-              <li><a href="/base64-to-json/">Base64 → JSON</a></li>
-              <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
+              <li><a href={navUrl('base64-to-png')}>Base64 → PNG</a></li>
+              <li><a href={navUrl('base64-to-jpeg')}>Base64 → JPEG</a></li>
+              <li><a href={navUrl('base64-to-svg')}>Base64 → SVG</a></li>
+              <li><a href={navUrl('base64-to-webp')}>Base64 → WebP</a></li>
+              <li><a href={navUrl('base64-to-gif')}>Base64 → GIF</a></li>
+              <li><a href={navUrl('base64-to-pdf')}>Base64 → PDF</a></li>
+              <li><a href={navUrl('base64-to-json')}>Base64 → JSON</a></li>
+              <li><a href={navUrl('base64-hex-converter')}>Base64 ⇄ HEX</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" class="nav-link dropdown-toggle">Tools <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/base64-validator/">Validator</a></li>
-              <li><a href="/base64-url-safe/">URL-Safe Encoder</a></li>
-              <li><a href="/base64-embed-generator/">Embed Generator</a></li>
-              <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
-              <li><a href="/base64-size-calculator/">Size Calculator</a></li>
-              <li><a href="/base32-encoder-decoder/">Base32 Encoder</a></li>
+              <li><a href={navUrl('base64-validator')}>Validator</a></li>
+              <li><a href={navUrl('base64-url-safe')}>URL-Safe Encoder</a></li>
+              <li><a href={navUrl('base64-embed-generator')}>Embed Generator</a></li>
+              <li><a href={navUrl('base64-bulk-converter')}>Bulk Converter</a></li>
+              <li><a href={navUrl('base64-size-calculator')}>Size Calculator</a></li>
+              <li><a href={navUrl('base32-encoder-decoder')}>Base32 Encoder</a></li>
             </ul>
           </li>
           <li class="dropdown">
             <a href="#" class="nav-link dropdown-toggle">Learn <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
             <ul class="dropdown-menu">
-              <li><a href="/what-is-base64/">What is Base64?</a></li>
-              <li><a href="/base64-algorithm/">Algorithm Explained</a></li>
-              <li><a href="/base64-character-table/">Character Table</a></li>
-              <li><a href="/data-uri-guide/">Data URI Guide</a></li>
-              <li><a href="/base64-mime-types/">MIME Types</a></li>
-              <li><a href="/base64-mac/">Base64 on Mac</a></li>
-              <li><a href="/base64-linux/">Base64 on Linux</a></li>
-              <li><a href="/base64-powershell/">PowerShell</a></li>
-              <li><a href="/base64-rust/">Rust</a></li>
+              <li><a href={navUrl('what-is-base64')}>What is Base64?</a></li>
+              <li><a href={navUrl('base64-algorithm')}>Algorithm Explained</a></li>
+              <li><a href={navUrl('base64-character-table')}>Character Table</a></li>
+              <li><a href={navUrl('data-uri-guide')}>Data URI Guide</a></li>
+              <li><a href={navUrl('base64-mime-types')}>MIME Types</a></li>
+              <li><a href={navUrl('base64-mac')}>Base64 on Mac</a></li>
+              <li><a href={navUrl('base64-linux')}>Base64 on Linux</a></li>
+              <li><a href={navUrl('base64-powershell')}>PowerShell</a></li>
+              <li><a href={navUrl('base64-rust')}>Rust</a></li>
             </ul>
           </li>
 
@@ -193,7 +203,7 @@ function langUrl(code: string) {
     <div class="footer-container">
       <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo">
+          <a href={homeUrl} class="logo">
             <span class="logo-mark">B64</span>
             <span class="logo-text">base64image<span class="dot">.net</span></span>
           </a>
@@ -203,28 +213,28 @@ function langUrl(code: string) {
         <div class="footer-section">
           <h3>Encode</h3>
           <ul>
-            <li><a href="/base64-text-encoder/">Text → Base64</a></li>
-            <li><a href="/base64-file-encoder/">File → Base64</a></li>
-            <li><a href="/base64-image-encoder/">Image → Base64</a></li>
-            <li><a href="/base64-bulk-converter/">Bulk Converter</a></li>
+            <li><a href={navUrl('base64-text-encoder')}>Text → Base64</a></li>
+            <li><a href={navUrl('base64-file-encoder')}>File → Base64</a></li>
+            <li><a href={navUrl('base64-image-encoder')}>Image → Base64</a></li>
+            <li><a href={navUrl('base64-bulk-converter')}>Bulk Converter</a></li>
           </ul>
         </div>
         <div class="footer-section">
           <h3>Decode &amp; Convert</h3>
           <ul>
-            <li><a href="/base64-image-decoder/">Base64 → Image</a></li>
-            <li><a href="/base64-text-decoder/">Base64 → Text</a></li>
-            <li><a href="/base64-to-png/">Base64 → PNG</a></li>
-            <li><a href="/base64-hex-converter/">Base64 ⇄ HEX</a></li>
+            <li><a href={navUrl('base64-image-decoder')}>Base64 → Image</a></li>
+            <li><a href={navUrl('base64-text-decoder')}>Base64 → Text</a></li>
+            <li><a href={navUrl('base64-to-png')}>Base64 → PNG</a></li>
+            <li><a href={navUrl('base64-hex-converter')}>Base64 ⇄ HEX</a></li>
           </ul>
         </div>
         <div class="footer-section">
           <h3>Reference</h3>
           <ul>
-            <li><a href="/what-is-base64/">What is Base64?</a></li>
-            <li><a href="/base64-algorithm/">Algorithm</a></li>
-            <li><a href="/base64-character-table/">Character Table</a></li>
-            <li><a href="/data-uri-guide/">Data URI Guide</a></li>
+            <li><a href={navUrl('what-is-base64')}>What is Base64?</a></li>
+            <li><a href={navUrl('base64-algorithm')}>Algorithm</a></li>
+            <li><a href={navUrl('base64-character-table')}>Character Table</a></li>
+            <li><a href={navUrl('data-uri-guide')}>Data URI Guide</a></li>
           </ul>
         </div>
         <div class="footer-section">
@@ -307,5 +317,25 @@ function langUrl(code: string) {
       targets.forEach(t => io.observe(t));
     }
   </script>
+
+  <!-- On translated pages: upgrade any /slug/ links in article content to /{lang}/slug/
+       This handles links inside bodyHtml from translation files without
+       requiring every translation string to be manually prefixed. -->
+  {lang !== 'en' && translatedSlugsForLang.length > 0 && (
+    <script is:inline define:vars={{ _lang: lang, _slugs: translatedSlugsForLang }}>
+    (function() {
+      var s = new Set(_slugs);
+      // Match exactly /slug/ or /slug (root-level paths only, not /es/slug/ or /about/)
+      var re = /^\/([a-z0-9][a-z0-9-]*)\/$/;
+      document.querySelectorAll('a[href^="/"]').forEach(function(a) {
+        var href = a.getAttribute('href');
+        var m = href.match(re);
+        if (m && s.has(m[1])) {
+          a.setAttribute('href', '/' + _lang + '/' + m[1] + '/');
+        }
+      });
+    })();
+    </script>
+  )}
 </body>
 </html>
