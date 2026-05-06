@@ -14,7 +14,6 @@ const bodyHtml = `<main x-data="base64Validator()">
                 <textarea
                     id="base64Input"
                     x-model="base64Input"
-                    @input="validateBase64"
                     placeholder="Paste your Base64 string here..."
                     rows="6"
                 ></textarea>
@@ -46,6 +45,7 @@ const bodyHtml = `<main x-data="base64Validator()">
             </div>
 
             <div class="actions">
+                <button @click="validateBase64" class="btn-primary">Validate</button>
                 <button @click="clearAll" class="btn-secondary">Clear</button>
             </div>
         </section>

@@ -24,10 +24,13 @@ const bodyHtml = `<main>
                 <textarea
                     id="base64Input"
                     x-model="base64Input"
-                    @input="handleBase64Input"
                     rows="6"
                     placeholder="Paste your Base64 string here (with or without data URI prefix)..."
                 ></textarea>
+            </div>
+
+            <div class="actions">
+                <button @click="handleBase64Input" class="btn-primary">Generate Embed Code</button>
             </div>
 
             <div x-show="error" class="error" x-text="error"></div>

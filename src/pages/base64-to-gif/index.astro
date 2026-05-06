@@ -14,7 +14,6 @@ const bodyHtml = `<main x-data="base64ToGif()">
                 <textarea
                     id="base64Input"
                     x-model="base64Input"
-                    @input="decodeGif"
                     placeholder="Paste your Base64-encoded GIF string here..."
                     rows="6"
                 ></textarea>
@@ -23,6 +22,7 @@ const bodyHtml = `<main x-data="base64ToGif()">
             </div>
 
             <div class="actions">
+                <button @click="decodeGif" class="btn-primary">Convert to GIF</button>
                 <button @click="clearAll" class="btn-secondary">Clear</button>
             </div>
 

@@ -14,7 +14,6 @@ const bodyHtml = `<main x-data="base64ToSvg()">
                 <textarea
                     id="base64Input"
                     x-model="base64Input"
-                    @input="decodeSvg"
                     placeholder="Paste your Base64-encoded SVG string here..."
                     rows="6"
                 ></textarea>
@@ -22,6 +21,7 @@ const bodyHtml = `<main x-data="base64ToSvg()">
             </div>
 
             <div class="actions">
+                <button @click="decodeSvg" class="btn-primary">Convert to SVG</button>
                 <button @click="clearAll" class="btn-secondary">Clear</button>
             </div>
 

@@ -7,6 +7,7 @@ const bodyHtml = `<div class="tool-section">
       <div class="error" id="pictureError" style="display:none"></div>
     </div>
     <div class="actions">
+      <button id="pictureDecodeBtn" class="btn-primary">Decode Picture</button>
       <button id="pictureClear" class="btn-secondary">Clear</button>
     </div>
     <div class="preview-container" id="picturePreview" style="display:none">
@@ -68,16 +69,17 @@ const bodyHtml = `<div class="tool-section">
     var inp=document.getElementById('pictureInput'),errDiv=document.getElementById('pictureError'),
         preview=document.getElementById('picturePreview'),img=document.getElementById('pictureImg'),
         fmtEl=document.getElementById('pictureFmt'),szEl=document.getElementById('pictureSize'),
-        dlBtn=document.getElementById('pictureDownload'),clrBtn=document.getElementById('pictureClear');
+        dlBtn=document.getElementById('pictureDownload'),decodeBtn=document.getElementById('pictureDecodeBtn'),
+        clrBtn=document.getElementById('pictureClear');
     function decode(){
       errDiv.style.display='none';errDiv.textContent='';preview.style.display='none';
-      if(img.src){try{URL.revokeObjectURL(img.src);}catch(e){}img.src='';}
-      _blob=null;
+      if(img.src&&img.src.startsWith('blob:')){try{URL.revokeObjectURL(img.src);}catch(e){}}
+      img.src='';_blob=null;
       var input=inp.value.trim();if(!input)return;
       try{
         var b64=input,fmt='unknown';
-        var m=input.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
-        if(m){fmt=m[1];b64=m[2];}
+        var m=input.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/s);
+        if(m){fmt=m[1];b64=m[2].replace(/\s/g,'');}else{b64=b64.replace(/\s/g,'');}
         if(!/^[A-Za-z0-9+\/]*={0,2}$/.test(b64))throw new Error('Invalid Base64 string.');
         var bin=atob(b64),bytes=new Uint8Array(bin.length);
         for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
@@ -96,21 +98,24 @@ const bodyHtml = `<div class="tool-section">
       if(b[0]===0x47&&b[1]===0x49)return'gif';
       if(b[0]===0x52&&b[1]===0x49)return'webp';
       if(b[0]===0x42&&b[1]===0x4D)return'bmp';
-      if(b[0]===0x3C&&b[1]===0x73)return'svg+xml';
+      if(b[0]===0x3C)return'svg+xml';
       return'png';
     }
     function mime(f){return{png:'image/png',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',bmp:'image/bmp','svg+xml':'image/svg+xml'}[f]||'image/png';}
     function fmtBytes(n){if(!n)return'0 B';var k=1024,s=['B','KB','MB'],i=Math.floor(Math.log(n)/Math.log(k));return Math.round((n/Math.pow(k,i))*100)/100+' '+s[i];}
-    inp.addEventListener('input',decode);
+    decodeBtn.addEventListener('click',decode);
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))decode();});
     dlBtn.addEventListener('click',function(){
-      if(!img.src||!img.src.startsWith('blob:'))return;
-      var a=document.createElement('a');a.href=img.src;a.download='base64-picture-'+Date.now()+'.'+_ext;
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      if(!_blob)return;
+      var url=URL.createObjectURL(_blob);
+      var a=document.createElement('a');a.href=url;a.download='base64-picture-'+Date.now()+'.'+_ext;
+      a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(url);},60000);
     });
     clrBtn.addEventListener('click',function(){
       inp.value='';errDiv.style.display='none';preview.style.display='none';
-      if(img.src){try{URL.revokeObjectURL(img.src);}catch(e){}img.src='';}
-      _blob=null;
+      if(img.src&&img.src.startsWith('blob:')){try{URL.revokeObjectURL(img.src);}catch(e){}}
+      img.src='';_blob=null;
     });
   })();
   </script>

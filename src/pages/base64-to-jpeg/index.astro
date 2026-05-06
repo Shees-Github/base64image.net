@@ -14,7 +14,6 @@ const bodyHtml = `<main x-data="base64ToJpeg()">
                 <textarea
                     id="base64Input"
                     x-model="base64Input"
-                    @input="decodeImage"
                     placeholder="Paste your Base64 string here..."
                     rows="6"
                 ></textarea>
@@ -37,6 +36,7 @@ const bodyHtml = `<main x-data="base64ToJpeg()">
             </div>
 
             <div class="actions">
+                <button @click="decodeImage" class="btn-primary">Convert to JPEG</button>
                 <button @click="clearAll" class="btn-secondary">Clear</button>
             </div>
 

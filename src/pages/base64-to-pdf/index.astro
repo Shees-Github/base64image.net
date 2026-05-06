@@ -65,11 +65,14 @@ const bodyHtml = `<main x-data="base64ToPdf()">
                 <textarea
                     id="base64Input"
                     x-model="base64Input"
-                    @input="decodePdf"
                     placeholder="Paste your Base64 string here..."
                     rows="8"
                 ></textarea>
                 <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="actions">
+                <button @click="decodePdf" class="btn-primary">Decode PDF</button>
             </div>
 
             <div class="preview-container" x-show="pdfUrl">

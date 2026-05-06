@@ -14,7 +14,8 @@ const bodyHtml = `<div class="tool-section">
     </div>
     <div class="error" id="decryptError" style="display:none;margin-top:8px"></div>
     <div class="actions">
-      <button id="decryptCopy" class="btn-primary">Copy Output</button>
+      <button id="decryptBtn" class="btn-primary">Decode</button>
+      <button id="decryptCopy" class="btn-secondary">Copy Output</button>
       <button id="decryptClear" class="btn-secondary">Clear</button>
     </div>
   </div>
@@ -74,8 +75,8 @@ const bodyHtml = `<div class="tool-section">
   <script is:inline>
   (function(){
     var inp=document.getElementById('decryptInput'),out=document.getElementById('decryptOutput'),
-        err=document.getElementById('decryptError'),cpBtn=document.getElementById('decryptCopy'),
-        clrBtn=document.getElementById('decryptClear');
+        err=document.getElementById('decryptError'),decodeBtn=document.getElementById('decryptBtn'),
+        cpBtn=document.getElementById('decryptCopy'),clrBtn=document.getElementById('decryptClear');
     function decode(){
       err.style.display='none';err.textContent='';out.value='';
       var input=inp.value.trim();if(!input)return;
@@ -87,7 +88,8 @@ const bodyHtml = `<div class="tool-section">
         out.value=atob(b64);
       }catch(e){err.textContent=e.message||'Failed to decode.';err.style.display='';}
     }
-    inp.addEventListener('input',decode);
+    decodeBtn.addEventListener('click',decode);
+    inp.addEventListener('keydown',function(e){if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))decode();});
     cpBtn.addEventListener('click',function(){
       if(!out.value)return;
       navigator.clipboard.writeText(out.value).then(function(){cpBtn.textContent='Copied!';setTimeout(function(){cpBtn.textContent='Copy Output';},1500);});
