@@ -1,8 +1,8 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-const { title, description, canonical, h1, lede, tag = 'learn', tagLabel = 'Reference', breadcrumbs = [], toc = [], readTime, updated } = Astro.props;
+const { title, description, canonical, h1, lede, tag = 'learn', tagLabel = 'Reference', breadcrumbs = [], toc = [], readTime, updated, lang = 'en', dir = 'ltr', alternates = [], currentSlug = '' } = Astro.props;
 ---
-<BaseLayout title={title} description={description} canonical={canonical}>
+<BaseLayout title={title} description={description} canonical={canonical} lang={lang} dir={dir} alternates={alternates} currentSlug={currentSlug}>
   <slot name="head" slot="head" />
   <main class="page">
     <nav class="breadcrumbs">

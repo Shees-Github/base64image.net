@@ -1,9 +1,21 @@
 ---
-const { title, description, canonical, ogType = 'website' } = Astro.props;
+import { LOCALES, NON_ENGLISH_LOCALES } from '../i18n/locales';
+const {
+  title, description, canonical, ogType = 'website',
+  lang = 'en', dir = 'ltr',
+  alternates = [],
+  currentSlug = '',
+} = Astro.props;
 const year = new Date().getFullYear();
+const currentLocale = LOCALES[lang] ?? LOCALES['en'];
+
+function langUrl(code: string) {
+  const slug = currentSlug ? currentSlug + '/' : '';
+  return code === 'en' ? `/${slug}` : `/${code}/${slug}`;
+}
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang} dir={dir}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +23,22 @@ const year = new Date().getFullYear();
   <meta name="description" content={description}>
   <link rel="canonical" href={canonical}>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <!-- hreflang alternates -->
+  {alternates.length > 0
+    ? alternates.map((a: {hreflang: string; href: string}) => (
+        <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+      ))
+    : (
+      <>
+        <link rel="alternate" hreflang="x-default" href={canonical} />
+        <link rel="alternate" hreflang="en" href={canonical} />
+        {NON_ENGLISH_LOCALES.map(l => (
+          <link rel="alternate" hreflang={l.code} href={`https://base64image.net/${l.code}/${currentSlug ? currentSlug + '/' : ''}`} />
+        ))}
+      </>
+    )
+  }
 
   <meta property="og:type" content={ogType}>
   <meta property="og:title" content={title}>
@@ -111,6 +139,25 @@ const year = new Date().getFullYear();
               <li><a href="/base64-rust/">Rust</a></li>
             </ul>
           </li>
+
+          <!-- Language switcher -->
+          <li class="dropdown lang-switcher">
+            <a href="#" class="nav-link dropdown-toggle lang-toggle" aria-label="Change language">
+              <svg class="globe-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span class="lang-code">{lang.toUpperCase()}</span>
+              <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </a>
+            <ul class="dropdown-menu lang-menu">
+              <li class={lang === 'en' ? 'lang-active' : ''}>
+                <a href={langUrl('en')}><span class="lang-flag">🇺🇸</span> English</a>
+              </li>
+              {NON_ENGLISH_LOCALES.map(l => (
+                <li class={lang === l.code ? 'lang-active' : ''}>
+                  <a href={langUrl(l.code)}><span class="lang-flag">{l.flag}</span> {l.nativeName}</a>
+                </li>
+              ))}
+            </ul>
+          </li>
         </ul>
       </nav>
     </div>
@@ -208,14 +255,11 @@ const year = new Date().getFullYear();
     const nav = document.querySelector('.main-nav');
     mt?.addEventListener('click', () => {
       const isOpen = nav.classList.toggle('open');
-      // Swap hamburger ↔ X icon
       mt.innerHTML = isOpen
         ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
         : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
       document.body.style.overflow = isOpen ? 'hidden' : '';
     });
-    // Close menu when a real page link is tapped — NOT dropdown toggles
-    // (dropdown toggles need to stay open so the sub-menu can be used)
     nav?.querySelectorAll('a:not(.dropdown-toggle)').forEach(a => {
       a.addEventListener('click', () => {
         if (innerWidth <= 768) {

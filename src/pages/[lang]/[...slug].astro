@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { LOCALES, NON_ENGLISH_LOCALES } from '../../i18n/locales';
+import { PAGE_REGISTRY } from '../../i18n/pageRegistry';
+import allTranslations from '../../i18n/translations/index';
+
+export function getStaticPaths() {
+  const paths: any[] = [];
+
+  for (const locale of NON_ENGLISH_LOCALES) {
+    const t = allTranslations[locale.code];
+    if (!t) continue;
+
+    for (const [slug, pageMeta] of Object.entries(PAGE_REGISTRY)) {
+      const pageT = (t.pages as Record<string, any>)[slug];
+      if (!pageT) continue;
+      // home pages only need metadata; article/tool pages need bodyHtml
+      if (pageMeta.type !== 'home' && !pageT.bodyHtml) continue;
+
+      paths.push({
+        params: { lang: locale.code, slug: slug || undefined },
+        props: { lang: locale.code, slug, pageT, nav: t.nav, common: t.common, pageType: pageMeta.type },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, slug, pageT, common, pageType } = Astro.props;
+const locale = LOCALES[lang];
+const canonical = `https://base64image.net/${lang}/${slug ? slug + '/' : ''}`;
+const enUrl = slug ? `https://base64image.net/${slug}/` : 'https://base64image.net/';
+
+// hreflang alternates for this page
+const alternates = [
+  { hreflang: 'en', href: enUrl },
+  { hreflang: 'x-default', href: enUrl },
+  ...NON_ENGLISH_LOCALES.map(l => ({
+    hreflang: l.code,
+    href: `https://base64image.net/${l.code}/${slug ? slug + '/' : ''}`,
+  })),
+];
+
+const isHome = pageType === 'home';
+const isTool = pageType === 'tool';
+const breadcrumbs = [
+  { label: 'Home', href: `/${lang}/` },
+  { label: pageT.h1 },
+];
+---
+
+{isHome ? (
+  <BaseLayout
+    title={pageT.title}
+    description={pageT.description}
+    canonical={canonical}
+    lang={lang}
+    dir={locale.dir}
+    alternates={alternates}
+    currentSlug=""
+  >
+    <main class="translated-home">
+      <section class="hero">
+        <div class="hero-inner" style="max-width:560px;margin:0 auto;text-align:center;padding:80px 24px 60px;">
+          <h1 class="grad" style="font-size:clamp(2rem,5vw,3rem);font-weight:700;line-height:1.15;margin-bottom:16px;">{pageT.h1}</h1>
+          <p style="font-size:1.1rem;color:var(--fg-mute);margin-bottom:32px;">{pageT.lede}</p>
+          <a href={enUrl} class="btn" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:var(--violet);color:#fff;border-radius:8px;font-weight:600;text-decoration:none;">
+            {common.useTool} →
+          </a>
+        </div>
+      </section>
+      {pageT.bodyHtml && <Fragment set:html={pageT.bodyHtml} />}
+    </main>
+  </BaseLayout>
+) : (
+  <ArticleLayout
+    title={pageT.title}
+    description={pageT.description}
+    canonical={canonical}
+    h1={pageT.h1}
+    lede={pageT.lede}
+    tag={isTool ? 'tool' : 'learn'}
+    tagLabel={isTool ? 'Tool' : 'Reference'}
+    breadcrumbs={breadcrumbs}
+    lang={lang}
+    dir={locale.dir}
+    alternates={alternates}
+    currentSlug={slug || ''}
+  >
+    {isTool && (
+      <div class="tool-lang-cta">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>{common.toolNote}</span>
+        <a href={enUrl}>{common.useTool} →</a>
+      </div>
+    )}
+    <Fragment set:html={pageT.bodyHtml || ''} />
+  </ArticleLayout>
+)}
