@@ -1,5 +1,6 @@
 ---
 import { LOCALES, NON_ENGLISH_LOCALES } from '../i18n/locales';
+import allTranslations from '../i18n/translations/index';
 const {
   title, description, canonical, ogType = 'website',
   lang = 'en', dir = 'ltr',
@@ -7,10 +8,40 @@ const {
   currentSlug = '',
 } = Astro.props;
 const year = new Date().getFullYear();
-const currentLocale = LOCALES[lang] ?? LOCALES['en'];
+
+// Auto-detect page slug from the URL when not explicitly passed.
+// This makes the language switcher work correctly on every English page
+// without requiring each page file to pass currentSlug.
+const autoSlug = Astro.url.pathname
+  .replace(/^\/([a-z]{2}\/)?/, '') // strip optional /lang/ prefix
+  .replace(/\/$/, '');             // strip trailing slash
+const resolvedSlug = currentSlug || autoSlug;
+
+// Which non-English locales actually have a translation for this slug?
+// Used to generate accurate hreflang tags — no phantom links to 404s.
+const translatedLocales = NON_ENGLISH_LOCALES.filter(l => {
+  const t = allTranslations[l.code];
+  if (!t) return false;
+  // Home page (empty slug): all languages have a translation
+  if (!resolvedSlug) return true;
+  return !!(t.pages as Record<string, any>)[resolvedSlug];
+});
+
+// hreflang link list — prefer explicitly passed alternates (catch-all pages),
+// otherwise build from the translation registry.
+const hreflangLinks: Array<{hreflang: string; href: string}> = alternates.length > 0
+  ? alternates
+  : [
+      { hreflang: 'x-default', href: canonical },
+      { hreflang: 'en',        href: canonical },
+      ...translatedLocales.map(l => ({
+        hreflang: l.code,
+        href: `https://base64image.net/${l.code}/${resolvedSlug ? resolvedSlug + '/' : ''}`,
+      })),
+    ];
 
 function langUrl(code: string) {
-  const slug = currentSlug ? currentSlug + '/' : '';
+  const slug = resolvedSlug ? resolvedSlug + '/' : '';
   return code === 'en' ? `/${slug}` : `/${code}/${slug}`;
 }
 ---
@@ -24,21 +55,10 @@ function langUrl(code: string) {
   <link rel="canonical" href={canonical}>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  <!-- hreflang alternates -->
-  {alternates.length > 0
-    ? alternates.map((a: {hreflang: string; href: string}) => (
-        <link rel="alternate" hreflang={a.hreflang} href={a.href} />
-      ))
-    : (
-      <>
-        <link rel="alternate" hreflang="x-default" href={canonical} />
-        <link rel="alternate" hreflang="en" href={canonical} />
-        {NON_ENGLISH_LOCALES.map(l => (
-          <link rel="alternate" hreflang={l.code} href={`https://base64image.net/${l.code}/${currentSlug ? currentSlug + '/' : ''}`} />
-        ))}
-      </>
-    )
-  }
+  <!-- hreflang alternates — only for language versions that actually exist -->
+  {hreflangLinks.map(a => (
+    <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+  ))}
 
   <meta property="og:type" content={ogType}>
   <meta property="og:title" content={title}>
