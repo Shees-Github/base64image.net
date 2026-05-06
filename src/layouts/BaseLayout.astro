@@ -42,7 +42,11 @@ const hreflangLinks: Array<{hreflang: string; href: string}> = alternates.length
 
 function langUrl(code: string) {
   const slug = resolvedSlug ? resolvedSlug + '/' : '';
-  return code === 'en' ? `/${slug}` : `/${code}/${slug}`;
+  if (code === 'en') return `/${slug}`;
+  // Only deep-link to the translated slug if a translation actually exists for it.
+  // Otherwise fall back to the language homepage to avoid 404s.
+  const hasTranslation = !resolvedSlug || translatedLocales.some(l => l.code === code);
+  return hasTranslation ? `/${code}/${slug}` : `/${code}/`;
 }
 ---
 <!DOCTYPE html>

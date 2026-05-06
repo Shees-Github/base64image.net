@@ -32,7 +32,10 @@ function faqItem(q: string, a: string) {
   return `<details class="faq-item"><summary>${q}<span class="ic">${PLUS_SVG}</span></summary><div class="a">${a}</div></details>`;
 }
 
-export function renderHomeSections(ex: HomeExtra): string {
+export function renderHomeSections(ex: HomeExtra, lang: string = 'en'): string {
+  // Build a URL that stays in the current language when a translated page
+  // exists, otherwise falls back to the English tool.
+  const p = (slug: string) => lang === 'en' ? `/${slug}/` : `/${lang}/${slug}/`;
   const trustStrip = `
 <div class="trust-strip">
   <div class="trust-inner">
@@ -74,31 +77,31 @@ export function renderHomeSections(ex: HomeExtra): string {
     </div>
   </div>
   <div class="bento">
-    <a href="/base64-image-encoder/" class="tile feat" style="--c:var(--cat-encode)">
+    <a href="${p('base64-image-encoder')}" class="tile feat" style="--c:var(--cat-encode)">
       <div class="top"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${IMG_IC}</svg></div><div class="arrow">${ARROW_SVG}</div></div>
       <h3>Image → Base64</h3><p>Drag-and-drop any image. Get a data URI ready to paste into HTML, CSS, or JSON.</p>
       <div class="demo"><span style="color:var(--cat-encode)">data:</span>image/png;base64,<span style="color:var(--fg-soft)">iVBORw0KGgoAAAA…</span></div>
       <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Encoder</span></div>
       <div class="glyph">B64</div>
     </a>
-    <a href="/base64-image-decoder/" class="tile feat" style="--c:var(--cat-decode)">
+    <a href="${p('base64-image-decoder')}" class="tile feat" style="--c:var(--cat-decode)">
       <div class="top"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">${DL_IC}</svg></div><div class="arrow">${ARROW_SVG}</div></div>
       <h3>Base64 → Image</h3><p>Paste any Base64 string. Preview and download the decoded image instantly.</p>
       <div class="demo"><span style="color:var(--fg-soft)">iVBORw0KGgoAAAA…</span><span style="color:var(--cat-decode);margin:0 6px">→</span><span style="color:var(--cat-decode)">image.png</span></div>
       <div class="meta"><span class="tag"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>Decoder</span></div>
       <div class="glyph">↓</div>
     </a>
-    ${tile('/base64-text-encoder/', '--cat-encode', TXT_IC, 'Text → Base64', 'Encode any UTF-8 text. Standard or URL-safe.', 'Encoder')}
-    ${tile('/base64-file-encoder/', '--cat-encode', FILE_IC, 'File → Base64', 'Any file type — PDF, ZIP, font, binary.', 'Encoder')}
-    ${tile('/base64-text-decoder/', '--cat-decode', TXT_IC, 'Base64 → Text', 'Decode JWT tokens, API headers, config values.', 'Decoder')}
-    ${tile('/base64-file-decoder/', '--cat-decode', FILE_IC, 'Base64 → File', 'Recover original files from Base64 strings.', 'Decoder')}
-    ${tile('/base64-to-png/', '--cat-convert', IMG_IC, 'Base64 → PNG', 'Decode and export as lossless PNG.', 'Converter', 'span-4')}
-    ${tile('/base64-to-jpeg/', '--cat-convert', IMG_IC, 'Base64 → JPEG', 'Convert with adjustable quality.', 'Converter', 'span-4')}
-    ${tile('/base64-to-webp/', '--cat-convert', IMG_IC, 'Base64 → WebP', 'Modern format, smaller file sizes.', 'Converter', 'span-4')}
-    ${tile('/base64-validator/', '--cat-tools', CHK_IC, 'Validator', 'Check if a string is valid Base64.', 'Utility')}
+    ${tile(p('base64-text-encoder'), '--cat-encode', TXT_IC, 'Text → Base64', 'Encode any UTF-8 text. Standard or URL-safe.', 'Encoder')}
+    ${tile(p('base64-file-encoder'), '--cat-encode', FILE_IC, 'File → Base64', 'Any file type — PDF, ZIP, font, binary.', 'Encoder')}
+    ${tile(p('base64-text-decoder'), '--cat-decode', TXT_IC, 'Base64 → Text', 'Decode JWT tokens, API headers, config values.', 'Decoder')}
+    ${tile(p('base64-file-decoder'), '--cat-decode', FILE_IC, 'Base64 → File', 'Recover original files from Base64 strings.', 'Decoder')}
+    ${tile(p('base64-to-png'), '--cat-convert', IMG_IC, 'Base64 → PNG', 'Decode and export as lossless PNG.', 'Converter', 'span-4')}
+    ${tile(p('base64-to-jpeg'), '--cat-convert', IMG_IC, 'Base64 → JPEG', 'Convert with adjustable quality.', 'Converter', 'span-4')}
+    ${tile(p('base64-to-webp'), '--cat-convert', IMG_IC, 'Base64 → WebP', 'Modern format, smaller file sizes.', 'Converter', 'span-4')}
+    ${tile(p('base64-validator'), '--cat-tools', CHK_IC, 'Validator', 'Check if a string is valid Base64.', 'Utility')}
     ${tile('/base64-size-calculator/', '--cat-tools', BAR_IC, 'Size Calculator', 'Calculate encoded output size before embedding.', 'Utility')}
     ${tile('/base64-embed-generator/', '--cat-tools', CODE_IC, 'Embed Generator', 'Get HTML/CSS embed code in one click.', 'Utility')}
-    ${tile('/what-is-base64/', '--cat-learn', BOOK_IC, 'What is Base64?', 'Complete guide to Base64 encoding and RFC 4648.', 'Reference')}
+    ${tile(p('what-is-base64'), '--cat-learn', BOOK_IC, 'What is Base64?', 'Complete guide to Base64 encoding and RFC 4648.', 'Reference')}
   </div>
 </section>`;
 
