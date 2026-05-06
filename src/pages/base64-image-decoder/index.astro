@@ -18,7 +18,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       "name": "How to Decode Base64 to Image",
       "step": [
         {"@type":"HowToStep","name":"Paste Base64","text":"Paste your Base64 string into the text area."},
-        {"@type":"HowToStep","name":"Auto Decode","text":"The tool validates and decodes your string instantly."},
+        {"@type":"HowToStep","name":"Click Decode","text":"Click the Decode Image button to validate and convert the string."},
         {"@type":"HowToStep","name":"Download","text":"Click Download Image to save the decoded image."}
       ]
     }</script>
@@ -38,6 +38,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       <div class="error" id="decodeError" style="display:none"></div>
     </div>
     <div class="actions">
+      <button id="decodeBtn" class="btn-primary">Decode Image</button>
       <button id="clearBtn" class="btn-secondary">Clear</button>
     </div>
     <div class="preview-container" id="previewContainer" style="display:none">
@@ -65,75 +66,104 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
   <script is:inline>
   (function () {
     var _blob = null, _ext = 'png';
-    var textarea = document.getElementById('base64Input');
-    var errorDiv = document.getElementById('decodeError');
+    var textarea  = document.getElementById('base64Input');
+    var errorDiv  = document.getElementById('decodeError');
     var container = document.getElementById('previewContainer');
-    var img = document.getElementById('previewImg');
-    var fmtSpan = document.getElementById('imageFormat');
-    var sizeSpan = document.getElementById('imageSize');
-    var dlBtn = document.getElementById('downloadBtn');
-    var clrBtn = document.getElementById('clearBtn');
-    function decode() {
-      errorDiv.style.display = 'none'; errorDiv.textContent = '';
+    var img       = document.getElementById('previewImg');
+    var fmtSpan   = document.getElementById('imageFormat');
+    var sizeSpan  = document.getElementById('imageSize');
+    var dlBtn     = document.getElementById('downloadBtn');
+    var decodeBtn = document.getElementById('decodeBtn');
+    var clrBtn    = document.getElementById('clearBtn');
+
+    function resetPreview() {
       container.style.display = 'none';
-      if (img.src) { try { URL.revokeObjectURL(img.src); } catch(e){} img.src = ''; }
+      errorDiv.style.display  = 'none';
+      errorDiv.textContent    = '';
+      // Revoke any previous preview URL so the browser can free memory
+      if (img.src && img.src.startsWith('blob:')) {
+        URL.revokeObjectURL(img.src);
+      }
+      img.src = '';
       _blob = null;
+    }
+
+    function decode() {
+      resetPreview();
       var input = textarea.value.trim();
       if (!input) return;
       try {
         var base64 = input, format = 'unknown';
-        var m = input.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/);
-        if (m) { format = m[1]; base64 = m[2]; }
-        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64)) throw new Error('Invalid Base64 string.');
-        var bin = atob(base64), bytes = new Uint8Array(bin.length);
+        var m = input.match(/^data:image\/([a-zA-Z0-9+\-]+);base64,(.+)$/s);
+        if (m) { format = m[1]; base64 = m[2].trim(); }
+        // Strip whitespace that some tools insert (line-wrapped Base64)
+        base64 = base64.replace(/\s/g, '');
+        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64)) throw new Error('Invalid Base64 characters detected.');
+        var bin = atob(base64);
+        var bytes = new Uint8Array(bin.length);
         for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
         if (format === 'unknown') format = detectFmt(bytes);
         _blob = new Blob([bytes], { type: getMime(format) });
-        _ext = format === 'jpeg' ? 'jpg' : format === 'svg+xml' ? 'svg' : format;
+        _ext  = format === 'jpeg' ? 'jpg' : format === 'svg+xml' ? 'svg' : format;
+        // Use a fresh blob URL for preview
         img.src = URL.createObjectURL(_blob);
-        fmtSpan.textContent = format.toUpperCase();
+        fmtSpan.textContent  = format.toUpperCase();
         sizeSpan.textContent = fmtBytes(_blob.size);
         container.style.display = '';
       } catch (err) {
-        errorDiv.textContent = err.message || 'Failed to decode.';
-        errorDiv.style.display = '';
+        errorDiv.textContent    = err.message || 'Failed to decode — check that the string is valid Base64.';
+        errorDiv.style.display  = '';
       }
     }
+
     function detectFmt(b) {
-      if (b[0]===0xFF&&b[1]===0xD8) return 'jpeg';
-      if (b[0]===0x89&&b[1]===0x50&&b[2]===0x4E&&b[3]===0x47) return 'png';
-      if (b[0]===0x47&&b[1]===0x49&&b[2]===0x46) return 'gif';
-      if (b[0]===0x52&&b[1]===0x49&&b[2]===0x46&&b[3]===0x46) return 'webp';
-      if (b[0]===0x42&&b[1]===0x4D) return 'bmp';
-      if (b[0]===0x3C&&b[1]===0x73&&b[2]===0x76&&b[3]===0x67) return 'svg+xml';
+      if (b[0]===0xFF&&b[1]===0xD8)                                         return 'jpeg';
+      if (b[0]===0x89&&b[1]===0x50&&b[2]===0x4E&&b[3]===0x47)              return 'png';
+      if (b[0]===0x47&&b[1]===0x49&&b[2]===0x46)                            return 'gif';
+      if (b[0]===0x52&&b[1]===0x49&&b[2]===0x46&&b[3]===0x46)              return 'webp';
+      if (b[0]===0x42&&b[1]===0x4D)                                          return 'bmp';
+      if (b[0]===0x3C) /* < — likely SVG */                                  return 'svg+xml';
       return 'png';
     }
+
     function getMime(f) {
-      return {png:'image/png',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',bmp:'image/bmp','svg+xml':'image/svg+xml'}[f]||'image/png';
+      return { png:'image/png', jpeg:'image/jpeg', gif:'image/gif',
+               webp:'image/webp', bmp:'image/bmp', 'svg+xml':'image/svg+xml' }[f] || 'image/png';
     }
+
     function fmtBytes(n) {
       if (!n) return '0 B';
-      var k=1024,s=['B','KB','MB'],i=Math.floor(Math.log(n)/Math.log(k));
+      var k=1024, s=['B','KB','MB'], i=Math.floor(Math.log(n)/Math.log(k));
       return Math.round((n/Math.pow(k,i))*100)/100+' '+s[i];
     }
-    textarea.addEventListener('input', decode);
+
+    // Decode on button click only (not on every keystroke)
+    decodeBtn.addEventListener('click', decode);
+
+    // Also decode on Ctrl/Cmd+Enter for keyboard users
+    textarea.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) decode();
+    });
+
+    // Download: create a brand-new blob URL each time so the browser
+    // always treats it as a fresh resource and triggers the save dialog.
     dlBtn.addEventListener('click', function() {
-      // Reuse the preview's blob URL directly — it's guaranteed valid
-      // since the image is visible. Creating a new URL from _blob on
-      // each click causes Chrome to fail silently on subsequent downloads.
-      if (!img.src || !img.src.startsWith('blob:')) return;
-      var a = document.createElement('a');
-      a.href = img.src;
+      if (!_blob) return;
+      var url = URL.createObjectURL(_blob);
+      var a   = document.createElement('a');
+      a.href     = url;
       a.download = 'decoded-image-' + Date.now() + '.' + _ext;
+      a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      // Revoke after 60 s — enough time for the browser to begin the download
+      setTimeout(function() { URL.revokeObjectURL(url); }, 60000);
     });
+
     clrBtn.addEventListener('click', function() {
-      textarea.value = ''; errorDiv.style.display = 'none'; errorDiv.textContent = '';
-      container.style.display = 'none';
-      if (img.src) { try { URL.revokeObjectURL(img.src); } catch(e){} img.src = ''; }
-      _blob = null;
+      textarea.value = '';
+      resetPreview();
     });
   })();
   </script>
