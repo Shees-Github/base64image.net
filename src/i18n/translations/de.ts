@@ -78,6 +78,24 @@ const decoded = atob('SGVsbG8gV29ybGQ=');
 // "Hello World"</code></pre><h2>Base64 in Node.js</h2><pre><code>const encoded = Buffer.from('Hello World').toString('base64');
 const decoded = Buffer.from('SGVsbG8gV29ybGQ=', 'base64').toString('utf8');</code></pre><h2>FAQ</h2><div class="faq-item"><h3>Warum schlägt btoa() bei Sonderzeichen fehl?</h3><p>btoa() akzeptiert nur Latin-1. Für Unicode TextEncoder oder encodeURIComponent verwenden.</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64 zu SVG — Kostenloser Konverter | base64image.net',
+      description: 'Konvertieren Sie Base64-Strings in SVG-Grafiken in Ihrem Browser. Vorschau und direkter Download.',
+      h1: 'Base64 zu SVG Konverter',
+      lede: 'Konvertieren Sie Base64 in skalierbare SVG-Vektorgrafiken. Vorschau und Download im Browser.',
+    },
+    'base64-to-webp': {
+      title: 'Base64 zu WebP — Kostenloser Konverter | base64image.net',
+      description: 'Konvertieren Sie Base64-Strings in WebP-Bilder im Browser. Einstellbare Qualität, Vorschau und Download.',
+      h1: 'Base64 zu WebP Konverter',
+      lede: 'Konvertieren Sie Base64 in WebP mit einstellbarer Qualität. Vorschau und Download im Browser.',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64 zu JPEG — Kostenloser Online-Konverter | base64image.net',
+      description: 'Konvertieren Sie Base64-Strings in JPEG-Bilder im Browser. Sofortige Vorschau und direkter Download.',
+      h1: 'Base64 zu JPEG Konverter',
+      lede: 'Konvertieren Sie Base64 in JPEG. Sofortige Vorschau und Download im Browser.',
+    },
     'base64-linux': {
       title: 'Base64 unter Linux — bash-Befehle mit Beispielen | base64image.net',
       description: 'Base64 unter Linux mit dem bash-Befehl base64. Beispiele für Strings, Dateien und Skripte.',

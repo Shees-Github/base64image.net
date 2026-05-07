@@ -425,4 +425,60 @@ export const TOOL_SECTIONS: Partial<Record<string, ToolSection>> = {
 };}`,
   },
 
+  /* ── Base64 → SVG ─────────────────────────────────────────────── */
+  'base64-to-svg': {
+    needsAlpine: true,
+    html: `<div x-data="base64ToSvg()">
+  <section class="tool-section">
+    <div class="input-group">
+      <label for="base64Input">Paste your Base64 string:</label>
+      <textarea id="base64Input" x-model="base64Input" placeholder="Paste your Base64-encoded SVG string here..." rows="6"></textarea>
+      <div class="error" x-show="error" x-text="error"></div>
+    </div>
+    <div class="actions">
+      <button @click="decodeSvg" class="btn-primary">Convert to SVG</button>
+      <button @click="clearAll" class="btn-secondary">Clear</button>
+    </div>
+    <div class="preview-container" x-show="svgContent">
+      <h2>Preview</h2>
+      <div class="image-wrapper" x-html="sanitizedSvg" style="max-width:100%;overflow:auto"></div>
+      <div class="image-info" x-show="svgInfo">
+        <p><strong>Format:</strong> SVG</p>
+        <p><strong>Size:</strong> <span x-text="svgInfo.size"></span></p>
+        <p><strong>Elements:</strong> <span x-text="svgInfo.elementCount"></span></p>
+      </div>
+      <button @click="downloadSvg" class="btn-primary">Download SVG</button>
+    </div>
+  </section>
+</div>`,
+    script: `function base64ToSvg(){return{base64Input:'',svgContent:'',sanitizedSvg:'',error:'',svgInfo:null,
+  decodeSvg(){this.error='';this.svgContent='';this.sanitizedSvg='';this.svgInfo=null;
+    if(!this.base64Input.trim())return;
+    try{var s=this.base64Input.trim();
+      var m=s.match(/^data:image\\/svg\\+xml;base64,(.+)$/);if(m)s=m[1];
+      else{var g=s.match(/^data:[^;]+;base64,(.+)$/);if(g)s=g[1];}
+      if(!/^[A-Za-z0-9+/]*={0,2}$/.test(s))throw new Error('Invalid Base64 string.');
+      var d;try{d=atob(s);}catch(e){throw new Error('Failed to decode Base64 string.');}
+      try{d=decodeURIComponent(escape(d));}catch(e){}
+      if(!d.trim().match(/^(<\\?xml|<svg)/i))throw new Error('Decoded content is not valid SVG.');
+      this.svgContent=d;this.sanitizedSvg=this.sanitizeSvg(d);
+      var parser=new DOMParser(),doc=parser.parseFromString(d,'image/svg+xml');
+      var sz=new Blob([d]).size;
+      this.svgInfo={size:this.formatBytes(sz),elementCount:doc.querySelectorAll('*').length+' elements'};
+    }catch(e){this.error=e.message||'Failed to decode.';this.svgContent='';this.sanitizedSvg='';this.svgInfo=null;}},
+  sanitizeSvg(str){var p=new DOMParser(),doc=p.parseFromString(str,'image/svg+xml');
+    doc.querySelectorAll('script').forEach(function(s){s.remove();});
+    doc.querySelectorAll('*').forEach(function(el){
+      Array.from(el.attributes).forEach(function(a){if(a.name.startsWith('on'))el.removeAttribute(a.name);});
+      if(el.hasAttribute('href')&&el.getAttribute('href').toLowerCase().trim().startsWith('javascript:'))el.removeAttribute('href');
+    });
+    var sv=doc.querySelector('svg');if(sv){sv.style.maxWidth='100%';sv.style.height='auto';}
+    return new XMLSerializer().serializeToString(doc.documentElement);},
+  formatBytes(n){if(!n)return'0 Bytes';var k=1024,s=['Bytes','KB','MB'],i=Math.floor(Math.log(n)/Math.log(k));return Math.round((n/Math.pow(k,i))*100)/100+' '+s[i];},
+  downloadSvg(){if(!this.svgContent)return;var b=new Blob([this.svgContent],{type:'image/svg+xml'}),u=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=u;a.download='converted-image-'+Date.now()+'.svg';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);},
+  clearAll(){this.base64Input='';this.svgContent='';this.sanitizedSvg='';this.error='';this.svgInfo=null;}
+};}`,
+  },
+
 };

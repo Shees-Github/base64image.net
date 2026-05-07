@@ -88,6 +88,30 @@ decoded = base64.b64decode(encoded).decode()
 with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>자주 묻는 질문</h2><div class="faq-item"><h3>Python 3에서 .encode()와 .decode()가 필요한 이유는?</h3><p>base64는 바이트를 처리합니다. .encode()로 문자열을 바이트로 변환하고, .decode()로 바이트를 문자열로 변환합니다.</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64를 SVG로 — 무료 온라인 변환기 | base64image.net',
+      description: '브라우저에서 Base64 문자열을 SVG 그래픽으로 변환. 즉시 미리보기 및 직접 다운로드.',
+      h1: 'Base64에서 SVG로 변환기',
+      lede: 'Base64를 확장 가능한 SVG 벡터 그래픽으로 변환. 브라우저에서 즉시 미리보기 및 다운로드.',
+    },
+    'base64-to-webp': {
+      title: 'Base64를 WebP로 — 무료 온라인 변환기 | base64image.net',
+      description: '브라우저에서 Base64 문자열을 WebP 이미지로 변환. 품질 조절 가능, 미리보기 및 다운로드.',
+      h1: 'Base64에서 WebP로 변환기',
+      lede: '품질 조절 가능한 Base64에서 WebP로 변환. 브라우저에서 즉시 미리보기 및 다운로드.',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64를 JPEG로 — 무료 온라인 변환기 | base64image.net',
+      description: '브라우저에서 Base64 문자열을 JPEG 이미지로 변환. 즉시 미리보기 및 직접 다운로드.',
+      h1: 'Base64에서 JPEG로 변환기',
+      lede: 'Base64를 JPEG로 변환. 브라우저에서 즉시 미리보기 및 직접 다운로드.',
+    },
+    'base64-validator': {
+      title: 'Base64 유효성 검사기 — Base64 문자열 온라인 검증 | base64image.net',
+      description: '브라우저에서 문자열이 유효한 Base64인지 확인. 형식 오류와 유효하지 않은 문자를 감지.',
+      h1: 'Base64 유효성 검사기',
+      lede: '문자열이 유효한 Base64인지 확인. 형식 오류와 유효하지 않은 문자를 감지.',
+    },
   },
   homeExtra: {
     eyebrowSub: '개인정보 보호 · 로컬 처리 · 계정 불필요',

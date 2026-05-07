@@ -88,6 +88,30 @@ decoded = base64.b64decode(encoded).decode()
 with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>أسئلة شائعة</h2><div class="faq-item"><h3>لماذا نحتاج .encode() و.decode() في Python 3؟</h3><p>تعمل وحدة base64 مع البايت. .encode() تحوِّل النص إلى بايت، و.decode() تحوِّل البايت إلى نص.</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64 إلى SVG — محوِّل مجاني عبر الإنترنت | base64image.net',
+      description: 'حوِّل سلاسل Base64 إلى رسومات SVG في متصفحك. معاينة فورية وتنزيل مباشر.',
+      h1: 'محوِّل Base64 إلى SVG',
+      lede: 'حوِّل Base64 إلى رسومات SVG متجهية قابلة للتوسع. معاينة فورية وتنزيل من متصفحك.',
+    },
+    'base64-to-webp': {
+      title: 'Base64 إلى WebP — محوِّل مجاني عبر الإنترنت | base64image.net',
+      description: 'حوِّل سلاسل Base64 إلى صور WebP في متصفحك. جودة قابلة للضبط، معاينة وتنزيل.',
+      h1: 'محوِّل Base64 إلى WebP',
+      lede: 'حوِّل Base64 إلى WebP بجودة قابلة للضبط. معاينة وتنزيل من متصفحك.',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64 إلى JPEG — محوِّل مجاني عبر الإنترنت | base64image.net',
+      description: 'حوِّل سلاسل Base64 إلى صور JPEG في متصفحك. معاينة فورية وتنزيل مباشر.',
+      h1: 'محوِّل Base64 إلى JPEG',
+      lede: 'حوِّل Base64 إلى JPEG. معاينة فورية وتنزيل مباشر من متصفحك.',
+    },
+    'base64-validator': {
+      title: 'مُدقِّق Base64 — تحقق من سلاسل Base64 عبر الإنترنت | base64image.net',
+      description: 'تحقق من صحة سلاسل Base64 في متصفحك. اكتشف أخطاء التنسيق والأحرف غير الصالحة.',
+      h1: 'مُدقِّق Base64',
+      lede: 'تحقق من صحة سلاسل Base64. اكتشف أخطاء التنسيق والأحرف غير الصالحة.',
+    },
   },
   homeExtra: {
     eyebrowSub: 'خصوصية تامة · محلي · بلا حساب',

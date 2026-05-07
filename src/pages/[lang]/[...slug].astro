@@ -17,7 +17,10 @@ export function getStaticPaths() {
     for (const [slug, pageMeta] of Object.entries(PAGE_REGISTRY)) {
       const pageT = (t.pages as Record<string, any>)[slug];
       if (!pageT) continue;
-      if (pageMeta.type !== 'home' && !pageT.bodyHtml) continue;
+      // Generate the page if it has article content OR if the interactive tool
+      // section exists in toolContent.ts (real tool will be embedded).
+      // Skip pages with no content at all to avoid thin-content pages.
+      if (pageMeta.type !== 'home' && !pageT.bodyHtml && !TOOL_SECTIONS[slug]) continue;
 
       paths.push({
         params: { lang: locale.code, slug: slug || undefined },

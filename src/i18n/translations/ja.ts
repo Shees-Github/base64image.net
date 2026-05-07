@@ -88,6 +88,30 @@ decoded = base64.b64decode(encoded).decode()
 with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>よくある質問</h2><div class="faq-item"><h3>Python 3で.encode()と.decode()が必要な理由は？</h3><p>base64はバイト列を扱います。.encode()で文字列をバイト列に、.decode()でバイト列を文字列に変換します。</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64からSVGへ — 無料オンラインコンバーター | base64image.net',
+      description: 'Base64文字列をSVGグラフィックスに変換。ブラウザで即時プレビューとダウンロード。',
+      h1: 'Base64からSVGへのコンバーター',
+      lede: 'Base64をスケーラブルなSVGベクターグラフィックスに変換。ブラウザで即時プレビューとダウンロード。',
+    },
+    'base64-to-webp': {
+      title: 'Base64からWebPへ — 無料オンラインコンバーター | base64image.net',
+      description: 'Base64文字列をWebP画像に変換。品質調整可能、プレビューとダウンロード。',
+      h1: 'Base64からWebPへのコンバーター',
+      lede: '品質調整可能なBase64からWebPへの変換。ブラウザで即時プレビューとダウンロード。',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64からJPEGへ — 無料オンラインコンバーター | base64image.net',
+      description: 'Base64文字列をJPEG画像に変換。ブラウザで即時プレビューとダウンロード。',
+      h1: 'Base64からJPEGへのコンバーター',
+      lede: 'Base64をJPEGに変換。ブラウザで即時プレビューとダウンロード。',
+    },
+    'base64-validator': {
+      title: 'Base64バリデーター — Base64文字列を検証 | base64image.net',
+      description: 'Base64文字列が有効かどうかを確認。形式エラーや無効な文字を検出します。',
+      h1: 'Base64バリデーター',
+      lede: 'Base64文字列の有効性を確認。形式エラーと無効な文字を検出します。',
+    },
   },
   homeExtra: {
     eyebrowSub: 'プライバシー重視 · ローカル処理 · アカウント不要',

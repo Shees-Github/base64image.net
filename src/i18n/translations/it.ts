@@ -88,6 +88,30 @@ decoded = base64.b64decode(encoded).decode()
 with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>FAQ</h2><div class="faq-item"><h3>Perché servono .encode() e .decode() in Python 3?</h3><p>base64 lavora con bytes. .encode() converte string in bytes, .decode() converte bytes in string.</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64 in SVG — Convertitore Gratuito Online | base64image.net',
+      description: 'Converti stringhe Base64 in grafica SVG nel browser. Anteprima istantanea e download diretto.',
+      h1: 'Convertitore Base64 in SVG',
+      lede: 'Converti Base64 in grafica vettoriale SVG scalabile. Anteprima e download diretto nel browser.',
+    },
+    'base64-to-webp': {
+      title: 'Base64 in WebP — Convertitore Gratuito Online | base64image.net',
+      description: 'Converti stringhe Base64 in immagini WebP nel browser. Qualità regolabile, anteprima e download.',
+      h1: 'Convertitore Base64 in WebP',
+      lede: 'Converti Base64 in WebP con qualità regolabile. Anteprima e download nel browser.',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64 in JPEG — Convertitore Gratuito Online | base64image.net',
+      description: 'Converti stringhe Base64 in immagini JPEG nel browser. Anteprima istantanea e download diretto.',
+      h1: 'Convertitore Base64 in JPEG',
+      lede: 'Converti Base64 in JPEG. Anteprima istantanea e download diretto nel browser.',
+    },
+    'base64-validator': {
+      title: 'Validatore Base64 — Verifica Stringhe Base64 Online | base64image.net',
+      description: 'Verifica se una stringa è Base64 valido nel browser. Rileva errori di formato e caratteri non validi.',
+      h1: 'Validatore Base64',
+      lede: 'Verifica se una stringa è Base64 valido. Rileva errori di formato e caratteri non validi.',
+    },
   },
   homeExtra: {
     eyebrowSub: 'Privacy totale · Locale · Senza account',

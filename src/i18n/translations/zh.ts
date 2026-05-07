@@ -88,6 +88,30 @@ decoded = base64.b64decode(encoded).decode()
 with open('output.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>常见问题</h2><div class="faq-item"><h3>为什么Python 3需要.encode()和.decode()？</h3><p>base64处理字节。.encode()将字符串转为字节，.decode()将字节转为字符串。</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64转SVG — 免费在线转换器 | base64image.net',
+      description: '在浏览器中将Base64字符串转换为SVG图形。即时预览和直接下载。',
+      h1: 'Base64转SVG转换器',
+      lede: '将Base64转换为可缩放的SVG矢量图形。在浏览器中即时预览和下载。',
+    },
+    'base64-to-webp': {
+      title: 'Base64转WebP — 免费在线转换器 | base64image.net',
+      description: '在浏览器中将Base64字符串转换为WebP图片。可调质量、预览和下载。',
+      h1: 'Base64转WebP转换器',
+      lede: '将Base64转换为可调质量的WebP图片。在浏览器中即时预览和下载。',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64转JPEG — 免费在线转换器 | base64image.net',
+      description: '在浏览器中将Base64字符串转换为JPEG图片。即时预览和直接下载。',
+      h1: 'Base64转JPEG转换器',
+      lede: '将Base64转换为JPEG。在浏览器中即时预览和直接下载。',
+    },
+    'base64-validator': {
+      title: 'Base64验证器 — 在线验证Base64字符串 | base64image.net',
+      description: '验证字符串是否为有效的Base64。检测格式错误和无效字符。',
+      h1: 'Base64验证器',
+      lede: '验证字符串是否为有效的Base64。检测格式错误和无效字符。',
+    },
   },
   homeExtra: {
     eyebrowSub: '隐私优先 · 本地处理 · 无需账户',

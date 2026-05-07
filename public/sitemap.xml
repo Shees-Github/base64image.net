@@ -1,358 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <!-- Homepage -->
-    <url>
-        <loc>https://base64image.net/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
-    </url>
 
-    <!-- Encoders -->
-    <url>
-        <loc>https://base64image.net/base64-text-encoder/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/</loc><lastmod>2026-02-12</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-file-encoder/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/base64-text-encoder/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-file-encoder/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-image-encoder/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-text-decoder/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-file-decoder/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-image-decoder/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-to-png/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-to-pdf/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-hex-converter/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-validator/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-url-safe/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-embed-generator/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-bulk-converter/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-to-jpeg/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-to-svg/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-to-webp/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-to-gif/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/png-to-base64/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/jpeg-to-base64/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/svg-to-base64/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-size-calculator/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base32-encoder-decoder/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ascii-to-base64/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/what-is-base64/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-algorithm/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-character-table/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/data-uri-guide/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-vs-binary/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-mime-types/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-email-images/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/base64-css/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/base64-api/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/base64-javascript/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-python/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-java/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-php/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-csharp/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-go/</loc><lastmod>2026-02-13</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/privacy-policy/</loc><lastmod>2026-02-12</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://base64image.net/terms-of-service/</loc><lastmod>2026-02-12</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://base64image.net/about/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://base64image.net/contact/</loc><lastmod>2026-02-12</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://base64image.net/base64-picture/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/base64-decrypt/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-mac/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-linux/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/base64-powershell/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/base64-rust/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/base64-to-json/</loc><lastmod>2026-05-05</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-image-encoder/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/es/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/es/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-algorithm/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/es/data-uri-guide/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/es/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-file-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/es/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/es/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/es/base64-linux/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <!-- Decoders -->
-    <url>
-        <loc>https://base64image.net/base64-text-decoder/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/fr/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/fr/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/fr/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/fr/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/fr/base64-linux/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-file-decoder/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/de/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/de/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/de/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/de/base64-linux/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-image-decoder/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/pt/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/pt/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/pt/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/pt/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <!-- Converters -->
-    <url>
-        <loc>https://base64image.net/base64-to-png/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/ja/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/ja/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ja/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/ja/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-to-pdf/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/zh/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/zh/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/zh/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/zh/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-hex-converter/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/ar/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/ar/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ar/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/ar/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <!-- Tools & Utilities -->
-    <url>
-        <loc>https://base64image.net/base64-validator/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/ru/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/ru/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ru/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/ru/base64-linux/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-url-safe/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/it/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/it/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/it/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/it/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-embed-generator/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
+  <url><loc>https://base64image.net/ko/</loc><lastmod>2026-05-08</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://base64image.net/ko/what-is-base64/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-image-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-image-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-text-encoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-text-decoder/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-to-png/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-to-jpeg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-to-svg/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-to-webp/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-validator/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://base64image.net/ko/base64-javascript/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://base64image.net/ko/base64-python/</loc><lastmod>2026-05-08</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-    <url>
-        <loc>https://base64image.net/base64-bulk-converter/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <!-- Format Converters (New) -->
-    <url>
-        <loc>https://base64image.net/base64-to-jpeg/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-to-svg/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-to-webp/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-to-gif/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/png-to-base64/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/jpeg-to-base64/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/svg-to-base64/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <!-- Additional Tools -->
-    <url>
-        <loc>https://base64image.net/base64-size-calculator/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base32-encoder-decoder/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/ascii-to-base64/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <!-- Pillar Content -->
-    <url>
-        <loc>https://base64image.net/what-is-base64/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-algorithm/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-character-table/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/data-uri-guide/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-vs-binary/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-mime-types/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <!-- Use-Case Guides -->
-    <url>
-        <loc>https://base64image.net/base64-email-images/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-css/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-api/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-
-    <!-- Developer Guides -->
-    <url>
-        <loc>https://base64image.net/base64-javascript/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-python/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-java/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-php/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-csharp/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/base64-go/</loc>
-        <lastmod>2026-02-13</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-
-    <!-- Legal Pages -->
-    <url>
-        <loc>https://base64image.net/privacy-policy/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/terms-of-service/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.3</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/about/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <url>
-        <loc>https://base64image.net/contact/</loc>
-        <lastmod>2026-02-12</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.5</priority>
-    </url>
-
-    <!-- New pages — keyword expansion May 2026 -->
-    <url>
-        <loc>https://base64image.net/base64-picture/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.9</priority>
-    </url>
-    <url>
-        <loc>https://base64image.net/base64-decrypt/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://base64image.net/base64-mac/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://base64image.net/base64-linux/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    <url>
-        <loc>https://base64image.net/base64-powershell/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://base64image.net/base64-rust/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.7</priority>
-    </url>
-    <url>
-        <loc>https://base64image.net/base64-to-json/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.8</priority>
-    </url>
 </urlset>

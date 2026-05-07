@@ -102,6 +102,24 @@ with open('image.png', 'rb') as f:
 with open('sortie.png', 'wb') as f:
     f.write(base64.b64decode(encoded))</code></pre><h2>FAQ</h2><div class="faq-item"><h3>Pourquoi .encode() et .decode() en Python 3 ?</h3><p>base64 travaille avec des bytes. .encode() convertit string en bytes, .decode() convertit bytes en string.</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64 en SVG — Convertisseur Gratuit | base64image.net',
+      description: 'Convertissez des chaînes Base64 en graphiques SVG dans votre navigateur. Prévisualisation et téléchargement direct.',
+      h1: 'Convertisseur Base64 en SVG',
+      lede: 'Convertissez Base64 en graphiques SVG vectoriels. Prévisualisation et téléchargement depuis votre navigateur.',
+    },
+    'base64-to-webp': {
+      title: 'Base64 en WebP — Convertisseur Gratuit | base64image.net',
+      description: 'Convertissez des chaînes Base64 en images WebP dans votre navigateur. Qualité ajustable, prévisualisation et téléchargement.',
+      h1: 'Convertisseur Base64 en WebP',
+      lede: 'Convertissez Base64 en WebP avec qualité ajustable. Prévisualisation et téléchargement depuis votre navigateur.',
+    },
+    'base64-to-jpeg': {
+      title: 'Base64 en JPEG — Convertisseur Gratuit en Ligne | base64image.net',
+      description: 'Convertissez des chaînes Base64 en images JPEG dans votre navigateur. Prévisualisation et téléchargement direct.',
+      h1: 'Convertisseur Base64 en JPEG',
+      lede: 'Convertissez Base64 en JPEG. Prévisualisation instantanée et téléchargement depuis votre navigateur.',
+    },
     'base64-linux': {
       title: 'Base64 sur Linux — Commandes bash avec Exemples | base64image.net',
       description: 'Comment utiliser Base64 sur Linux avec la commande base64 en bash. Exemples pour strings, fichiers et scripts.',

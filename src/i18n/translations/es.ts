@@ -151,6 +151,18 @@ echo 'SGVsbG8gV29ybGQ=' | base64 -d
 # Decodificar archivo
 base64 -d imagen.b64 > imagen.png</code></pre><h2>Linux vs macOS</h2><p>Linux: <code>-d</code> para decodificar, <code>-w 0</code> sin saltos. macOS: <code>-D</code> y <code>-b 0</code> respectivamente.</p><h2>Preguntas Frecuentes</h2><div class="faq-item"><h3>¿Por qué usar echo -n?</h3><p>Sin -n, echo agrega un salto de línea que se incluye en la codificación, produciendo un resultado incorrecto.</p></div></article>`,
     },
+    'base64-to-svg': {
+      title: 'Base64 a SVG — Convertidor Gratuito Online | base64image.net',
+      description: 'Convierte cadenas Base64 a gráficos vectoriales SVG en tu navegador. Previsualización y descarga directa.',
+      h1: 'Conversor de Base64 a SVG',
+      lede: 'Convierte Base64 de vuelta a gráficos SVG escalables. Previsualización y descarga directa en tu navegador.',
+    },
+    'base64-to-webp': {
+      title: 'Base64 a WebP — Convertidor Gratuito Online | base64image.net',
+      description: 'Convierte cadenas Base64 a imágenes WebP en tu navegador. Calidad ajustable, previsualización y descarga.',
+      h1: 'Conversor de Base64 a WebP',
+      lede: 'Convierte Base64 a WebP con calidad ajustable. Previsualización y descarga directa desde tu navegador.',
+    },
     'base64-file-encoder': {
       title: 'Codificador de Archivos Base64 — Cualquier Archivo a Base64 | base64image.net',
       description: 'Convierte cualquier archivo (PDF, ZIP, audio, documentos) a Base64 en tu navegador. Sin subidas, completamente privado.',
