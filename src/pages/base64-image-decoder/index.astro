@@ -145,16 +145,25 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     });
 
     // Download: use data URI — data is inline in the href, no async blob
-    // registry lookup, no memory paging → consistent speed every time.
+    // Blob URL download: _blob is already decoded binary in memory.
+    // URL.createObjectURL is O(1) — just a pointer, no re-decoding.
+    // A fresh URL per click avoids the browser caching/serving issues
+    // that plagued the old approach of reusing img.src.
+    // Data URI downloads (previous approach) forced Chrome to re-parse
+    // the entire base64 string as a URL on every click, causing queuing
+    // lag when downloading multiple images in sequence.
     dlBtn.addEventListener('click', function() {
-      if (!_b64) return;
-      var a = document.createElement('a');
-      a.href     = 'data:' + _mime + ';base64,' + _b64;
+      if (!_blob) return;
+      var url = URL.createObjectURL(_blob);
+      var a   = document.createElement('a');
+      a.href     = url;
       a.download = 'decoded-image-' + Date.now() + '.' + _ext;
       a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      // Revoke after 30 s — well after Chrome has started the file write.
+      setTimeout(function() { URL.revokeObjectURL(url); }, 30000);
     });
 
     clrBtn.addEventListener('click', function() {
