@@ -48,7 +48,13 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
         <p><strong>Format:</strong> <span id="imageFormat"></span></p>
         <p><strong>Size:</strong> <span id="imageSize"></span></p>
       </div>
-      <button id="downloadBtn" class="btn-primary">Download Image</button>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button id="downloadBtn" class="btn-primary">Download Image</button>
+        <button id="openTabBtn" class="btn-secondary">Open in New Tab</button>
+      </div>
+      <p id="downloadBlockedMsg" style="display:none;font-size:13px;color:var(--fg-mute);margin-top:8px">
+        If Download doesn't work, Chrome may have blocked it — click the <strong>↓</strong> icon in your address bar and choose <em>Always allow</em>, or use <strong>Open in New Tab</strong> then press <kbd>Ctrl+S</kbd>.
+      </p>
     </div>
   </div>
 
@@ -72,9 +78,12 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     var img       = document.getElementById('previewImg');
     var fmtSpan   = document.getElementById('imageFormat');
     var sizeSpan  = document.getElementById('imageSize');
-    var dlBtn     = document.getElementById('downloadBtn');
-    var decodeBtn = document.getElementById('decodeBtn');
-    var clrBtn    = document.getElementById('clearBtn');
+    var dlBtn        = document.getElementById('downloadBtn');
+    var openTabBtn   = document.getElementById('openTabBtn');
+    var blockedMsg   = document.getElementById('downloadBlockedMsg');
+    var decodeBtn    = document.getElementById('decodeBtn');
+    var clrBtn       = document.getElementById('clearBtn');
+    var _dlCount     = 0; // track download attempts to surface the hint
 
     function resetPreview() {
       container.style.display = 'none';
@@ -145,13 +154,7 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     });
 
     // Download: use data URI — data is inline in the href, no async blob
-    // Blob URL download: _blob is already decoded binary in memory.
-    // URL.createObjectURL is O(1) — just a pointer, no re-decoding.
-    // A fresh URL per click avoids the browser caching/serving issues
-    // that plagued the old approach of reusing img.src.
-    // Data URI downloads (previous approach) forced Chrome to re-parse
-    // the entire base64 string as a URL on every click, causing queuing
-    // lag when downloading multiple images in sequence.
+    // Blob URL download — fresh URL per click, no base64 re-decoding.
     dlBtn.addEventListener('click', function() {
       if (!_blob) return;
       var url = URL.createObjectURL(_blob);
@@ -162,13 +165,28 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      // Revoke after 30 s — well after Chrome has started the file write.
       setTimeout(function() { URL.revokeObjectURL(url); }, 30000);
+      // After 2nd download attempt, surface the Chrome permission hint
+      // (Chrome silently blocks multi-file downloads without any JS error)
+      _dlCount++;
+      if (_dlCount >= 2) blockedMsg.style.display = '';
+    });
+
+    // Fallback: open blob in a new tab — window.open() is never blocked
+    // by Chrome's download permission system. User can then Ctrl+S to save.
+    openTabBtn.addEventListener('click', function() {
+      if (!_blob) return;
+      var url = URL.createObjectURL(_blob);
+      window.open(url, '_blank');
+      // Keep the URL alive for 5 min so the new tab can render the image
+      setTimeout(function() { URL.revokeObjectURL(url); }, 300000);
     });
 
     clrBtn.addEventListener('click', function() {
       textarea.value = '';
       resetPreview();
+      _dlCount = 0;
+      blockedMsg.style.display = 'none';
     });
   })();
   </script>
