@@ -971,19 +971,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .faq-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
-  /* Mobile nav hidden by default, shown when .open toggled */
+  /* Mobile nav hidden by default, shown when .open toggled.
+     top:0 + height:100dvh instead of top:64px + bottom:0 because
+     backdrop-filter on .site-header creates a new containing block in
+     Chrome, making position:fixed children relative to the 64px header
+     (not the viewport), which collapses the nav to ~0 height.
+     Viewport units (dvh) are always relative to the actual viewport. */
   .main-nav {
     display: none;
     position: fixed;
-    top: var(--header-h);
-    left: 0; right: 0; bottom: 0;
+    top: 0;
+    left: 0; right: 0;
+    height: 100vh;
+    height: 100dvh;
     background: var(--bg);
-    border-top: 1px solid var(--line);
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
-    z-index: 49;
-    padding: 8px 0 40px;
+    z-index: 48;
+    padding-top: var(--header-h);
+    padding-bottom: 40px;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
