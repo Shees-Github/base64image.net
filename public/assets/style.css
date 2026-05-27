@@ -988,27 +988,30 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     -ms-overflow-style: none;
   }
   .main-nav::-webkit-scrollbar { display: none; }
-  .main-nav.open { display: block; }
+  .main-nav.open { display: block !important; }
 
   /* Remove desktop hover-bridge — causes layout bleed on mobile */
-  .dropdown::after { display: none; }
+  .dropdown::after { display: none !important; }
 
-  /* Override the desktop flex layout — block stacking */
+  /* Override the desktop flex layout — block stacking with !important */
   .main-nav > ul {
-    display: block;
-    padding: 0;
-    margin: 0;
-    list-style: none;
+    display: block !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+    gap: 0 !important;
   }
   .main-nav > ul > li {
-    display: block;
-    width: 100%;
+    display: block !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
   }
 
   /* Top-level nav links */
   .main-nav > ul > li > a,
   .main-nav > ul > li .nav-link {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
     width: 100%;
@@ -1027,7 +1030,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   /* Mobile dropdown menus — inline block, full width, no absolute positioning */
   .dropdown-menu {
     position: static !important;
-    display: none;
+    display: none !important;
     opacity: 1 !important;
     pointer-events: auto !important;
     transform: none !important;
@@ -1042,10 +1045,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
     width: 100% !important;
     box-sizing: border-box;
   }
-  .dropdown.active .dropdown-menu { display: block; }
+  .dropdown.active .dropdown-menu { display: block !important; }
 
   /* Dropdown sub-items */
-  .dropdown-menu li { display: block; list-style: none; }
+  .dropdown-menu li { display: block !important; list-style: none !important; }
   .dropdown-menu li a,
   .dropdown-menu a {
     display: flex !important;
