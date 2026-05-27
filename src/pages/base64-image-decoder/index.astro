@@ -153,8 +153,6 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) decode();
     });
 
-    // Download: use data URI — data is inline in the href, no async blob
-    // Blob URL download — fresh URL per click, no base64 re-decoding.
     dlBtn.addEventListener('click', function() {
       if (!_blob) return;
       var url = URL.createObjectURL(_blob);
@@ -166,10 +164,10 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       a.click();
       document.body.removeChild(a);
       setTimeout(function() { URL.revokeObjectURL(url); }, 30000);
-      // After 2nd download attempt, surface the Chrome permission hint
-      // (Chrome silently blocks multi-file downloads without any JS error)
+      // Show fallback hint after first download — Chrome silently blocks
+      // subsequent downloads (multiple-file protection) with no JS error.
       _dlCount++;
-      if (_dlCount >= 2) blockedMsg.style.display = '';
+      if (_dlCount >= 1) blockedMsg.style.display = '';
     });
 
     // Fallback: open blob in a new tab — window.open() is never blocked
@@ -185,8 +183,6 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
     clrBtn.addEventListener('click', function() {
       textarea.value = '';
       resetPreview();
-      _dlCount = 0;
-      blockedMsg.style.display = 'none';
     });
   })();
   </script>
