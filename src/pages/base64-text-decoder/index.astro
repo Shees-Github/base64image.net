@@ -1,12 +1,6 @@
 ﻿---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 const bodyHtml = `<main>
-        <h1><i class="fas fa-unlock"></i> Base64 Text Decoder</h1>
-
-        <p class="intro">
-            Decode Base64 encoded strings back to plain text instantly. Extract text from Base64 data, decode API responses, or reverse Base64 encoding for any text data.
-        </p>
-
         <div class="trust-note">
             <strong>🔒 Privacy First:</strong> All decoding happens locally in your browser. Your data never leaves your device.
         </div>
@@ -72,6 +66,11 @@ const bodyHtml = `<main>
                 Base64 text decoding converts Base64 encoded strings back to their original plain text format. This is essential when working with APIs, configuration files, or any system that transmits text data in Base64 format.
             </p>
 
+            <h2><i class="fas fa-bolt"></i> Base64 Decode Online, No Install Required</h2>
+            <p>
+                This is a straightforward way to base64 decode online: paste a string, click decode, get plain text back — nothing to install, no account, no rate limit. It runs the same native <code>atob()</code> function your browser already ships with, so the output matches what <code>base64 -d</code> or <code>Buffer.from(str, 'base64')</code> would give you locally. Working with binary data instead of text? Use the <a href="/base64-file-decoder/">Base64 file decoder</a> or <a href="/base64-image-decoder/">Base64 image decoder</a>.
+            </p>
+
             <h2><i class="fas fa-lightbulb"></i> When Do You Need Base64 Text Decoding?</h2>
             <p>
                 <strong>API Responses:</strong> Many APIs return text data encoded in Base64 format. You need to decode it to read the actual content.
@@ -135,12 +134,12 @@ const bodyHtml = `<main>
     </main>`;
 ---
 <ToolLayout
-  title="Base64 Text Decoder - Decode Base64 to Text Online Free"
-  description="Free online Base64 to text decoder. Convert Base64 strings back to plain text instantly. Decode API responses, JWT tokens, and email headers in your browser."
+  title="Base64 Decode Online — Free Base64 to Text Decoder"
+  description="Free Base64 decode online — paste a string, convert to plain text instantly. Decode API responses, JWT tokens, headers. No uploads, 100% private."
   canonical="https://base64image.net/base64-text-decoder/"
-  h1="Base64 Text Decoder"
+  h1="Base64 Decode Online"
   mono="// atob()"
-  lede="Decode Base64 encoded strings back to plain text instantly. Extract text from Base64 data, decode API responses, or reverse Base64 encoding for any text data."
+  lede="Paste a Base64 string below to decode it to plain text instantly — no install, no account. Decode API responses, JWT tokens, or reverse any Base64-encoded text, entirely in your browser."
   tag="decode"
   tagLabel="Decoder"
   breadcrumbs={[{label:'Home',href:'/'},{label:'Decoders',href:'#'},{label:'Base64 → Text'}]}
