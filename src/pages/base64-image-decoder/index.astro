@@ -2,12 +2,12 @@
 import ToolLayout from '../../layouts/ToolLayout.astro';
 ---
 <ToolLayout
-  title="Base64 to Image Converter &amp; Viewer — Decode Base64 Online Free"
-  description="Free online Base64 to image converter. Paste any Base64 string to instantly preview and download the decoded picture. Works as a Base64 image viewer in your browser — no uploads."
+  title="Base64 Image Decoder — Decode Base64 to Image Online Free"
+  description="Free Base64 image decoder &amp; viewer — paste a Base64 string, decode to image, preview PNG/JPG/SVG/GIF, and download instantly. No uploads, 100% client-side."
   canonical="https://base64image.net/base64-image-decoder/"
-  h1="Base64 to Image Decoder"
+  h1="Base64 Image Decoder"
   mono="// atob()"
-  lede="Paste any Base64 string and instantly preview and download the decoded picture. Works as a Base64 image viewer in your browser — no uploads, no server."
+  lede="Paste any Base64 string to decode it to an image instantly. This free Base64 image viewer and decoder runs entirely in your browser — no uploads, no server, nothing leaves your device."
   tag="decode"
   tagLabel="Decoder"
   breadcrumbs={[{label:'Home',href:'/'},{label:'Decoders',href:'#'},{label:'Base64 → Image'}]}
@@ -15,7 +15,8 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
   <Fragment slot="head">
     <script type="application/ld+json">{
       "@context": "https://schema.org", "@type": "HowTo",
-      "name": "How to Decode Base64 to Image",
+      "name": "How to Decode a Base64 Image",
+      "description": "Decode a Base64 string to an image and view or download it, right in your browser.",
       "step": [
         {"@type":"HowToStep","name":"Paste Base64","text":"Paste your Base64 string into the text area."},
         {"@type":"HowToStep","name":"Click Decode","text":"Click the Decode Image button to validate and convert the string."},
@@ -27,6 +28,16 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
       "itemListElement": [
         {"@type":"ListItem","position":1,"name":"Home","item":"https://base64image.net/"},
         {"@type":"ListItem","position":2,"name":"Base64 Image Decoder","item":"https://base64image.net/base64-image-decoder/"}
+      ]
+    }</script>
+    <script type="application/ld+json">{
+      "@context": "https://schema.org", "@type": "FAQPage",
+      "mainEntity": [
+        {"@type":"Question","name":"How do I decode a Base64 image?","acceptedAnswer":{"@type":"Answer","text":"Paste the Base64 string into the text area above and click Decode Image. The tool validates the string, detects the image format, and shows a preview you can download."}},
+        {"@type":"Question","name":"How do I view a Base64 image without downloading it?","acceptedAnswer":{"@type":"Answer","text":"This page doubles as a Base64 image viewer — paste your string and click Decode Image to preview it instantly in the browser. Use Open in New Tab to view it full-size without saving a file."}},
+        {"@type":"Question","name":"Is my data safe?","acceptedAnswer":{"@type":"Answer","text":"Yes. This tool runs entirely in your browser. No data is uploaded to any server."}},
+        {"@type":"Question","name":"Can I decode without the data URI prefix?","acceptedAnswer":{"@type":"Answer","text":"Yes. Paste the full data URI or just the raw Base64 string — the tool handles both."}},
+        {"@type":"Question","name":"Why is my string showing an error?","acceptedAnswer":{"@type":"Answer","text":"Errors occur if the string is malformed or contains invalid characters. Base64 strings should only contain A-Z, a-z, 0-9, +, /, and = (padding)."}}
       ]
     }</script>
   </Fragment>
@@ -60,10 +71,16 @@ import ToolLayout from '../../layouts/ToolLayout.astro';
 
   <article class="content-section">
     <h2>What is a Base64 Image Decoder?</h2>
-    <p>A Base64 image decoder converts Base64-encoded strings back into their original image format. Base64 encoding is widely used to embed images directly into HTML, CSS, or JSON files. You can <a href="/base64-validator/">validate any Base64 string</a> before decoding.</p>
+    <p>A Base64 image decoder converts Base64-encoded strings back into their original image format. Base64 encoding is widely used to embed images directly into HTML, CSS, or JSON files. You can <a href="/base64-validator/">validate any Base64 string</a> before decoding, or head the other way with the <a href="/base64-image-encoder/">Base64 image encoder</a>.</p>
+    <h2>How to Decode a Base64 Image</h2>
+    <p>Paste your Base64 string above and click <strong>Decode Image</strong> — that's it. To decode Base64 to image, the tool strips any <code>data:image/…;base64,</code> prefix, validates the characters, and rebuilds the original bytes with the browser's native <code>atob()</code> function. No signup, no server round-trip, no file size limit imposed by an upload.</p>
+    <h2>Base64 Image Viewer — Preview Without Downloading</h2>
+    <p>Need to just look at what a Base64 string contains? This page works as a standalone Base64 image viewer: decode the string and the image renders immediately in the preview pane, with its format and file size shown below it. Use <strong>Open in New Tab</strong> to view it full-size, or <strong>Download Image</strong> only if you need to keep a copy.</p>
     <h2>What Image Formats Are Supported?</h2>
-    <p>PNG, JPEG, GIF, WebP, SVG, and BMP. The format is automatically detected from the data URI prefix (e.g., <code>data:image/png;base64,</code>) or from binary file signatures.</p>
+    <p>PNG, JPEG, GIF, WebP, SVG, and BMP. The format is automatically detected from the data URI prefix (e.g., <code>data:image/png;base64,</code>) or from binary file signatures. Need a specific output format instead? Try <a href="/base64-to-png/">Base64 to PNG</a>, <a href="/base64-to-jpeg/">Base64 to JPEG</a>, or <a href="/base64-to-svg/">Base64 to SVG</a>.</p>
     <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><h3>How do I decode a Base64 image?</h3><p>Paste the Base64 string into the text area above and click Decode Image. The tool validates the string, detects the image format, and shows a preview you can download.</p></div>
+    <div class="faq-item"><h3>How do I view a Base64 image without downloading it?</h3><p>This page doubles as a Base64 image viewer — paste your string and click Decode Image to preview it instantly in the browser. Use Open in New Tab to view it full-size without saving a file.</p></div>
     <div class="faq-item"><h3>Is my data safe?</h3><p>Yes. This tool runs entirely in your browser. No data is uploaded to any server.</p></div>
     <div class="faq-item"><h3>Can I decode without the data URI prefix?</h3><p>Yes. Paste the full data URI or just the raw Base64 string — the tool handles both.</p></div>
     <div class="faq-item"><h3>Why is my string showing an error?</h3><p>Errors occur if the string is malformed or contains invalid characters. Base64 strings should only contain A-Z, a-z, 0-9, +, /, and = (padding).</p></div>
