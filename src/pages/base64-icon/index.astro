@@ -1,0 +1,205 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64IconTool()">
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="iconFile">Upload an icon or favicon image (PNG, ICO, or SVG, ideally 16–512px):</label>
+                <input type="file" id="iconFile" @change="handleFile($event)" accept="image/png,image/x-icon,image/svg+xml,.ico,.png,.svg" class="file-input">
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="preview-container" x-show="dataUri">
+                <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+                    <img :src="dataUri" alt="Icon preview" style="width:48px;height:48px;object-fit:contain;background:#fff;border-radius:6px;padding:4px;">
+                    <div class="image-info" style="margin:0;">
+                        <p style="margin:0"><strong>File:</strong> <span x-text="fileName"></span> (<span x-text="fileSize"></span>)</p>
+                    </div>
+                </div>
+
+                <h2><i class="fas fa-code"></i> HTML &mdash; Favicon Link Tags</h2>
+                <textarea readonly rows="4" :value="faviconSnippet"></textarea>
+                <button @click="copy(faviconSnippet, 'favicon')" class="btn-primary" style="margin-top:8px">
+                    <i class="fas fa-copy"></i> <span x-text="copiedKey === 'favicon' ? 'Copied!' : 'Copy HTML'"></span>
+                </button>
+
+                <h2 style="margin-top:24px"><i class="fab fa-css3-alt"></i> CSS &mdash; Icon Background</h2>
+                <textarea readonly rows="5" :value="cssSnippet"></textarea>
+                <button @click="copy(cssSnippet, 'css')" class="btn-primary" style="margin-top:8px">
+                    <i class="fas fa-copy"></i> <span x-text="copiedKey === 'css' ? 'Copied!' : 'Copy CSS'"></span>
+                </button>
+
+                <h2 style="margin-top:24px"><i class="fas fa-code"></i> Raw Base64</h2>
+                <textarea readonly rows="6" :value="base64Output"></textarea>
+                <button @click="copy(base64Output, 'raw')" class="btn-secondary" style="margin-top:8px">
+                    <i class="fas fa-copy"></i> <span x-text="copiedKey === 'raw' ? 'Copied!' : 'Copy Base64'"></span>
+                </button>
+            </div>
+
+            <div class="actions" x-show="dataUri">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> Why Base64-Encode a Favicon or Icon?</h2>
+            <p>
+                Embedding an icon as a Base64 data URI eliminates a separate HTTP request — the browser decodes the icon inline from the HTML or CSS itself. For a tiny favicon (typically 1–5&nbsp;KB), this can shave a request off the page's critical path, which matters more on high-latency mobile connections than the raw byte count suggests.
+            </p>
+
+            <h2><i class="fas fa-icons"></i> How Do You Embed a Base64 Favicon?</h2>
+            <p>
+                Upload your icon above to get ready-to-paste <code>&lt;link&gt;</code> tags for the <code>&lt;head&gt;</code> of your HTML, covering both the standard favicon and the Apple touch icon used on iOS home screens. Browsers support data URIs in <code>rel="icon"</code> the same way they support them in <code>&lt;img&gt;</code> tags.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> When Should You Avoid Inlining a Favicon?</h2>
+            <p>
+                A linked <code>favicon.ico</code> file gets cached once and reused across every page on your domain. An inlined Base64 favicon is duplicated inside every HTML page's source and can't be cached separately — so for a multi-page site, a normal linked file is usually still the better choice. Base64 favicons make the most sense for single-page apps, email signatures, or contexts where you can't reference an external file at all.
+            </p>
+
+            <h2><i class="fas fa-table"></i> Recommended Icon Sizes</h2>
+            <table class="reference-table">
+                <thead><tr><th>Use case</th><th>Size</th><th>rel attribute</th></tr></thead>
+                <tbody>
+                    <tr><td>Standard favicon</td><td>16×16 / 32×32</td><td><code>icon</code></td></tr>
+                    <tr><td>Apple touch icon (iOS home screen)</td><td>180×180</td><td><code>apple-touch-icon</code></td></tr>
+                    <tr><td>Android/Chrome (manifest-based)</td><td>192×192 / 512×512</td><td>referenced in <code>manifest.json</code>, not inlined</td></tr>
+                </tbody>
+            </table>
+            <p>
+                For general image-to-code embedding beyond favicons, see the <a href="/base64-embed-generator/">embed code generator</a>. For uncommon icon formats like <code>.ico</code> specifically, see <a href="/base64-to-ico/">Base64 to ICO</a>.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>Can I use a Base64 data URI as a favicon?</h3>
+                <p>Yes. Modern browsers accept <code>&lt;link rel="icon" href="data:image/png;base64,..."&gt;</code> the same way they accept a linked file.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does inlining a favicon speed up my site?</h3>
+                <p>It removes one HTTP request on first load, but since a linked favicon.ico is cached across every page after the first visit, inlining can end up costing more bytes overall on multi-page sites. It's most useful for single-page apps or standalone HTML documents.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What image format should I use for a Base64 favicon?</h3>
+                <p>PNG for a crisp, small raster icon, or SVG if your icon is a simple vector shape — SVG favicons scale to any size and often produce a smaller Base64 string than PNG.</p>
+            </div>
+        </article>
+    </main>`;
+---
+<ToolLayout
+  title="Base64 Icon &amp; Favicon Generator — Embed Icons in HTML/CSS Online"
+  description="Convert an icon or favicon image to a ready-to-paste Base64 data URI. Get HTML link tags, CSS background code, and the raw Base64 string. Runs in your browser."
+  canonical="https://base64image.net/base64-icon/"
+  h1="Base64 Icon &amp; Favicon Generator"
+  mono="// data:image"
+  lede="Upload an icon or favicon and get ready-to-paste HTML link tags, CSS, and the raw Base64 string — no external file needed."
+  tag="tools"
+  tagLabel="Utility"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Icon Generator'}]}
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Can I use a Base64 data URI as a favicon?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Modern browsers accept a link rel=icon tag with a Base64 data URI href the same way they accept a linked file." }
+        }, {
+            "@type": "Question",
+            "name": "Does inlining a favicon speed up my site?",
+            "acceptedAnswer": { "@type": "Answer", "text": "It removes one HTTP request on first load, but a linked favicon.ico is cached across every page after the first visit, so inlining can cost more bytes overall on multi-page sites." }
+        }, {
+            "@type": "Question",
+            "name": "What image format should I use for a Base64 favicon?",
+            "acceptedAnswer": { "@type": "Answer", "text": "PNG for a crisp, small raster icon, or SVG if your icon is a simple vector shape — SVG favicons scale to any size and often produce a smaller Base64 string." }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem", "position": 1, "name": "Home", "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem", "position": 2, "name": "Base64 Icon Generator", "item": "https://base64image.net/base64-icon/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <script is:inline>function base64IconTool() {
+            return {
+                dataUri: '',
+                base64Output: '',
+                fileName: '',
+                fileSize: '',
+                mimeType: '',
+                error: '',
+                copiedKey: '',
+
+                get faviconSnippet() {
+                    if (!this.dataUri) return '';
+                    return '<link rel="icon" type="' + this.mimeType + '" href="' + this.dataUri + '">\n<link rel="apple-touch-icon" href="' + this.dataUri + '">';
+                },
+
+                get cssSnippet() {
+                    if (!this.dataUri) return '';
+                    return '.icon {\n  background-image: url("' + this.dataUri + '");\n  background-size: contain;\n  width: 32px;\n  height: 32px;\n}';
+                },
+
+                handleFile(event) {
+                    this.error = '';
+                    this.dataUri = '';
+                    this.base64Output = '';
+
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.dataUri = e.target.result;
+                        this.base64Output = e.target.result.split(',')[1] || '';
+                        this.fileName = file.name;
+                        this.fileSize = this.formatBytes(file.size);
+                        this.mimeType = file.type || 'image/png';
+                    };
+                    reader.onerror = () => { this.error = 'Failed to read file.'; };
+                    reader.readAsDataURL(file);
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                copy(text, key) {
+                    if (!text) return;
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.copiedKey = key;
+                        setTimeout(() => { this.copiedKey = ''; }, 2000);
+                    });
+                },
+
+                clearAll() {
+                    this.dataUri = '';
+                    this.base64Output = '';
+                    this.fileName = '';
+                    this.fileSize = '';
+                    this.error = '';
+                    this.copiedKey = '';
+                    const fileInput = document.getElementById('iconFile');
+                    if (fileInput) fileInput.value = '';
+                }
+            }
+        }</script>
+</ToolLayout>

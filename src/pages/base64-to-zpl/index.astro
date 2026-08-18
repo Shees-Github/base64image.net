@@ -1,0 +1,199 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64ZplTool()">
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="zplFile">Upload an image to embed in a ZPL label (PNG or monochrome BMP recommended):</label>
+                <input type="file" id="zplFile" @change="handleFile($event)" accept="image/png,image/bmp,.png,.bmp" class="file-input">
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="input-group" x-show="base64Output" style="margin-top:12px">
+                <label for="zplObjectName">Object name on the printer (max 8 chars, no extension needed)</label>
+                <input type="text" id="zplObjectName" x-model="objectName" placeholder="LOGO" maxlength="8" class="format-select" @input="objectName = objectName.toUpperCase().replace(/[^A-Z0-9]/g, '')">
+            </div>
+
+            <div class="preview-container" x-show="base64Output">
+                <h2><i class="fas fa-code"></i> Raw Base64 (image data)</h2>
+                <textarea :value="base64Output" readonly rows="6"></textarea>
+                <button @click="copy(base64Output, 'raw')" class="btn-secondary" style="margin-top:8px">
+                    <i class="fas fa-copy"></i> <span x-text="copiedKey === 'raw' ? 'Copied!' : 'Copy Base64'"></span>
+                </button>
+
+                <h2 style="margin-top:24px"><i class="fas fa-print"></i> ZPL ~DY Download Command Template</h2>
+                <textarea :value="zplSnippet" readonly rows="6"></textarea>
+                <button @click="copy(zplSnippet, 'zpl')" class="btn-primary" style="margin-top:8px">
+                    <i class="fas fa-copy"></i> <span x-text="copiedKey === 'zpl' ? 'Copied!' : 'Copy ZPL Template'"></span>
+                </button>
+                <div style="margin-top:12px;background:color-mix(in oklab,var(--amber,#ffb454) 10%,var(--bg-card));border:1px solid color-mix(in oklab,var(--amber,#ffb454) 30%,transparent);border-radius:var(--radius);padding:12px 16px;font-size:13px;color:var(--fg-mute,#9aa3b3);">
+                    <strong style="color:var(--fg,#e6ebf2)">⚠ CRC placeholder, not calculated.</strong> Zebra printers validate a CRC-16 checksum after the final colon and reject the download on a mismatch. This tool generates the correct <code>:B64:</code>-encoded image data — paste it into <a href="https://labelary.com/viewer.html" target="_blank" rel="noopener">Labelary</a>, ZebraDesigner, or your label software's send/preview step, which will calculate and insert the real CRC before it reaches the printer.
+                </div>
+            </div>
+
+            <div class="actions" x-show="base64Output">
+                <button @click="clearAll" class="btn-secondary">Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> How Does Base64 Fit Into ZPL Labels?</h2>
+            <p>
+                ZPL (Zebra Programming Language) is the command language most Zebra thermal label printers use. To embed a graphic — a logo, barcode image, or icon — in a label, ZPL's <code>~DY</code> download command needs the image data encoded as text. Per Zebra's own ZPL II Programming Guide, that data can use plain ASCII hex, or the more compact <code>:B64:</code> format, which is standard Base64 — "a drop-in replacement for the existing ASCII hexadecimal encoding," per Zebra's documentation.
+            </p>
+
+            <h2><i class="fas fa-cog"></i> What Does a Base64 ZPL Image Block Look Like?</h2>
+            <p>
+                The general structure Zebra defines is: the encoding identifier, the encoded data, then a colon followed by a 4-digit hexadecimal CRC that the printer checks before accepting the download.
+            </p>
+            <div class="code-example">
+                <div class="code-example-head"><span>ZPL &mdash; ~DY command structure</span></div>
+                <pre><code>~DYR:OBJECT.GRF,B,B,total_bytes,,:B64:&lt;base64-encoded-image-data&gt;:CRC</code></pre>
+            </div>
+            <p>
+                Upload an image above to generate the <code>:B64:</code>-encoded portion and a filled-in template. The CRC field is left as a placeholder — see the note above for why it can't be safely guessed.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> Why Not Calculate the CRC Automatically?</h2>
+            <p>
+                The printer validates the CRC-16 checksum on the data it receives and aborts the download entirely on a mismatch. Publishing a checksum without being certain it matches the exact variant your printer firmware expects would produce a template that looks complete but silently fails — worse than leaving it as an explicit placeholder. Label design tools like Labelary's ZPL viewer and ZebraDesigner calculate this correctly as part of their send/print pipeline.
+            </p>
+
+            <h2><i class="fas fa-image"></i> What Image Types Work Best for ZPL Labels?</h2>
+            <p>
+                Thermal label printers render 1-bit monochrome graphics natively. A small PNG or bitmap logo converts cleanly; photographic or full-color images will be flattened to black-and-white by the printer or by your label design software before printing, so simple high-contrast logos and barcodes produce the best results.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This Converter Private?</h2>
+            <p>
+                Yes. The image is read and Base64-encoded entirely in your browser using the FileReader API — nothing is uploaded anywhere.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>Can ZPL use Base64-encoded images?</h3>
+                <p>Yes. Zebra's <code>~DY</code> download command accepts image data in <code>:B64:</code> (Base64) or <code>:Z64:</code> (LZ77-compressed then Base64) format as an alternative to ASCII hex encoding.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why does my generated ZPL fail with a CRC error?</h3>
+                <p>This tool leaves the CRC as a placeholder since it can't be safely calculated without matching your printer's exact expected checksum. Run the template through a ZPL preview/send tool such as Labelary or ZebraDesigner, which fills in the correct CRC automatically.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is this the same as regular Base64 encoding?</h3>
+                <p>Yes — the <code>:B64:</code> data itself is standard Base64 (RFC 4648), identical to what any <a href="/base64-image-encoder/">Base64 image encoder</a> produces. ZPL just wraps it in a printer-specific command with a length and checksum.</p>
+            </div>
+        </article>
+    </main>`;
+---
+<ToolLayout
+  title="Base64 to ZPL — Embed Images in Zebra Printer Labels (~DY :B64:)"
+  description="Convert an image to Base64 for ZPL label printers. Generates the :B64: encoded data and a ~DY download command template for Zebra thermal printers."
+  canonical="https://base64image.net/base64-to-zpl/"
+  h1="Base64 to ZPL"
+  mono="// ~DY :B64:"
+  lede="Convert an image to the Base64 (:B64:) format Zebra ZPL label printers use, with a ready ~DY download command template."
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → ZPL'}]}
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Can ZPL use Base64-encoded images?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Zebra's ~DY download command accepts image data in :B64: (Base64) or :Z64: (LZ77-compressed then Base64) format as an alternative to ASCII hex encoding." }
+        }, {
+            "@type": "Question",
+            "name": "Why does my generated ZPL fail with a CRC error?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The CRC is left as a placeholder since it can't be safely calculated without matching the printer's exact expected checksum. Run the template through a ZPL preview/send tool such as Labelary or ZebraDesigner to fill in the correct CRC." }
+        }, {
+            "@type": "Question",
+            "name": "Is this the same as regular Base64 encoding?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — the :B64: data itself is standard Base64 (RFC 4648). ZPL wraps it in a printer-specific command with a length and checksum." }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem", "position": 1, "name": "Home", "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem", "position": 2, "name": "Base64 to ZPL", "item": "https://base64image.net/base64-to-zpl/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <style is:inline>
+    .code-example { margin: 20px 0; border: 1px solid var(--border, #2a2f3a); border-radius: var(--radius, 8px); overflow: hidden; }
+    .code-example-head { padding: 8px 14px; background: var(--bg-card, #161a22); font-size: 0.85rem; color: var(--fg-mute, #9aa3b3); }
+    .code-example pre { margin: 0; padding: 14px; overflow-x: auto; }
+    .format-select {
+      width: 100%; background: #06080c; border: 1px solid var(--line);
+      border-radius: var(--radius-sm); padding: 12px 14px; color: var(--fg);
+      font-family: var(--font-mono); font-size: 13px; outline: none;
+    }
+    #zplObjectName { min-height: auto; height: 44px; }
+  </style>
+  <script is:inline>function base64ZplTool() {
+            return {
+                base64Output: '',
+                fileSize: 0,
+                objectName: 'LOGO',
+                error: '',
+                copiedKey: '',
+
+                get zplSnippet() {
+                    if (!this.base64Output) return '';
+                    return '~DYR:' + (this.objectName || 'LOGO') + '.GRF,B,B,' + this.fileSize + ',,:B64:' + this.base64Output + ':CRC';
+                },
+
+                handleFile(event) {
+                    this.error = '';
+                    this.base64Output = '';
+
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            this.base64Output = e.target.result.split(',')[1] || '';
+                            this.fileSize = file.size;
+                        } catch (err) {
+                            this.error = 'Failed to encode file. Please try again.';
+                        }
+                    };
+                    reader.onerror = () => { this.error = 'Failed to read file.'; };
+                    reader.readAsDataURL(file);
+                },
+
+                copy(text, key) {
+                    if (!text) return;
+                    navigator.clipboard.writeText(text).then(() => {
+                        this.copiedKey = key;
+                        setTimeout(() => { this.copiedKey = ''; }, 2000);
+                    });
+                },
+
+                clearAll() {
+                    this.base64Output = '';
+                    this.fileSize = 0;
+                    this.objectName = 'LOGO';
+                    this.error = '';
+                    this.copiedKey = '';
+                    const fileInput = document.getElementById('zplFile');
+                    if (fileInput) fileInput.value = '';
+                }
+            }
+        }</script>
+</ToolLayout>

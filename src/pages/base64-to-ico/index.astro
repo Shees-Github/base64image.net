@@ -271,7 +271,7 @@ const bodyHtml = `<main x-data="base64RareFormats()">
                     let base64String = this.base64Input.trim();
                     const dataUriMatch = base64String.match(/^data:[^;]+;base64,(.+)$/);
                     if (dataUriMatch) base64String = dataUriMatch[1];
-                    return base64String.replace(/\\s/g, '');
+                    return base64String.replace(/\s/g, '');
                 },
 
                 tryPreview() {

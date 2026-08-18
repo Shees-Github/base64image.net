@@ -295,7 +295,7 @@ const bodyHtml = `<main x-data="base64ToExcel()">
                         let base64String = this.base64Input.trim();
                         const dataUriMatch = base64String.match(/^data:[^;]+;base64,(.+)$/);
                         if (dataUriMatch) base64String = dataUriMatch[1];
-                        base64String = base64String.replace(/\\s/g, '');
+                        base64String = base64String.replace(/\s/g, '');
 
                         if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
                             throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');

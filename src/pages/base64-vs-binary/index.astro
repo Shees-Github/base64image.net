@@ -12,7 +12,7 @@ const bodyHtml = `<main>
                 Binary data consists of sequences of bytes (values 0-255) that represent file content in its most compact form. A 10 KB PNG file stored as binary occupies exactly 10,240 bytes. The same file encoded as Base64 occupies 13,656 bytes because every 3 bytes of binary input produce 4 bytes of Base64 output. This ratio is fixed: the overhead is always 33.33% plus up to 2 bytes of <code>=</code> padding.
             </p>
             <p>
-                The reason Base64 exists is that many transport protocols and document formats only support text characters. Email (SMTP), HTML attributes, CSS <code>url()</code> values, and JSON strings cannot contain raw binary bytes. Base64 solves this by encoding binary data into a safe subset of ASCII characters that passes through any text channel without corruption. For a detailed explanation of the encoding algorithm, see <a href="/what-is-base64/">What is Base64</a>.
+                The reason Base64 exists is that many transport protocols and document formats only support text characters. Email (SMTP), HTML attributes, CSS <code>url()</code> values, and JSON strings cannot contain raw binary bytes. Base64 solves this by encoding binary data into a safe subset of ASCII characters that passes through any text channel without corruption. For a detailed explanation of the encoding algorithm, see <a href="/what-is-base64/">What is Base64</a>. To see the actual 1s-and-0s bit pattern behind a Base64 string, use the <a href="/base64-to-binary/">Base64 to binary converter</a>.
             </p>
 
             <h2><i class="fas fa-tachometer-alt"></i> How Do Base64 and Binary Compare for Web Performance?</h2>

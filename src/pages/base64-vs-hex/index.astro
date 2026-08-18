@@ -1,0 +1,143 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <div class="input-group">
+                <label for="vhInput">Type or paste text to see both encodings side by side</label>
+                <textarea id="vhInput" placeholder="Type something..." rows="3" oninput="vhRun()"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="input-group">
+                    <label>Base64 (<span id="vhB64Len">0</span> chars)</label>
+                    <textarea id="vhB64Output" rows="5" readonly></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Hex (<span id="vhHexLen">0</span> chars)</label>
+                    <textarea id="vhHexOutput" rows="5" readonly></textarea>
+                </div>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> Base64 vs Hex: What's the Difference?</h2>
+            <p>
+                Both Base64 and hexadecimal (hex) encoding turn binary data into printable text, but they trade off differently between compactness and simplicity. Hex represents each byte as exactly 2 characters from a 16-character alphabet (<code>0-9a-f</code>) — simple to read and debug, but it doubles the size of the original data. Base64 represents every 3 bytes as 4 characters from a 64-character alphabet, for a smaller 33% size increase. Try the converter above to see the difference on your own text.
+            </p>
+
+            <h2><i class="fas fa-balance-scale"></i> Base64 vs Hex: Key Differences</h2>
+            <table class="reference-table">
+                <thead><tr><th>Property</th><th>Base64</th><th>Hex</th></tr></thead>
+                <tbody>
+                    <tr><td>Alphabet size</td><td>64 characters</td><td>16 characters</td></tr>
+                    <tr><td>Bits per character</td><td>6</td><td>4</td></tr>
+                    <tr><td>Size overhead</td><td>~33%</td><td>100% (doubles)</td></tr>
+                    <tr><td>Human readability</td><td>Low (looks like noise)</td><td>Higher (maps directly to bytes)</td></tr>
+                    <tr><td>Case-sensitive</td><td>Yes</td><td>No (usually)</td></tr>
+                    <tr><td>Common use</td><td>Files, images, API payloads, data URIs</td><td>Checksums, color codes, memory dumps, crypto keys</td></tr>
+                    <tr><td>URL-safe by default</td><td>No (needs <a href="/base64-url-safe/">URL-safe variant</a>)</td><td>Yes</td></tr>
+                </tbody>
+            </table>
+
+            <h2><i class="fas fa-cogs"></i> Why Does Hex Take Twice the Space?</h2>
+            <p>
+                A byte holds 8 bits (256 possible values). Hex uses 2 characters per byte, and each hex character encodes 4 bits — so 2 characters × 4 bits = 8 bits, a clean one-to-one mapping with no waste in alphabet size, but no compression either: the text representation is always exactly double the binary size. Base64 packs more information per character (6 bits instead of 4), so 4 Base64 characters cover 3 full bytes (24 bits) — a smaller 33% overhead instead of 100%.
+            </p>
+
+            <h2><i class="fas fa-tasks"></i> When Should You Use Hex Instead of Base64?</h2>
+            <p>
+                Reach for hex when a human needs to read, compare, or manually type the value — MD5/SHA checksums, CSS color codes (<code>#FF5733</code>), MAC addresses, and memory addresses are all conventionally hex because each byte maps to a fixed 2-character chunk that's easy to eyeball and diff. Reach for Base64 when you're transmitting or storing larger binary data (files, images, API payloads) where the smaller size matters more than character-by-character readability. For direct hex conversion of a Base64 string, use the <a href="/base64-hex-converter/">Base64 to HEX converter</a>.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>Is Base64 or hex more secure?</h3>
+                <p>Neither — both are reversible text encodings, not encryption. Anyone can decode either format instantly with no key.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why is a SHA-256 hash usually shown in hex, not Base64?</h3>
+                <p>Convention and readability: a 64-character hex hash lets you visually compare or diff two hashes character-by-character. The same hash in Base64 would be shorter (about 44 characters) but is used less often outside of contexts like Git's internal object format or Subresource Integrity (SRI) hashes, which do use Base64.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I convert directly between Base64 and hex?</h3>
+                <p>Yes — use the <a href="/base64-hex-converter/">Base64 to HEX converter</a> for direct bidirectional conversion, or the tool above to compare both encodings of the same input side by side.</p>
+            </div>
+        </article>
+    </main>`;
+---
+<ToolLayout
+  title="Base64 vs Hex — Differences, Size Overhead &amp; When to Use Each"
+  description="Base64 vs hex encoding explained: alphabet size, size overhead (33% vs 100%), readability, and when to use each. Includes a live side-by-side converter."
+  canonical="https://base64image.net/base64-vs-hex/"
+  h1="Base64 vs Hex"
+  mono="// 6-bit vs 4-bit"
+  lede="How Base64 and hex encoding differ in size overhead and readability, with a live side-by-side converter."
+  tag="learn"
+  tagLabel="Comparison"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base64 vs Hex'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Is Base64 or hex more secure?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Neither — both are reversible text encodings, not encryption. Anyone can decode either format instantly with no key." }
+        }, {
+            "@type": "Question",
+            "name": "Why is a SHA-256 hash usually shown in hex, not Base64?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Convention and readability: a hex hash lets you visually compare two hashes character-by-character. The same hash in Base64 is shorter but used less often outside contexts like Subresource Integrity (SRI) hashes." }
+        }, {
+            "@type": "Question",
+            "name": "Can I convert directly between Base64 and hex?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes — use the Base64 to HEX converter for direct bidirectional conversion." }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem", "position": 1, "name": "Home", "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem", "position": 2, "name": "Base64 vs Hex", "item": "https://base64image.net/base64-vs-hex/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <script is:inline>
+    function vhRun() {
+      var input = document.getElementById('vhInput').value;
+      var b64Out = document.getElementById('vhB64Output');
+      var hexOut = document.getElementById('vhHexOutput');
+
+      if (!input) {
+        b64Out.value = ''; hexOut.value = '';
+        document.getElementById('vhB64Len').textContent = '0';
+        document.getElementById('vhHexLen').textContent = '0';
+        return;
+      }
+
+      var bytes = new TextEncoder().encode(input);
+      var binary = '';
+      var hex = '';
+      for (var i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+        hex += bytes[i].toString(16).padStart(2, '0');
+      }
+
+      var b64 = btoa(binary);
+      b64Out.value = b64;
+      hexOut.value = hex;
+      document.getElementById('vhB64Len').textContent = b64.length;
+      document.getElementById('vhHexLen').textContent = hex.length;
+    }
+  </script>
+</ToolLayout>
