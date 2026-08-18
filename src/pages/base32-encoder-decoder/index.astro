@@ -1,9 +1,6 @@
 ﻿---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 const bodyHtml = `<main>
-        <h1><i class="fas fa-exchange-alt"></i> Base32 Encoder & Decoder</h1>
-        <p class="intro">Encode text to Base32 and decode Base32 strings back to text</p>
-
         <div class="trust-note">
             <strong>Privacy First:</strong> All encoding and decoding happens locally in your browser. Your data never leaves your device.
         </div>
@@ -189,15 +186,15 @@ const bodyHtml = `<main>
     </main>`;
 ---
 <ToolLayout
-  title="Base32 Encoder & Decoder - Encode and Decode Base32 Online"
-  description="Free online Base32 encoder and decoder. Convert text to Base32 and Base32 to text. Learn how Base32 differs from Base64 and when to use each encoding."
+  title="Base32 Decoder & Encoder - Encode and Decode Base32 Online Free"
+  description="Free online Base32 decoder and encoder. Convert Base32 to text and text to Base32. Learn how Base32 differs from Base64 and when to use each encoding."
   canonical="https://base64image.net/base32-encoder-decoder/"
-  h1="Base32 Encoder & Decoder"
+  h1="Base32 Decoder & Encoder"
   mono="// base32()"
-  lede="Encode text to Base32 and decode Base32 strings back to text"
+  lede="Decode Base32 strings back to text, or encode text to Base32"
   tag="tools"
   tagLabel="Utility"
-  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Base32 Encoder'}]}
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'#'},{label:'Base32 Decoder'}]}
 >
   <Fragment slot="head">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -213,7 +210,7 @@ const bodyHtml = `<main>
         }, {
             "@type": "ListItem",
             "position": 2,
-            "name": "Base32 Encoder & Decoder",
+            "name": "Base32 Decoder & Encoder",
             "item": "https://base64image.net/base32-encoder-decoder/"
         }]
     }
