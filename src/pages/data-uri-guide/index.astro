@@ -1,12 +1,7 @@
 ﻿---
 import ArticleLayout from '../../layouts/ArticleLayout.astro';
 const bodyHtml = `<main>
-        <h1><i class="fas fa-link"></i> Data URI Guide</h1>
         <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: February 2026</p>
-
-        <p class="intro">
-            How to embed Base64-encoded data directly in HTML, CSS, and JavaScript using data URIs
-        </p>
 
         <article class="content-section">
             <h2><i class="fas fa-question-circle"></i> What Is a Data URI?</h2>
@@ -209,15 +204,22 @@ const bodyHtml = `<main>
                     The fastest method is to use the <a href="/base64-image-encoder/">Base64 Image Encoder</a> on this site: upload an image, and the tool outputs the complete data URI with the correct MIME type prefix. Programmatically, the JavaScript <code>FileReader</code> API provides a <code>readAsDataURL()</code> method that reads a file and returns a complete data URI. On the command line, encode the file with <code>base64</code> (Linux/macOS) or <code>certutil -encode</code> (Windows), then prepend <code>data:[MIME type];base64,</code> to the output. The <a href="/base64-embed-generator/">Embed Code Generator</a> produces ready-to-paste HTML and CSS snippets from any image.
                 </p>
             </div>
+
+            <div class="faq-item">
+                <h3>How do I convert an SVG to a data URI?</h3>
+                <p>
+                    SVG is text-based XML, so it can go in a data URI either Base64-encoded or percent-encoded (percent-encoding usually produces a shorter string for SVG). Use the <a href="/svg-to-base64/">SVG to Base64 converter</a> on this site to get the <code>data:image/svg+xml;base64,...</code> form, or the <a href="/base64-embed-generator/">Embed Code Generator</a> for a ready-to-paste <code>background-image</code> or <code>&lt;img&gt;</code> snippet. Either form works in <code>src</code>, <code>href</code>, or CSS <code>url()</code>.
+                </p>
+            </div>
         </article>
     </main>`;
 ---
 <ArticleLayout
-  title="Data URI Guide - How to Use Data URIs with Base64 in HTML and CSS"
-  description="Complete guide to data URIs. Learn the data URI syntax, browser support limits, Base64 encoding for images, and when to use inline data vs external files."
+  title="Data URI Guide — Data URI Scheme, Syntax &amp; Examples"
+  description="Complete data URI guide: the data URI scheme, syntax, browser size limits, and how to convert an image or SVG to a data URI for HTML and CSS."
   canonical="https://base64image.net/data-uri-guide/"
   h1="Data URI Guide"
-  lede="How to embed Base64-encoded data directly in HTML, CSS, and JavaScript using data URIs"
+  lede="The data URI scheme lets you embed Base64-encoded files directly in HTML, CSS, and JavaScript — no separate request, no external file. Here's the syntax, browser limits, and how to build one from an image or SVG."
   tag="learn"
   tagLabel="Reference"
   breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Data URI Guide'}]}
@@ -227,10 +229,10 @@ const bodyHtml = `<main>
     {
         "@context": "https://schema.org",
         "@type": "Article",
-        "headline": "Data URI Guide - How to Use Data URIs with Base64 in HTML and CSS",
+        "headline": "Data URI Guide — Data URI Scheme, Syntax & Examples",
         "datePublished": "2026-02-13",
         "dateModified": "2026-02-25",
-        "description": "Complete guide to data URIs. Learn the data URI syntax, browser support limits, Base64 encoding for images, and when to use inline data vs external files.",
+        "description": "Complete data URI guide: the data URI scheme, syntax, browser size limits, and how to convert an image or SVG to a data URI for HTML and CSS.",
         "author": {
             "@type": "Organization",
             "name": "BASE64IMAGE",
@@ -302,6 +304,13 @@ const bodyHtml = `<main>
             "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Use a Base64 image encoder tool to convert the image file to a Base64 string, then prepend the data URI prefix data:[MIME type];base64, followed by the encoded string. Programmatically, the JavaScript FileReader API reads a file and outputs a complete data URI via the readAsDataURL() method. Command-line tools like base64 on Linux can encode files, after which you manually add the data URI prefix."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I convert an SVG to a data URI?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "SVG is text-based XML, so it can go in a data URI either Base64-encoded or percent-encoded — percent-encoding usually produces a shorter string for SVG. Use an SVG to Base64 converter to get the data:image/svg+xml;base64,... form, or an embed code generator for a ready-to-paste background-image or img snippet. Either form works in src, href, or CSS url()."
             }
         }]
     }
