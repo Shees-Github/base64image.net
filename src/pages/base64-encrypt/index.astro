@@ -1,0 +1,111 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<div class="tool-section">
+    <div style="background:color-mix(in oklab,var(--amber,#ffb454) 10%,var(--bg-card));border:1px solid color-mix(in oklab,var(--amber,#ffb454) 30%,transparent);border-radius:var(--radius);padding:14px 18px;margin-bottom:20px;font-size:14px;color:var(--fg-mute,#9aa3b3);">
+      <strong style="color:var(--fg,#e6ebf2)">⚠ Base64 is not encryption.</strong> It provides zero security — anyone can decode it instantly with no password or key. If you need real confidentiality, use an actual cipher (AES, RSA, etc.), then Base64-encode the resulting ciphertext for safe transport.
+    </div>
+    <div class="input-group">
+      <label for="encryptInput">Text to encode</label>
+      <textarea id="encryptInput" placeholder="Type or paste text here..." rows="5" oninput="b64EncryptRun()"></textarea>
+    </div>
+    <div class="input-group" style="margin-top:12px">
+      <label>Base64 output</label>
+      <textarea id="encryptOutput" placeholder="Base64-encoded text appears here..." rows="5" readonly style="opacity:0.8"></textarea>
+    </div>
+    <div class="error" id="encryptError" style="display:none;margin-top:8px"></div>
+    <div class="actions">
+      <button id="encryptCopy" class="btn-secondary" onclick="b64EncryptCopy()">Copy Output</button>
+      <button id="encryptClear" class="btn-secondary" onclick="b64EncryptClear()">Clear</button>
+    </div>
+  </div>
+
+  <article class="content-section">
+    <h2>Does "Base64 Encrypt" Actually Encrypt Anything?</h2>
+    <p>No — despite the common phrase "Base64 encrypt," Base64 is <strong>encoding</strong>, not encryption. It converts text or binary data into a printable ASCII string using 64 characters, and the transformation is fully reversible by anyone, instantly, with no password or key. The tool above performs this encoding using the browser's built-in <code>btoa()</code> function.</p>
+    <p>If a tutorial, API, or coworker tells you to "Base64 encrypt" some data, what they actually mean is <strong>Base64 encode</strong> it. To decode it back, use the <a href="/base64-decrypt/">Base64 decrypt (decoder)</a> page.</p>
+    <h2>Why Do People Call It "Encryption"?</h2>
+    <p>Base64 output looks like gibberish at a glance — a jumble of letters, numbers, and symbols — which makes it feel "encrypted" to someone unfamiliar with the format. In reality, every character maps to a fixed, publicly known value (the RFC 4648 alphabet), so decoding requires no secret at all. See <a href="/what-is-base64/">What is Base64?</a> for the full explanation of how the encoding works.</p>
+    <h2>If Base64 Isn't Encryption, What Should I Use for Real Security?</h2>
+    <p>For actual confidentiality, use a cryptographic cipher such as <strong>AES-256</strong> (symmetric) or <strong>RSA-2048</strong> (asymmetric), which require a secret key to reverse. Base64 is often applied <em>on top of</em> the resulting ciphertext — not instead of it — so the encrypted bytes can travel safely through text-only channels like JSON, URLs, or email:</p>
+    <ol>
+      <li>Encrypt the plaintext with AES (or another cipher) using a secret key → produces binary ciphertext.</li>
+      <li>Base64-encode the ciphertext → produces a safe ASCII string for transport.</li>
+      <li>On the receiving end: Base64-decode first, then decrypt with the same key.</li>
+    </ol>
+    <p>Never skip step 1. Base64 alone protects nothing — anyone can reverse step 2 with this page.</p>
+    <h2>How Do You Base64 Encode in Code?</h2>
+    <p>Every major language has built-in Base64 encoding:</p>
+    <ul>
+      <li><strong>JavaScript:</strong> <code>btoa(str)</code> — or <a href="/base64-javascript/">full JavaScript guide</a></li>
+      <li><strong>Python:</strong> <code>base64.b64encode(str.encode('utf-8')).decode()</code> — or <a href="/base64-python/">full Python guide</a></li>
+      <li><strong>Java:</strong> <code>Base64.getEncoder().encodeToString(bytes)</code> — or <a href="/base64-java/">full Java guide</a></li>
+      <li><strong>Terminal (Linux/Mac):</strong> <code>echo -n 'str' | base64</code></li>
+      <li><strong>PowerShell:</strong> <code>[Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes('str'))</code></li>
+    </ul>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-item"><h3>Is Base64 encryption?</h3><p>No. Base64 is encoding, not encryption. It has no key or password, and anyone can decode it instantly using the tool on this page or any standard Base64 decoder.</p></div>
+    <div class="faq-item"><h3>How do I "Base64 encrypt" text?</h3><p>Type or paste your text into the box above — it's encoded to Base64 immediately using <code>btoa()</code>. Remember: this only encodes the text, it does not protect it. Use real encryption (AES, RSA) if you need confidentiality.</p></div>
+    <div class="faq-item"><h3>Can someone decode my Base64 string?</h3><p>Yes, instantly, by anyone — no key required. Use the <a href="/base64-decrypt/">Base64 decrypt (decoder)</a> page to see it happen. Never use Base64 alone to hide sensitive data like passwords or API keys.</p></div>
+    <div class="faq-item"><h3>Should I combine Base64 with encryption?</h3><p>Yes, that's the correct pattern for transmitting encrypted data through text-only channels: encrypt first with AES/RSA, then Base64-encode the resulting ciphertext for safe transport. Decoding the Base64 only recovers the ciphertext — you still need the encryption key to read the plaintext.</p></div>
+  </article>`;
+---
+<ToolLayout
+  title="Base64 Encrypt — Encode (Not Encrypt) Text to Base64 Online"
+  description="Base64 is encoding, not encryption — there is no key or password. Type or paste text to instantly Base64-encode it. Free, private, browser-only, no uploads."
+  canonical="https://base64image.net/base64-encrypt/"
+  h1="Base64 Encrypt Online (Encoder)"
+  mono="// btoa()"
+  lede="Base64 is encoding, not encryption — it has no password or key. Type or paste any text to instantly Base64-encode it."
+  tag="encode"
+  tagLabel="Encoder"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Encoders',href:'#'},{label:'Base64 Encrypt'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+      {"@type":"Question","name":"Is Base64 encryption?","acceptedAnswer":{"@type":"Answer","text":"No. Base64 is encoding, not encryption. It has no key or password, and anyone can decode it instantly using any standard Base64 decoder."}},
+      {"@type":"Question","name":"How do I \\"Base64 encrypt\\" text?","acceptedAnswer":{"@type":"Answer","text":"Type or paste your text into the encoder — it is encoded to Base64 immediately using btoa(). This only encodes the text; it does not protect it. Use real encryption such as AES or RSA if you need confidentiality."}},
+      {"@type":"Question","name":"Can someone decode my Base64 string?","acceptedAnswer":{"@type":"Answer","text":"Yes, instantly, by anyone, with no key required. Never use Base64 alone to hide sensitive data like passwords or API keys."}},
+      {"@type":"Question","name":"Should I combine Base64 with encryption?","acceptedAnswer":{"@type":"Answer","text":"Yes — encrypt first with AES or RSA, then Base64-encode the resulting ciphertext for safe transport through text-only channels. Decoding the Base64 only recovers the ciphertext; the encryption key is still required to read the plaintext."}}
+    ]}</script>
+    <script type="application/ld+json">{ "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://base64image.net/"},
+      {"@type":"ListItem","position":2,"name":"Base64 Encrypt","item":"https://base64image.net/base64-encrypt/"}
+    ]}</script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <script is:inline>
+    function b64EncryptRun() {
+      var input = document.getElementById('encryptInput').value;
+      var errorEl = document.getElementById('encryptError');
+      var outputEl = document.getElementById('encryptOutput');
+      errorEl.style.display = 'none';
+      errorEl.textContent = '';
+      if (!input) { outputEl.value = ''; return; }
+      try {
+        var bytes = new TextEncoder().encode(input);
+        var binary = '';
+        for (var i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+        outputEl.value = btoa(binary);
+      } catch (e) {
+        errorEl.textContent = 'Failed to encode: ' + e.message;
+        errorEl.style.display = 'block';
+        outputEl.value = '';
+      }
+    }
+    function b64EncryptCopy() {
+      var outputEl = document.getElementById('encryptOutput');
+      if (!outputEl.value) return;
+      navigator.clipboard.writeText(outputEl.value).then(function () {
+        var btn = document.getElementById('encryptCopy');
+        var original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = original; }, 2000);
+      });
+    }
+    function b64EncryptClear() {
+      document.getElementById('encryptInput').value = '';
+      document.getElementById('encryptOutput').value = '';
+      document.getElementById('encryptError').style.display = 'none';
+    }
+  </script>
+</ToolLayout>

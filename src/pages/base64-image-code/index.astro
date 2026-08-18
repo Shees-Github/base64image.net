@@ -1,0 +1,205 @@
+---
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+const bodyHtml = `<main>
+        <p class="last-updated" style="color: #666; font-size: 0.9em; margin: -10px 0 15px 0;"><i class="fas fa-calendar-alt"></i> Last updated: August 2026</p>
+
+        <article class="content-section" style="margin-top: 0; padding-top: 0; border-top: none;">
+
+            <h2><i class="fas fa-question-circle"></i> What Does Base64 Image Code Look Like?</h2>
+            <p>
+                Base64 image code is a text string that represents an image's binary bytes using 64 printable ASCII characters. Wrapped in a <code>data:</code> URI, it can replace a normal image <code>src</code> or <code>url()</code> reference — the browser decodes it inline instead of making a separate HTTP request. Below are ready-to-copy examples for the most common formats and embedding contexts.
+            </p>
+
+            <h2><i class="fas fa-code"></i> Base64 Image Code for HTML</h2>
+            <p>
+                Paste a data URI directly into an <code>&lt;img&gt;</code> tag's <code>src</code> attribute. This example is a real, valid 1×1 pixel transparent PNG — copy it and it will render.
+            </p>
+            <div class="code-example">
+                <div class="code-example-head"><span>HTML &mdash; PNG</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-html-png"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-html-png">&lt;img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=" alt="Base64 PNG example"&gt;</code></pre>
+            </div>
+            <div class="code-example">
+                <div class="code-example-head"><span>HTML &mdash; JPEG</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-html-jpeg"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-html-jpeg">&lt;img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgICAgMCAgIDAwMDBAYEBAQEBAgGBgUGCQgKCgkICQkKDA8MCgsOCwkJDRENDg8QEBEQCgwSExIQEw8QEBD/2wBDAQMDAwQDBAgEBAgQCwkLEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBD/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k=" alt="Base64 JPEG example"&gt;</code></pre>
+            </div>
+            <div class="code-example">
+                <div class="code-example-head"><span>HTML &mdash; GIF</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-html-gif"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-html-gif">&lt;img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBTAA7" alt="Base64 GIF example"&gt;</code></pre>
+            </div>
+            <div class="code-example">
+                <div class="code-example-head"><span>HTML &mdash; SVG</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-html-svg"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-html-svg">&lt;img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PGNpcmNsZSBjeD0iNSIgY3k9IjUiIHI9IjUiIGZpbGw9IiUyMzY2N2VlYSIvPjwvc3ZnPg==" alt="Base64 SVG example"&gt;</code></pre>
+            </div>
+            <p>
+                Need to generate this code for your own image instead of the sample above? Use the <a href="/base64-embed-generator/">Base64 embed code generator</a> — upload an image and it produces the exact <code>&lt;img&gt;</code> tag for you.
+            </p>
+
+            <h2><i class="fab fa-css3-alt"></i> Base64 Image Code for CSS</h2>
+            <p>
+                The same data URI works inside <code>background-image: url(...)</code>. This is common for small icons, patterns, and sprites where an extra HTTP request isn't worth it.
+            </p>
+            <div class="code-example">
+                <div class="code-example-head"><span>CSS &mdash; background-image</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-css-bg"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-css-bg">.icon {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=");
+  background-size: contain;
+  width: 24px;
+  height: 24px;
+}</code></pre>
+            </div>
+            <p>
+                Full guidance and more patterns (fonts, multiple backgrounds, browser support) are on the <a href="/base64-css/">Base64 in CSS</a> page.
+            </p>
+
+            <h2><i class="fas fa-file-code"></i> Base64 Image Code for JSON / APIs</h2>
+            <p>
+                REST APIs commonly return image data as a Base64 string inside a JSON field, either as the raw string or as a full data URI. Both forms below are valid — check your API's documentation for which one it expects.
+            </p>
+            <div class="code-example">
+                <div class="code-example-head"><span>JSON &mdash; raw Base64</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-json-raw"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-json-raw">{
+  "filename": "icon.png",
+  "mimeType": "image/png",
+  "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+}</code></pre>
+            </div>
+            <div class="code-example">
+                <div class="code-example-head"><span>JSON &mdash; data URI</span><button class="btn-secondary copy-snippet-btn" data-target="snippet-json-uri"><i class="fas fa-copy"></i> Copy</button></div>
+                <pre><code id="snippet-json-uri">{
+  "avatar": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+}</code></pre>
+            </div>
+            <p>
+                To decode a Base64 image string back into a viewable picture, use the <a href="/base64-image-decoder/">Base64 image decoder</a>. To turn your own image into a JSON-ready string, use the <a href="/base64-image-encoder/">Base64 image encoder</a>.
+            </p>
+
+            <h2><i class="fas fa-table"></i> Data URI MIME Type Reference</h2>
+            <table class="reference-table">
+                <thead><tr><th>Format</th><th>MIME Type</th><th>Data URI Prefix</th></tr></thead>
+                <tbody>
+                    <tr><td>PNG</td><td><code>image/png</code></td><td><code>data:image/png;base64,</code></td></tr>
+                    <tr><td>JPEG</td><td><code>image/jpeg</code></td><td><code>data:image/jpeg;base64,</code></td></tr>
+                    <tr><td>GIF</td><td><code>image/gif</code></td><td><code>data:image/gif;base64,</code></td></tr>
+                    <tr><td>SVG</td><td><code>image/svg+xml</code></td><td><code>data:image/svg+xml;base64,</code></td></tr>
+                    <tr><td>WebP</td><td><code>image/webp</code></td><td><code>data:image/webp;base64,</code></td></tr>
+                </tbody>
+            </table>
+            <p>
+                See the <a href="/base64-mime-types/">full Base64 MIME type list</a> for every format the browser understands.
+            </p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> When Should You Avoid Base64 Image Code?</h2>
+            <p>
+                Base64 encoding inflates file size by roughly 33%, and inline images can't be cached separately from the page or CSS file that contains them. Use it for small, frequently-reused icons and inline SVGs — not for photos or large hero images, which should stay as normal linked files. See <a href="/base64-vs-binary/">Base64 vs binary</a> for the full size/performance tradeoff.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>What is Base64 image code?</h3>
+                <p>Base64 image code is a text representation of an image's binary data, wrapped in a <code>data:</code> URI (e.g. <code>data:image/png;base64,...</code>) so it can be embedded directly in HTML, CSS, or JSON instead of linking to a separate image file.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I copy the example code on this page and use it directly?</h3>
+                <p>Yes. Every snippet above is real, valid Base64 image data — the PNG, JPEG, GIF, and SVG examples will actually render if you paste them into an HTML file. They're tiny placeholder images meant for testing and learning the format.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I generate this code for my own image?</h3>
+                <p>Use the <a href="/base64-image-encoder/">Base64 image encoder</a> to get the raw string, or the <a href="/base64-embed-generator/">embed code generator</a> to get a ready-made <code>&lt;img&gt;</code> tag or CSS rule for any image you upload.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does Base64 image code work in all browsers?</h3>
+                <p>Yes. Data URIs are supported in every modern browser (and IE8+) for <code>&lt;img&gt;</code> tags and CSS <code>background-image</code>. Very old versions of IE (6–7) had an 32&nbsp;KB size limit, but that's no longer a practical concern.</p>
+            </div>
+        </article>
+    </main>`;
+---
+<ArticleLayout
+  title="Base64 Image Code — Copy-Paste Examples for HTML, CSS &amp; JSON"
+  description="Real, working Base64 image code examples you can copy and paste — for HTML img tags, CSS background-image, and JSON API payloads. PNG, JPEG, GIF, and SVG."
+  canonical="https://base64image.net/base64-image-code/"
+  h1="Base64 Image Code"
+  lede="Copy-paste Base64 image code examples for HTML, CSS, and JSON — real, working data URIs for PNG, JPEG, GIF, and SVG."
+  tag="learn"
+  tagLabel="Reference"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Image Code'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base64 Image Code",
+            "item": "https://base64image.net/base64-image-code/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "What is Base64 image code?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base64 image code is a text representation of an image's binary data, wrapped in a data: URI so it can be embedded directly in HTML, CSS, or JSON instead of linking to a separate image file."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I copy the example code on this page and use it directly?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Every snippet on the page is real, valid Base64 image data — the PNG, JPEG, GIF, and SVG examples will actually render if pasted into an HTML file."
+            }
+        }, {
+            "@type": "Question",
+            "name": "How do I generate this code for my own image?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Use the Base64 image encoder to get the raw string, or the embed code generator to get a ready-made img tag or CSS rule for any image you upload."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Does Base64 image code work in all browsers?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Data URIs are supported in every modern browser for img tags and CSS background-image."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <style is:inline>
+    .code-example { margin: 20px 0; border: 1px solid var(--border, #2a2f3a); border-radius: var(--radius, 8px); overflow: hidden; }
+    .code-example-head { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; background: var(--bg-card, #161a22); font-size: 0.85rem; color: var(--fg-mute, #9aa3b3); }
+    .code-example-head button { padding: 4px 10px; font-size: 0.8rem; }
+    .code-example pre { margin: 0; padding: 14px; overflow-x: auto; }
+    .code-example pre code { white-space: pre-wrap; word-break: break-all; }
+  </style>
+  <script is:inline>
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.copy-snippet-btn');
+      if (!btn) return;
+      var target = document.getElementById(btn.getAttribute('data-target'));
+      if (!target) return;
+      navigator.clipboard.writeText(target.textContent).then(function () {
+        var original = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(function () { btn.innerHTML = original; }, 2000);
+      });
+    });
+  </script>
+</ArticleLayout>

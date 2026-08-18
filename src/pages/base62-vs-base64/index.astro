@@ -1,0 +1,254 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main>
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <section class="tool-section">
+            <p style="margin-bottom:16px;color:var(--fg-mute,#9aa3b3);font-size:0.9rem;">Bonus tool: convert a non-negative integer (e.g. a database ID) to Base62 and back — the same technique URL shorteners use to turn <code>12345</code> into a short code.</p>
+            <div class="input-group">
+                <label for="b62NumInput">Number</label>
+                <input type="text" id="b62NumInput" placeholder="e.g. 125000" oninput="b62FromNumber()" inputmode="numeric">
+            </div>
+            <div class="input-group">
+                <label for="b62StrInput">Base62 string</label>
+                <input type="text" id="b62StrInput" placeholder="e.g. 8Q0" oninput="b62FromString()">
+            </div>
+            <div class="error" id="b62Error" style="display:none;"></div>
+            <div class="actions">
+                <button class="btn-secondary" onclick="b62Clear()"><i class="fas fa-trash"></i> Clear</button>
+            </div>
+        </section>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> What Is Base62?</h2>
+            <p>
+                Base62 is a binary-to-text encoding that represents data using 62 characters: <code>0-9</code>, <code>A-Z</code>, and <code>a-z</code>. Unlike <a href="/what-is-base64/">Base64</a>, it uses no special characters (no <code>+</code>, <code>/</code>, or <code>=</code> padding), which makes every Base62 string automatically safe to use in URLs, filenames, and database keys without any escaping.
+            </p>
+            <p>
+                There's no single RFC for Base62 — it's typically implemented as straight positional-numeral-system conversion, the same idea as converting a decimal number to hexadecimal, just with a 62-character alphabet instead of 16. That's different from Base64, which processes data in fixed 3-byte-to-4-character blocks.
+            </p>
+
+            <h2><i class="fas fa-balance-scale"></i> Base62 vs Base64: Key Differences</h2>
+            <table class="reference-table">
+                <thead><tr><th>Property</th><th>Base62</th><th>Base64</th></tr></thead>
+                <tbody>
+                    <tr><td>Alphabet</td><td>0-9, A-Z, a-z (62 chars)</td><td>A-Z, a-z, 0-9, +, / (64 chars)</td></tr>
+                    <tr><td>Padding</td><td>None</td><td><code>=</code> (multiple of 4)</td></tr>
+                    <tr><td>URL-safe by default</td><td>Yes</td><td>No (needs the <a href="/base64-url-safe/">URL-safe variant</a>)</td></tr>
+                    <tr><td>Encoding method</td><td>Positional numeral conversion (like hex)</td><td>Fixed 3-byte → 4-character blocks</td></tr>
+                    <tr><td>Standardized (RFC)</td><td>No</td><td>Yes (RFC 4648)</td></tr>
+                    <tr><td>Typical input</td><td>Integers (IDs, counters)</td><td>Arbitrary binary data (files, images, text)</td></tr>
+                    <tr><td>Common use case</td><td>Short URLs, order/invoice codes</td><td>Embedding files, API payloads, data URIs</td></tr>
+                </tbody>
+            </table>
+
+            <h2><i class="fas fa-link"></i> Why Do URL Shorteners Use Base62?</h2>
+            <p>
+                Services like Bitly and TinyURL assign each link an auto-incrementing database ID, then convert that integer to Base62 to produce the short code in the URL — <code>id 125000</code> becomes something like <code>8Q0</code>. Because the alphabet excludes <code>+</code>, <code>/</code>, and other reserved URL characters, the result never needs percent-encoding. Base64 can't do this directly for the same reason it needs a <a href="/base64-url-safe/">URL-safe variant</a> in the first place.
+            </p>
+            <p>
+                Try the converter above: enter an integer to see its Base62 code, or paste a Base62 code to recover the original number.
+            </p>
+
+            <h2><i class="fas fa-cogs"></i> How Does Base62 Encoding Work?</h2>
+            <p>
+                Base62 encoding repeatedly divides the input number by 62, using the remainder at each step to look up a character in the alphabet, then reverses the resulting digit sequence — the same algorithm you'd use to convert a decimal number to any other base.
+            </p>
+            <div class="code-example">
+                <div class="code-example-head"><span>JavaScript</span></div>
+                <pre><code>const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+function toBase62(n) {
+  if (n === 0n) return '0';
+  let out = '';
+  while (n > 0n) {
+    out = ALPHABET[Number(n % 62n)] + out;
+    n = n / 62n;
+  }
+  return out;
+}
+
+function fromBase62(s) {
+  let n = 0n;
+  for (const ch of s) n = n * 62n + BigInt(ALPHABET.indexOf(ch));
+  return n;
+}</code></pre>
+            </div>
+            <p>
+                Because Base62 operates on the number as a whole rather than fixed byte blocks, encoding text requires first converting the text's bytes into one large integer (or using a per-character mapping) — it isn't a drop-in replacement for encoding arbitrary binary files the way <a href="/base64-file-encoder/">Base64 file encoding</a> is.
+            </p>
+
+            <h2><i class="fas fa-layer-group"></i> When Should You Use Base62 Instead of Base64?</h2>
+            <p>
+                Choose Base62 when you're encoding a number (a database ID, counter, or hash-derived integer) into a short, URL-safe, human-typeable string — short links, invite codes, order references, or shard/partition keys. Choose Base64 when you're encoding arbitrary binary data (images, files, JSON payloads) that needs a lossless, standardized, reversible text representation. The two aren't really interchangeable: Base62 shines at compressing small integers into short strings, while Base64 is built for streaming raw bytes through text-only channels.
+            </p>
+
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>Is Base62 more secure than Base64?</h3>
+                <p>Neither is a security mechanism — both are reversible encodings, not encryption. Anyone can decode a Base62 or Base64 string with no key. Base62 short codes are only "hidden" in the sense that they're hard to guess sequentially if you also add randomness; the encoding itself provides no confidentiality.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Is Base62 shorter than Base64?</h3>
+                <p>For the same integer value, Base62 and Base64 produce similar lengths since 62 and 64 are close in size (about 5.95 vs 6 bits per character). The real advantage of Base62 isn't shortness — it's that the output never contains URL-unsafe characters.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I use Base62 to encode a whole file?</h3>
+                <p>Technically yes — treat the file's bytes as one giant integer — but it's impractical. Base62's math gets extremely slow on large numbers, and there's no standard chunking scheme like Base64's 3-byte blocks. For files and binary data, use <a href="/base64-file-encoder/">Base64</a> instead.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>What is Base58, and how does it compare?</h3>
+                <p>Base58 (used by Bitcoin addresses) is Base62 with 4 more characters removed — <code>0</code>, <code>O</code>, <code>I</code>, and <code>l</code> — to avoid visual ambiguity when people read or type codes by hand. It trades a little compactness for fewer transcription errors, similar to why <a href="/base32-encoder-decoder/">Base32</a> excludes ambiguous characters too.</p>
+            </div>
+        </article>
+    </main>`;
+---
+<ToolLayout
+  title="Base62 vs Base64 — Differences, Converter &amp; When to Use Each"
+  description="Base62 vs Base64 explained: alphabet, encoding method, and when to use each. Includes a free Base62 number encoder/decoder — the technique behind URL shorteners."
+  canonical="https://base64image.net/base62-vs-base64/"
+  h1="Base62 vs Base64"
+  mono="// toBase62()"
+  lede="How Base62 differs from Base64, when URL shorteners use it, and a free number-to-Base62 converter."
+  tag="learn"
+  tagLabel="Comparison"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Learn',href:'#'},{label:'Base62 vs Base64'}]}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Base62 vs Base64",
+            "item": "https://base64image.net/base62-vs-base64/"
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "Is Base62 more secure than Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Neither is a security mechanism — both are reversible encodings, not encryption. Anyone can decode a Base62 or Base64 string with no key."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Is Base62 shorter than Base64?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "For the same integer value, Base62 and Base64 produce similar lengths since 62 and 64 are close in size. Base62's advantage is that its output never contains URL-unsafe characters, not that it's shorter."
+            }
+        }, {
+            "@type": "Question",
+            "name": "Can I use Base62 to encode a whole file?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Technically yes by treating the file's bytes as one giant integer, but it's impractical for large files. Base64 is the standard choice for encoding files and binary data."
+            }
+        }, {
+            "@type": "Question",
+            "name": "What is Base58, and how does it compare?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Base58, used by Bitcoin addresses, is Base62 with 0, O, I, and l removed to avoid visual ambiguity when people read or type codes by hand."
+            }
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <style is:inline>
+    .code-example { margin: 20px 0; border: 1px solid var(--border, #2a2f3a); border-radius: var(--radius, 8px); overflow: hidden; }
+    .code-example-head { padding: 8px 14px; background: var(--bg-card, #161a22); font-size: 0.85rem; color: var(--fg-mute, #9aa3b3); }
+    .code-example pre { margin: 0; padding: 14px; overflow-x: auto; }
+    #b62NumInput, #b62StrInput { min-height: auto; height: 44px; }
+  </style>
+  <script is:inline>
+    var B62_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    var b62Updating = false;
+
+    function b62ToString(n) {
+      if (n === 0n) return '0';
+      var out = '';
+      while (n > 0n) {
+        out = B62_ALPHABET[Number(n % 62n)] + out;
+        n = n / 62n;
+      }
+      return out;
+    }
+
+    function b62FromStringToNumber(s) {
+      var n = 0n;
+      for (var i = 0; i < s.length; i++) {
+        var idx = B62_ALPHABET.indexOf(s[i]);
+        if (idx === -1) throw new Error('Invalid Base62 character: "' + s[i] + '"');
+        n = n * 62n + BigInt(idx);
+      }
+      return n;
+    }
+
+    function b62ShowError(msg) {
+      var el = document.getElementById('b62Error');
+      if (!msg) { el.style.display = 'none'; el.textContent = ''; return; }
+      el.style.display = 'block';
+      el.textContent = msg;
+    }
+
+    function b62FromNumber() {
+      if (b62Updating) return;
+      var input = document.getElementById('b62NumInput').value.trim();
+      var strEl = document.getElementById('b62StrInput');
+      if (!input) { b62Updating = true; strEl.value = ''; b62Updating = false; b62ShowError(''); return; }
+      if (!/^[0-9]+$/.test(input)) { b62ShowError('Enter a non-negative whole number.'); return; }
+      try {
+        var n = BigInt(input);
+        b62Updating = true;
+        strEl.value = b62ToString(n);
+        b62Updating = false;
+        b62ShowError('');
+      } catch (e) {
+        b62ShowError('Could not convert that number.');
+      }
+    }
+
+    function b62FromString() {
+      if (b62Updating) return;
+      var input = document.getElementById('b62StrInput').value.trim();
+      var numEl = document.getElementById('b62NumInput');
+      if (!input) { b62Updating = true; numEl.value = ''; b62Updating = false; b62ShowError(''); return; }
+      try {
+        var n = b62FromStringToNumber(input);
+        b62Updating = true;
+        numEl.value = n.toString();
+        b62Updating = false;
+        b62ShowError('');
+      } catch (e) {
+        b62ShowError(e.message);
+      }
+    }
+
+    function b62Clear() {
+      document.getElementById('b62NumInput').value = '';
+      document.getElementById('b62StrInput').value = '';
+      b62ShowError('');
+    }
+  </script>
+</ToolLayout>

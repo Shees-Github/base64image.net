@@ -1,0 +1,357 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+const bodyHtml = `<main x-data="base64RareFormats()">
+        <div class="trust-note">
+            <strong>🔒 Privacy First:</strong> All conversion happens locally in your browser. Your data never leaves your device.
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 10px; margin: 30px 0;">
+            <button
+                @click="mode = 'encode'; clearAll()"
+                :class="mode === 'encode' ? 'btn-primary' : 'btn-secondary'"
+                style="min-width: 150px;">
+                <i class="fas fa-lock"></i> Encode (File → Base64)
+            </button>
+            <button
+                @click="mode = 'decode'; clearAll()"
+                :class="mode === 'decode' ? 'btn-primary' : 'btn-secondary'"
+                style="min-width: 150px;">
+                <i class="fas fa-unlock"></i> Decode (Base64 → File)
+            </button>
+        </div>
+
+        <section class="tool-section" x-show="mode === 'encode'">
+            <div class="input-group">
+                <label for="rareFile">Upload file (.ico, .tiff, .avif, .bmp, .woff, .woff2, .ttf, .otf):</label>
+                <input
+                    type="file"
+                    id="rareFile"
+                    @change="encodeFile($event)"
+                    accept=".ico,.tiff,.tif,.avif,.bmp,.woff,.woff2,.ttf,.otf"
+                    class="file-input">
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="preview-container" x-show="base64Output">
+                <h2><i class="fas fa-code"></i> Base64 Output</h2>
+                <div class="input-group">
+                    <textarea x-model="base64Output" readonly rows="10" placeholder="Base64 string will appear here..."></textarea>
+                </div>
+                <div class="image-info" x-show="fileInfo">
+                    <p><strong>Filename:</strong> <span x-text="fileInfo.name"></span></p>
+                    <p><strong>Size:</strong> <span x-text="fileInfo.size"></span></p>
+                    <p><strong>Base64 Length:</strong> <span x-text="base64Output.length"></span> characters</p>
+                </div>
+                <button @click="copyBase64" class="btn-primary">
+                    <i class="fas fa-copy"></i> <span x-text="copyButtonText"></span>
+                </button>
+            </div>
+        </section>
+
+        <section class="tool-section" x-show="mode === 'decode'">
+            <div class="input-group">
+                <label for="base64Input">Paste your Base64 string:</label>
+                <textarea id="base64Input" x-model="base64Input" placeholder="Paste your Base64 string here..." rows="8" @input="tryPreview"></textarea>
+                <div class="error" x-show="error" x-text="error"></div>
+            </div>
+
+            <div class="input-group">
+                <label for="rareFormat">Output format:</label>
+                <select id="rareFormat" x-model="outputFormat" @change="tryPreview" class="format-select">
+                    <option value="ico">.ico (Icon)</option>
+                    <option value="bmp">.bmp (Bitmap)</option>
+                    <option value="avif">.avif (AV1 Image)</option>
+                    <option value="tiff">.tiff (Tagged Image)</option>
+                    <option value="woff">.woff (Web Font)</option>
+                    <option value="woff2">.woff2 (Web Font)</option>
+                    <option value="ttf">.ttf (TrueType Font)</option>
+                    <option value="otf">.otf (OpenType Font)</option>
+                </select>
+            </div>
+
+            <div class="actions">
+                <button @click="decodeFile" class="btn-primary">Decode &amp; Download</button>
+            </div>
+
+            <div class="image-wrapper" x-show="previewSrc">
+                <img :src="previewSrc" alt="Decoded preview" @load="previewOk = true" @error="previewOk = false" style="max-width:200px" x-show="previewOk">
+            </div>
+
+            <div class="preview-container" x-show="decodedInfo">
+                <h2><i class="fas fa-file"></i> Decoded File</h2>
+                <div class="image-info" x-show="decodedInfo">
+                    <p><strong>Size:</strong> <span x-text="decodedInfo.size"></span></p>
+                    <p><strong>Format:</strong> <span x-text="outputFormat.toUpperCase()"></span></p>
+                    <p><strong>Status:</strong> <span style="color:#28a745;">✓ Downloaded</span></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="actions" x-show="base64Output || decodedInfo">
+            <button @click="clearAll" class="btn-secondary">Clear</button>
+        </div>
+
+        <article class="content-section">
+            <h2><i class="fas fa-question-circle"></i> Base64 for Uncommon Formats: ICO, TIFF, AVIF, BMP &amp; Fonts</h2>
+            <p>
+                Formats like ICO, TIFF, AVIF, BMP, and web fonts (WOFF/WOFF2/TTF/OTF) don't get dedicated converters on most Base64 tool sites — but they encode and decode exactly the same way as PNG or JPEG. This page bundles them into one converter so you don't need a separate page per format.
+            </p>
+
+            <h2><i class="fas fa-icons"></i> Base64 to ICO — Favicons and App Icons</h2>
+            <p>
+                <code>.ico</code> files can contain multiple image sizes in one file, which is why browsers use them for favicons. Encode an <code>.ico</code> to Base64 to embed it directly with a data URI instead of linking a separate file: <code>&lt;link rel="icon" href="data:image/x-icon;base64,..."&gt;</code>. For a standard PNG/SVG favicon workflow instead, see the <a href="/base64-embed-generator/">embed code generator</a>.
+            </p>
+
+            <h2><i class="fas fa-file-image"></i> Base64 to TIFF and AVIF</h2>
+            <p>
+                <strong>TIFF</strong> is a high-fidelity raster format common in scanning, printing, and archival workflows — it's rarely used on the web because most browsers can't render it inline, so decoding a TIFF here downloads the file rather than previewing it. <strong>AVIF</strong> is the opposite case: a modern, highly compressed format built on the AV1 video codec, supported for inline preview in current versions of Chrome, Firefox, and Edge.
+            </p>
+
+            <h2><i class="fas fa-square"></i> Base64 to BMP</h2>
+            <p>
+                BMP is an uncompressed Windows bitmap format — large in file size but simple to decode, since there's no compression algorithm involved. It's commonly generated by legacy Windows applications and screenshot tools.
+            </p>
+
+            <h2><i class="fas fa-font"></i> Base64 for Web Fonts (WOFF, WOFF2, TTF, OTF)</h2>
+            <p>
+                Base64-encoding a font file lets you embed it directly in a CSS <code>@font-face</code> rule, eliminating a separate font-file request:
+            </p>
+            <div class="code-example">
+                <div class="code-example-head"><span>CSS &mdash; @font-face</span></div>
+                <pre><code>@font-face {
+  font-family: 'MyFont';
+  src: url("data:font/woff2;base64,PASTE_BASE64_HERE") format("woff2");
+}</code></pre>
+            </div>
+            <p>
+                As with images, only do this for small font files — Base64 inflates size by ~33%, and an inlined font can't be cached independently of the CSS file that contains it. See <a href="/base64-vs-binary/">Base64 vs binary</a> for the general size tradeoff.
+            </p>
+
+            <h2><i class="fas fa-table"></i> MIME Type Reference</h2>
+            <table class="reference-table">
+                <thead><tr><th>Format</th><th>MIME Type</th><th>Inline browser preview</th></tr></thead>
+                <tbody>
+                    <tr><td>.ico</td><td><code>image/x-icon</code></td><td>Yes</td></tr>
+                    <tr><td>.bmp</td><td><code>image/bmp</code></td><td>Yes</td></tr>
+                    <tr><td>.avif</td><td><code>image/avif</code></td><td>Yes (modern browsers)</td></tr>
+                    <tr><td>.tiff</td><td><code>image/tiff</code></td><td>No</td></tr>
+                    <tr><td>.woff / .woff2</td><td><code>font/woff</code> / <code>font/woff2</code></td><td>N/A (font, not image)</td></tr>
+                    <tr><td>.ttf / .otf</td><td><code>font/ttf</code> / <code>font/otf</code></td><td>N/A (font, not image)</td></tr>
+                </tbody>
+            </table>
+            <p>
+                For the common image formats, use the dedicated <a href="/base64-to-png/">PNG</a>, <a href="/base64-to-jpeg/">JPEG</a>, <a href="/base64-to-svg/">SVG</a>, <a href="/base64-to-webp/">WebP</a>, or <a href="/base64-to-gif/">GIF</a> converters. The full list is on the <a href="/base64-mime-types/">MIME type list</a> page.
+            </p>
+
+            <h2><i class="fas fa-shield-alt"></i> Is This Converter Private and Secure?</h2>
+            <p>
+                Yes. Encoding and decoding both run locally using the FileReader, Blob, and <code>URL.createObjectURL</code> APIs. Nothing is uploaded to a server.
+            </p>
+
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>How do I convert an ICO file to Base64?</h3>
+                <p>Click Encode, upload your <code>.ico</code> file, and copy the generated Base64 string.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Can I preview the decoded image?</h3>
+                <p>Yes, for formats browsers can render inline — ICO, BMP, and AVIF. TIFF and font files download directly since browsers can't preview them inline.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Why isn't there a separate page for each format?</h3>
+                <p>These formats are used infrequently enough that one shared converter serves them better than six near-empty single-format pages — the encode/decode logic is identical, only the MIME type changes.</p>
+            </div>
+        </article>
+    </main>`;
+---
+<ToolLayout
+  title="Base64 to ICO Converter — Plus TIFF, AVIF, BMP &amp; Font Formats"
+  description="Free Base64 converter for ICO, TIFF, AVIF, BMP, and web font files (WOFF/WOFF2/TTF/OTF). Encode or decode, with inline preview where browsers support it."
+  canonical="https://base64image.net/base64-to-ico/"
+  h1="Base64 to ICO Converter"
+  mono="// rare formats"
+  lede="Encode or decode Base64 for ICO, TIFF, AVIF, BMP, and web font files — one converter for the formats other tools skip."
+  tag="convert"
+  tagLabel="Converter"
+  breadcrumbs={[{label:'Home',href:'/'},{label:'Converters',href:'#'},{label:'Base64 → ICO'}]}
+>
+  <Fragment slot="head">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [{
+            "@type": "Question",
+            "name": "How do I convert an ICO file to Base64?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Click Encode, upload your .ico file, and copy the generated Base64 string." }
+        }, {
+            "@type": "Question",
+            "name": "Can I preview the decoded image?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, for formats browsers can render inline — ICO, BMP, and AVIF. TIFF and font files download directly since browsers can't preview them inline." }
+        }, {
+            "@type": "Question",
+            "name": "Why isn't there a separate page for each format?",
+            "acceptedAnswer": { "@type": "Answer", "text": "These formats are used infrequently enough that one shared converter serves them better than several near-empty single-format pages." }
+        }]
+    }
+        </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [{
+            "@type": "ListItem", "position": 1, "name": "Home", "item": "https://base64image.net/"
+        }, {
+            "@type": "ListItem", "position": 2, "name": "Base64 to ICO Converter", "item": "https://base64image.net/base64-to-ico/"
+        }]
+    }
+        </script>
+  </Fragment>
+  <Fragment set:html={bodyHtml} />
+  <style is:inline>
+    .code-example { margin: 20px 0; border: 1px solid var(--border, #2a2f3a); border-radius: var(--radius, 8px); overflow: hidden; }
+    .code-example-head { padding: 8px 14px; background: var(--bg-card, #161a22); font-size: 0.85rem; color: var(--fg-mute, #9aa3b3); }
+    .code-example pre { margin: 0; padding: 14px; overflow-x: auto; }
+    .format-select {
+      width: 100%; background: #06080c; border: 1px solid var(--line);
+      border-radius: var(--radius-sm); padding: 12px 14px; color: var(--fg);
+      font-family: var(--font-mono); font-size: 13px; outline: none;
+    }
+    .format-select:focus { border-color: var(--violet); box-shadow: 0 0 0 3px rgba(124,92,255,0.15); }
+  </style>
+  <script is:inline>function base64RareFormats() {
+            const MIME = {
+                ico: 'image/x-icon',
+                bmp: 'image/bmp',
+                avif: 'image/avif',
+                tiff: 'image/tiff',
+                woff: 'font/woff',
+                woff2: 'font/woff2',
+                ttf: 'font/ttf',
+                otf: 'font/otf'
+            };
+            const PREVIEWABLE = ['ico', 'bmp', 'avif'];
+
+            return {
+                mode: 'encode',
+                base64Input: '',
+                base64Output: '',
+                outputFormat: 'ico',
+                error: '',
+                fileInfo: null,
+                decodedInfo: null,
+                previewSrc: '',
+                previewOk: false,
+                copyButtonText: 'Copy Base64',
+
+                encodeFile(event) {
+                    this.error = '';
+                    this.base64Output = '';
+                    this.fileInfo = null;
+
+                    const file = event.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const base64String = e.target.result.split(',')[1];
+                            this.base64Output = base64String;
+                            this.fileInfo = { name: file.name, size: this.formatBytes(file.size) };
+                        } catch (err) {
+                            this.error = 'Failed to encode file. Please try again.';
+                        }
+                    };
+                    reader.onerror = () => { this.error = 'Failed to read file.'; };
+                    reader.readAsDataURL(file);
+                },
+
+                cleanBase64() {
+                    let base64String = this.base64Input.trim();
+                    const dataUriMatch = base64String.match(/^data:[^;]+;base64,(.+)$/);
+                    if (dataUriMatch) base64String = dataUriMatch[1];
+                    return base64String.replace(/\\s/g, '');
+                },
+
+                tryPreview() {
+                    this.previewSrc = '';
+                    this.previewOk = false;
+                    if (!this.base64Input.trim() || PREVIEWABLE.indexOf(this.outputFormat) === -1) return;
+                    try {
+                        const base64String = this.cleanBase64();
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) return;
+                        this.previewSrc = 'data:' + MIME[this.outputFormat] + ';base64,' + base64String;
+                    } catch (e) { /* ignore preview errors */ }
+                },
+
+                decodeFile() {
+                    this.error = '';
+                    this.decodedInfo = null;
+
+                    if (!this.base64Input.trim()) return;
+
+                    try {
+                        const base64String = this.cleanBase64();
+
+                        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64String)) {
+                            throw new Error('Invalid Base64 string. Only A-Z, a-z, 0-9, +, /, and = are allowed.');
+                        }
+
+                        const binaryString = atob(base64String);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+
+                        const mime = MIME[this.outputFormat] || 'application/octet-stream';
+                        const blob = new Blob([bytes], { type: mime });
+                        const url = URL.createObjectURL(blob);
+                        const filename = 'decoded-file.' + this.outputFormat;
+
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = filename;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+
+                        this.decodedInfo = { size: this.formatBytes(bytes.length) };
+                    } catch (err) {
+                        this.error = err.message || 'Failed to decode Base64 string. Please check your input.';
+                        this.decodedInfo = null;
+                    }
+                },
+
+                formatBytes(bytes) {
+                    if (bytes === 0) return '0 Bytes';
+                    const k = 1024;
+                    const sizes = ['Bytes', 'KB', 'MB'];
+                    const i = Math.floor(Math.log(bytes) / Math.log(k));
+                    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+                },
+
+                copyBase64() {
+                    if (!this.base64Output) return;
+                    navigator.clipboard.writeText(this.base64Output).then(() => {
+                        this.copyButtonText = 'Copied!';
+                        setTimeout(() => { this.copyButtonText = 'Copy Base64'; }, 2000);
+                    }).catch(() => { this.error = 'Failed to copy to clipboard.'; });
+                },
+
+                clearAll() {
+                    this.base64Input = '';
+                    this.base64Output = '';
+                    this.error = '';
+                    this.fileInfo = null;
+                    this.decodedInfo = null;
+                    this.previewSrc = '';
+                    this.previewOk = false;
+                    this.copyButtonText = 'Copy Base64';
+                    const fileInput = document.getElementById('rareFile');
+                    if (fileInput) fileInput.value = '';
+                }
+            }
+        }</script>
+</ToolLayout>
