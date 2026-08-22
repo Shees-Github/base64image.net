@@ -1,0 +1,107 @@
+name: Submit changed pages to IndexNow
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/pages/**'
+  workflow_dispatch:
+    inputs:
+      slugs:
+        description: 'Optional: specific slugs to submit (comma-separated, e.g. "base64-validator,base64-css"). Leave blank for "/" (homepage).'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Build changed URL list
+        id: urls
+        run: |
+          BASE_URL="https://base64image.net"
+          KEY="a7eade2c2c4cb8b603ff8be3df2f628b"
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            RAW_SLUGS="${{ github.event.inputs.slugs }}"
+            URLS=""
+            if [ -z "$RAW_SLUGS" ]; then
+              URLS="\"$BASE_URL/\","
+            else
+              IFS=',' read -ra SLUGS <<< "$RAW_SLUGS"
+              for s in "${SLUGS[@]}"; do
+                s=$(echo "$s" | xargs) # trim whitespace
+                [ -z "$s" ] && continue
+                URLS="$URLS\"$BASE_URL/$s/\","
+              done
+            fi
+          else
+            # Compare against the previous commit on this push. Fall back to HEAD~1
+            # if this is the first push GitHub has a "before" SHA for (all zeros).
+            BEFORE="${{ github.event.before }}"
+            if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              BEFORE=$(git rev-parse HEAD~1 2>/dev/null || echo "")
+            fi
+
+            if [ -z "$BEFORE" ]; then
+              echo "No previous commit to diff against, skipping."
+              echo "has_urls=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}" -- 'src/pages/**/index.astro' 'src/pages/index.astro')
+
+            URLS=""
+            while IFS= read -r file; do
+              [ -z "$file" ] && continue
+              if [ "$file" = "src/pages/index.astro" ]; then
+                slug=""
+              else
+                # src/pages/<slug>/index.astro -> <slug>
+                slug=$(echo "$file" | sed -E 's#^src/pages/([^/]+)/index\.astro$#\1#')
+                # Skip if the sed didn't actually match a top-level slug page
+                # (e.g. nested/dynamic routes like [lang]/[...slug].astro)
+                case "$file" in
+                  src/pages/*/index.astro) ;;
+                  *) continue ;;
+                esac
+              fi
+              URLS="$URLS\"$BASE_URL/$slug/\","
+            done <<< "$CHANGED"
+          fi
+
+          URLS=$(echo "$URLS" | sed 's/,$//')
+
+          if [ -z "$URLS" ]; then
+            echo "No relevant page URLs changed, skipping IndexNow submission."
+            echo "has_urls=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "has_urls=true" >> "$GITHUB_OUTPUT"
+          {
+            echo "payload<<EOF"
+            echo "{\"host\":\"base64image.net\",\"key\":\"$KEY\",\"keyLocation\":\"$BASE_URL/$KEY.txt\",\"urlList\":[$URLS]}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Wait for deploy to go live
+        if: steps.urls.outputs.has_urls == 'true'
+        run: sleep 90
+
+      - name: Submit to IndexNow
+        if: steps.urls.outputs.has_urls == 'true'
+        run: |
+          echo "Submitting: ${{ steps.urls.outputs.payload }}"
+          curl -sf -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data '${{ steps.urls.outputs.payload }}' \
+            -w "\nHTTP status: %{http_code}\n"
